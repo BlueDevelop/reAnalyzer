@@ -1,0 +1,14 @@
+{
+  "check-coverage": false,
+  "exclude": [
+    "*.interface.ts",
+    "coverage"
+  ],
+  "reporter": [
+    "text",
+    "html"
+  ],
+  "cache": false,
+  "all": true,
+  "sourceMap": true
+}
