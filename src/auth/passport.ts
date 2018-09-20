@@ -21,7 +21,9 @@ export default (app: Application) => {
 
     passport.use(LocalStrategy);
 
+    app.post('/login',
     passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: true });
+                                    failureRedirect: '/login',
+                                    failureFlash: false })
+    );
 };

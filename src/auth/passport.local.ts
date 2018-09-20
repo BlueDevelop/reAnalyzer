@@ -3,7 +3,7 @@ import User from '../users/user.model';
 
 const strategy = new LocalStrategy.Strategy({
   usernameField: 'uniqueId',
-  passwordField: 'password'
+  passwordField: 'password',
 }, (uniqueId, password, done) => {
     User.findOne({ uniqueId: uniqueId }, function(err, user) {
       if (err) { return done(err); }

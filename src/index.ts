@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
-import * as mongoose from 'mongoose';
+import {connect, connection} from 'mongoose';
 const MongoStore = require('connect-mongo')(session);
 
 import getConfig from './config';
@@ -12,6 +12,7 @@ const app = express();
 
 (function init() {
     process.on('uncaughtException', err => {
+        console.log(err);
         process.exit(1);
     });
 
@@ -25,17 +26,17 @@ const app = express();
 })();
 
 function initDbConnection() {
-    mongoose.connect(config.connString);
+    connect(config.connString, { useNewUrlParser: true });
 }
 
 function setMiddlewares() {
     app.use(cors());
     app.use(session({
-        secret: '',
+        secret: config.sessionSecret,
         resave: true,
         saveUninitialized: false,
         store: new MongoStore({
-            mongooseConnection: mongoose.connection
+            mongooseConnection: connection
         })
     }));
     passport(app);
