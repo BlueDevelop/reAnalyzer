@@ -1,14 +1,15 @@
 import passport, { Profile } from 'passport';
-import session from 'express-session';
-import mongoose from 'mongoose';
 import { Application } from 'express';
 
 import userModel from '../users/user.model';
 import IUser from '../users/user.interface';
+import LocalStrategy from './passport.local';
 
-const mongoStore = require('connect-mongo')(session);
+export const authenticate = passport.authenticate('local', { successRedirect: '/',
+                                                    failureRedirect: '/login',
+                                                    failureFlash: false });
 
-export default (app: Application) => {
+export const init = (app: Application) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
@@ -21,4 +22,8 @@ export default (app: Application) => {
             done(err, <IUser>user);
         });
     });
+
+    passport.use(LocalStrategy);
+
+    app.post('/login', authenticate);
 };

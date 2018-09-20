@@ -1,19 +1,20 @@
 {
-  "name": "reAnalyzer",
+  "name": "reanalyzer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "build": "npm run build:tsc",
-    "build:tsc": "tsc",
+    "build:tsc": " tsc",
     "test": "npm run build && npm test:run",
     "test:run": "set NODE_ENV=test&& mocha dist/**/*.spec.js --exit",
     "test:coverage": "npm run build && nyc npm test:run"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
-    "mocha": "./node_modules/mocha/bin/mocha"
+    "mocha": "./node_modules/mocha/bin/mocha",
+    "nyc": "./node_modules/.bin/nyc"
   },
   "keywords": [],
   "author": "",

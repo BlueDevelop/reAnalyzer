@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import IUser from './user.interface';
 
@@ -27,5 +27,13 @@ userSchema.methods.generateHash = function generateHash(password: string) : stri
 userSchema.methods.validPassword = function validPassword(password: string): boolean {
     return bcrypt.compareSync(password, this.password);
 }
+
+userSchema.pre<IUser>('save', function preSave(this: IUser, next: Function) {
+    if (this.password) {
+        this.password = this.generateHash(this.password);
+    }
+    
+    next();
+});
 
 export default model<IUser>('users', userSchema);

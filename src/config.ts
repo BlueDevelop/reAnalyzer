@@ -1,17 +1,25 @@
 interface IConfig {
-    port: number
+    port: number,
+    connString: string,
+    sessionSecret: string
 }
 
 const prod: IConfig = {
-    port: 3000
+    port: 3000,
+    connString: 'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replica=reAnalyzer',
+    sessionSecret: 'OmerIsTheBestProgrammer'
 };
 
 const dev: IConfig = {
-    port: 3000
+    port: 3000,
+    connString: 'mongodb://localhost:27017/reAnalyzer_dev',
+    sessionSecret: 'OmerIsTheBestProgrammer'
 };
 
 const test: IConfig = {
-    port: 3000
+    port: 3000,
+    connString: 'mongodb://localhost:27017/reAnalyzer_test',
+    sessionSecret: 'OmerIsTheBestProgrammer'
 };
 
 export default () => {
