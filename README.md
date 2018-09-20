@@ -52,5 +52,5 @@ NODE_ENV=prod && npm start
 
 * **Omer Zamir** - *Initial work* - [Omer Zamir](https://github.com/omerzamir)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/omerzamir/reAnalyzer/graphs/contributors) who participated in this project.
 
