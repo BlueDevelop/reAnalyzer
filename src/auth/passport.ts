@@ -3,6 +3,7 @@ import { Application } from 'express';
 
 import userModel from '../users/user.model';
 import IUser from '../users/user.interface';
+import LocalStrategy from './passport.local';
 
 export default (app: Application) => {
     app.use(passport.initialize());
@@ -18,5 +19,9 @@ export default (app: Application) => {
         });
     });
 
-    passport.use();
+    passport.use(LocalStrategy);
+
+    passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login',
+                                   failureFlash: true });
 };

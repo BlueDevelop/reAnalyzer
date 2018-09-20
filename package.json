@@ -6,10 +6,10 @@
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "build": "npm run build:tsc",
-    "build:tsc": "tsc",
+    "build:tsc": " npx tsc",
     "test": "npm run build && npm test:run",
-    "test:run": "set NODE_ENV=test&& mocha dist/**/*.spec.js --exit",
-    "test:coverage": "npm run build && nyc npm test:run"
+    "test:run": "set NODE_ENV=test&& npx mocha dist/**/*.spec.js --exit",
+    "test:coverage": "npm run build && npx nyc npm test:run"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",

@@ -5,6 +5,7 @@ import * as mongoose from 'mongoose';
 const MongoStore = require('connect-mongo')(session);
 
 import getConfig from './config';
+import passport from './auth/passport';
 
 const config = getConfig();
 const app = express();
@@ -24,7 +25,7 @@ const app = express();
 })();
 
 function initDbConnection() {
-
+    mongoose.connect(config.connString);
 }
 
 function setMiddlewares() {
@@ -37,10 +38,13 @@ function setMiddlewares() {
             mongooseConnection: mongoose.connection
         })
     }));
+    passport(app);
 }
 
 function setRoutes() {
     app.get('/', (_, res) => {
         res.send('Hello, World!');
     });
+
+    
 }

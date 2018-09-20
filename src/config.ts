@@ -1,17 +1,21 @@
 interface IConfig {
-    port: number
+    port: number,
+    connString: string
 }
 
 const prod: IConfig = {
-    port: 3000
+    port: 3000,
+    connString: 'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replica=reAnalyzer'
 };
 
 const dev: IConfig = {
-    port: 3000
+    port: 3000,
+    connString: 'mongodb://localhost:27017/reAnalyzer_dev'
 };
 
 const test: IConfig = {
-    port: 3000
+    port: 3000,
+    connString: 'mongodb://localhost:27017/reAnalyzer_test'
 };
 
 export default () => {
