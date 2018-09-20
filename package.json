@@ -1,5 +1,5 @@
 {
-  "name": "reAnalyzer",
+  "name": "reanalyzer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,7 +13,8 @@
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
-    "mocha": "./node_modules/mocha/bin/mocha"
+    "mocha": "./node_modules/mocha/bin/mocha",
+    "nyc": "./node_modules/.bin/nyc"
   },
   "keywords": [],
   "author": "",
