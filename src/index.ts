@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
+import * as mongoose from 'mongoose';
+const MongoStore = require('connect-mongo')(session);
 
 import getConfig from './config';
 
@@ -26,6 +29,14 @@ function initDbConnection() {
 
 function setMiddlewares() {
     app.use(cors());
+    app.use(session({
+        secret: '',
+        resave: true,
+        saveUninitialized: false,
+        store: new MongoStore({
+            mongooseConnection: mongoose.connection
+        })
+    }));
 }
 
 function setRoutes() {
