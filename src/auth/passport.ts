@@ -1,5 +1,4 @@
 import passport, { Profile } from 'passport';
-
 import { Application } from 'express';
 
 import userModel from '../users/user.model';
@@ -18,4 +17,6 @@ export default (app: Application) => {
             done(err, <IUser>user);
         });
     });
+
+    passport.use();
 };
