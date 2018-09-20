@@ -1,10 +1,11 @@
-import LocalStrategy from 'passport-local';
+import {Strategy} from 'passport-local';
 import User from '../users/user.model';
 
-const strategy = new LocalStrategy.Strategy({
+const strategy = new Strategy({
   usernameField: 'uniqueId',
   passwordField: 'password',
-}, (uniqueId, password, done) => {
+  passReqToCallback : true 
+}, (req, uniqueId, password, done) => {
     User.findOne({ uniqueId: uniqueId }, function(err, user) {
       if (err) { return done(err); }
       if (!user) {

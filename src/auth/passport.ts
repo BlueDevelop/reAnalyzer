@@ -5,7 +5,11 @@ import userModel from '../users/user.model';
 import IUser from '../users/user.interface';
 import LocalStrategy from './passport.local';
 
-export default (app: Application) => {
+export const authenticate = passport.authenticate('local', { successRedirect: '/',
+                                                    failureRedirect: '/login',
+                                                    failureFlash: false });
+
+export const init = (app: Application) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
@@ -21,9 +25,5 @@ export default (app: Application) => {
 
     passport.use(LocalStrategy);
 
-    app.post('/login',
-    passport.authenticate('local', { successRedirect: '/',
-                                    failureRedirect: '/login',
-                                    failureFlash: false })
-    );
+    app.post('/login', authenticate);
 };
