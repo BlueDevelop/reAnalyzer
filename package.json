@@ -11,6 +11,11 @@
     "test:run": "set NODE_ENV=test&& mocha dist/**/*.spec.js --exit",
     "test:coverage": "npm run build && nyc npm test:run"
   },
+    "bin": {
+    "tsc": "./node_modules/.bin/tsc",
+    "mocha": "./node_modules/mocha/bin/mocha",
+    "nyc": "./node_modules/.bin/nyc"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
