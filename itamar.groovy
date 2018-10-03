@@ -1,11 +1,15 @@
 pipeline {
     agent none
     stages {
-        agent {
-            label 'default'
-        }
-        steps {
-            sh 'npm run test:coverage'
-        }
+        stage ('unit-testing') {
+            agent {
+                label 'reanalyzer-backend'
+            }        
+            steps {
+                sh 'sudo service mongod start'
+                sh 'npm install'
+                sh 'npm run test:coverage'
+            }
+        }        
     }
 }
