@@ -7,7 +7,7 @@ pipeline {
             }        
             steps {
                 sh 'sudo service mongod start'
-                sh 'npm install'
+                sh 'sudo npm install'
                 sh 'npm run test:coverage'
             }
         }        
