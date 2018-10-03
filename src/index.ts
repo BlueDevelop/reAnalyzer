@@ -14,7 +14,7 @@ import authenticate from './auth/auth.middleware';
 
 
 const config = getConfig();
-const app = express();
+export const app = express();
 
 (function init() {
     process.on('uncaughtException', err => {
@@ -60,7 +60,4 @@ function setRoutes() {
     });
 
     app.use('/api/user', userRoutes);
-
-    
-
 }

@@ -6,9 +6,9 @@
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "build": "npm run build:tsc && cd client && ng build && cd ..",
-    "build:tsc": " tsc",
-    "test": "npm run build && npm test:run",
-    "test:run": "set NODE_ENV=test&& mocha dist/**/*.spec.js --exit",
+    "build:tsc": "tsc",
+    "test": "npm run build:tsc && npm run test:run",
+    "test:run": "NODE_ENV=test mocha dist/**/*.spec.js --exit --timeout=30000",
     "test:coverage": "npm run build && nyc npm test:run"
   },
   "bin": {
