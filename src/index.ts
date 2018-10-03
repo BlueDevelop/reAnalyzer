@@ -4,6 +4,7 @@ import session from 'express-session';
 import {connect, connection} from 'mongoose';
 import {json, urlencoded} from 'body-parser';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 const MongoStore = require('connect-mongo')(session);
 
 import getConfig from './config';
@@ -51,9 +52,15 @@ function setMiddlewares() {
 }
 
 function setRoutes() {
-    app.get('/', authenticate, (_, res) => {
-        res.send('Hello, World!');
+    // Static files
+    app.use(express.static(path.join(__dirname, '../client/dist/App')));
+
+    app.get('*', (_, res) => {
+        res.sendFile(path.join(__dirname, '../client/dist/App/index.html'));
     });
 
     app.use('/api/user', userRoutes);
+
+    
+
 }
