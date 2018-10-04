@@ -11,7 +11,7 @@
     "test:run": "NODE_ENV=test mocha dist/**/*.spec.js --exit --timeout=30000",
     "test:coverage": "npm run build:tsc && nyc npm run test:run"
   },
-  "bin": {
+    "bin": {
     "tsc": "./node_modules/.bin/tsc",
     "mocha": "./node_modules/mocha/bin/mocha",
     "nyc": "./node_modules/.bin/nyc"
@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.0",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
@@ -35,7 +35,7 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^2.0.0",
+    "@types/bcrypt": "^2.x.x",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.4",
     "@types/chai-as-promised": "^7.1.0",
