@@ -8,10 +8,10 @@
     "build": "npm run build:tsc && cd client && ng build && cd ..",
     "build:tsc": "tsc",
     "test": "npm run build:tsc && npm run test:run",
-    "test:run": "NODE_ENV=test mocha dist/**/*.spec.js --exit --timeout=30000",
+    "test:run": "NODE_ENV=test mocha src/**/*.spec.ts --opts ./mocha.opts",
     "test:coverage": "npm run build:tsc && nyc npm run test:run"
   },
-    "bin": {
+  "bin": {
     "tsc": "./node_modules/.bin/tsc",
     "mocha": "./node_modules/mocha/bin/mocha",
     "nyc": "./node_modules/.bin/nyc"
@@ -58,6 +58,7 @@
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
+    "ts-node": "7.0.1",
     "typescript": "^3.0.3"
   }
 }

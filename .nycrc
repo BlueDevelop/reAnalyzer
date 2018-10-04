@@ -1,14 +1,24 @@
 {
-  "check-coverage": false,
-  "exclude": [
-    "*.interface.ts",
-    "coverage"
+  "exclude" :[
+    "src/auth",
+    "config",
+    "src/**/index.ts",
+    "src/**/config.ts",
+    "src/helpers/spec.helper.ts"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "require": [
+    "ts-node/register"
   ],
   "reporter": [
     "text",
     "html"
   ],
-  "cache": false,
-  "all": true,
-  "sourceMap": true
+  "sourceMap": true,
+  "instrument": true
 }

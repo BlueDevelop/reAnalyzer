@@ -20,7 +20,6 @@ const mockUser: IUser = new User({
     name: 'Omer Zamir'
   });
 const badMockUser: IUser = new User({
-    password: 'testTest',
     name: 'Omer Zamir'
 });
 const basePath = '/api/user/';
@@ -28,8 +27,20 @@ const basePath = '/api/user/';
 describe('User Service', () => {
 
     describe('#create', () => {
-        it('Should create a user', async () => {
+        it('Should create a user with password', async () => {
             const user = await userService.create(new User(mockUser));
+
+            expect(user).to.exist;            
+            expect(user).to.have.property('id');
+            expect(user).to.have.property('name');
+            expect(user).to.have.property('password');
+        });
+
+        it('Should create a user without password', async () => {
+            const userWithoutPassword = new User(mockUser);
+            userWithoutPassword.password = undefined;
+
+            const user = await userService.create(userWithoutPassword);
 
             expect(user).to.exist;            
             expect(user).to.have.property('id');
@@ -86,7 +97,7 @@ describe('User Routes', () => {
             .send(new User(badMockUser))
             .end((err, res) => {
 
-                expect(res).to.have.status(500);
+                expect(res).to.have.status(400);
                 expect(res.body).to.be.empty;
                 expect(res.error).to.exist;
                 expect(res.error).to.be.an('error');
@@ -97,3 +108,42 @@ describe('User Routes', () => {
     });
 
   });
+
+  describe('User Schema', () => {
+
+    describe('#generateHash', () => {
+        it('Should generate hash for users password', async () => {
+            const user = await userService.create(new User(mockUser));
+
+            expect(user).to.exist;
+            expect(user).to.have.property('id');
+            expect(user).to.have.property('name');
+            expect(user).to.have.property('password');
+        });
+    });
+
+    describe('#validPassword', () => {
+        it('Should return true for valid password', async () => {
+            const user = await userService.create(new User(mockUser));
+            expect(user).to.exist;
+            expect(user).to.have.property('id');
+            expect(user).to.have.property('name');
+            expect(user).to.have.property('password');
+
+            // Real function check.
+            expect(user.validPassword(<string>mockUser.password)).to.be.true;
+        });
+
+        it('Should return false for invalid password', async () => {
+            const user = await userService.create(new User(mockUser));
+            expect(user).to.exist;
+            expect(user).to.have.property('id');
+            expect(user).to.have.property('name');
+            expect(user).to.have.property('password');
+
+            // Real function check.
+            expect(user.validPassword('Omer Is A King!')).to.be.false;
+        });
+    });
+
+});
