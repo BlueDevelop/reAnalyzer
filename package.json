@@ -9,7 +9,7 @@
     "build:tsc": "tsc",
     "test": "npm run build:tsc && npm run test:run",
     "test:run": "NODE_ENV=test mocha dist/**/*.spec.js --exit --timeout=30000",
-    "test:coverage": "npm run build && nyc npm test:run"
+    "test:coverage": "nyc npm test"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",

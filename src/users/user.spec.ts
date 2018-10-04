@@ -6,6 +6,7 @@ import User from './user.model';
 import IUser from './user.interface';
 import userService from './user.service';
 import userController from './user.controller';
+import { ValidationError } from 'mongoose';
 require('../helpers/spec.helper');
 const server = require('../index').app;
 const expect = chai.expect;
@@ -18,6 +19,10 @@ const mockUser: IUser = new User({
     password: 'testTest',
     name: 'Omer Zamir'
   });
+const badMockUser: IUser = new User({
+    password: 'testTest',
+    name: 'Omer Zamir'
+});
 const basePath = '/api/user/';
 
 describe('User Service', () => {
@@ -29,6 +34,10 @@ describe('User Service', () => {
             expect(user).to.exist;            
             expect(user).to.have.property('id');
             expect(user).to.have.property('name');
+        });
+
+        it('Should not create a user', async () => {
+            await expect(userService.create(new User(badMockUser))).to.be.rejectedWith(ValidationError);
         });
     });
 
@@ -44,6 +53,10 @@ describe('User Controller', () => {
             expect(user).to.have.property('id');
             expect(user).to.have.property('name');
         });
+
+        it('Should not create a user', async () => {
+            await expect(userController.create(new User(badMockUser))).to.be.rejectedWith(ValidationError);
+        });
     });
 
 });
@@ -51,7 +64,7 @@ describe('User Controller', () => {
 describe('User Routes', () => {
 
     describe('/POST '+ basePath, () => {
-        it('it should create a user', (done) => {
+        it('should create a user', (done) => {
             chai.request(server)
             .post(basePath)
             .send(new User(mockUser))
@@ -67,13 +80,10 @@ describe('User Routes', () => {
             });
         });
 
-        it('it should not create a user without uniqueId', (done) => {
+        it('should not create a user without uniqueId', (done) => {
             chai.request(server)
             .post(basePath)
-            .send(new User({
-                password: '1234', 
-                name: 'Omer'
-            }))
+            .send(new User(badMockUser))
             .end((err, res) => {
 
                 expect(res).to.have.status(500);
