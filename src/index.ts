@@ -1,17 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
-import {connect, connection} from 'mongoose';
+import {connect, connection, Mongoose} from 'mongoose';
 import {json, urlencoded} from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import morgan from 'morgan';
+import os from 'os';
 const MongoStore = require('connect-mongo')(session);
 
 import getConfig from './config';
 import * as passport from './auth/passport';
 import userRoutes from './users/user.router';
 import morganLogger from './loggers/morgan.logger';
+import errorLogger from './loggers/error.logger';
+import verboseLogger from './loggers/verbose.logger';
+import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
 
 
@@ -20,7 +24,11 @@ export const app = express();
 
 (function init() {
     process.on('uncaughtException', err => {
-        console.error(err);
+        errorLogger.error('%j', {
+            message: err.message,
+            stack: err.stack,
+            name:err.name
+        });
         process.exit(1);
     });
 
@@ -29,12 +37,34 @@ export const app = express();
     setRoutes();
 
     app.listen(config.port, () => {
+        verboseLogger.info(`Server is listening on port ${config.port}`);
         console.log(`Server is listening on port ${config.port}`);
     });
 })();
 
 function initDbConnection() {
-    connect(config.connString, { useNewUrlParser: true });
+    connect(config.connString, { useNewUrlParser: true }, err => {
+        if (err) {
+            errorLogger.error('%j', {
+                message: err.message,
+                stack: err.stack,
+                name:err.name
+            });
+            process.exit(1);
+        }
+    });
+
+    connection.on('connected', () => {
+        verboseLogger.info(`Server is connected to ${config.connString}`);
+    });
+
+    connection.on('disconnected', () => {
+        errorLogger.error(`Server disconnected from ${config.connString}`);
+    });
+
+    connection.on('reconnected', () => {
+        verboseLogger.info(`Server reconnected to ${config.connString}`);
+    });
 }
 
 function setMiddlewares() {
@@ -72,4 +102,21 @@ function setRoutes() {
     });
 
     app.use('/api/user', userRoutes);
+
+    app.get('/api/isAlive', (_, res) => {
+        if (connection.readyState) {
+            return res.send('ok');
+        }
+        return res.status(500).send();
+    });
+
+    app.get('/api/hostname', (_, res) => {
+        return res.send(os.hostname());
+    });
+
+    app.get('/api/ruok', (_, res) => {
+        if (connection.readyState) {
+            return res.send('ok');
+        }
+        return res.status(500).send();    });
 }
