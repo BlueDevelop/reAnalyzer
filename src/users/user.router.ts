@@ -18,8 +18,9 @@ router.post('/', async (req, res, next) => {
         name: req.body.name
       }));
   
-      return user ? res.json(user) : res.sendStatus(400);
+      return res.json(user);
     } catch (err) {
+      res.status(400);
       next(err);
     }
   });

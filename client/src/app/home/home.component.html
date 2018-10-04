@@ -1,0 +1,10 @@
+<mat-sidenav-container >
+  <mat-sidenav mode="side" #sidenav opened position="end" role="navigation">
+  <app-sidenav-buttons></app-sidenav-buttons>
+  </mat-sidenav>
+  <mat-sidenav-content>
+
+<app-nav-bar></app-nav-bar>
+        <router-outlet name="app"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
