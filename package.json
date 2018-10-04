@@ -9,7 +9,7 @@
     "build:tsc": "tsc",
     "test": "npm run build:tsc && npm run test:run",
     "test:run": "NODE_ENV=test mocha dist/**/*.spec.js --exit --timeout=30000",
-    "test:coverage": "nyc npm test"
+    "test:coverage": "npm run build:tsc && nyc npm run test:run"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
