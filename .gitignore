@@ -1,4 +1,5 @@
 dist
+mochawesome-report
 
 # Logs
 logs

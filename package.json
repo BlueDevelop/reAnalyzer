@@ -57,6 +57,7 @@
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
+    "mochawesome": "3.0.3",
     "nyc": "^13.0.1",
     "ts-node": "7.0.1",
     "typescript": "^3.0.3"
