@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "build": "npm run build:tsc",
-    "build:tsc": " tsc",
-    "test": "npm run build && npm test:run",
-    "test:run": "set NODE_ENV=test&& mocha dist/**/*.spec.js --exit",
-    "test:coverage": "npm run build && nyc npm test:run"
+    "build": "npm run build:tsc && cd client && ng build && cd ..",
+    "build:tsc": "tsc",
+    "test": "npm run build:tsc && npm run test:run",
+    "test:run": "NODE_ENV=test mocha src/**/*.spec.ts --opts ./mocha.opts",
+    "test:coverage": "npm run build:tsc && nyc npm run test:run"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^2.0.0",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
@@ -32,10 +32,11 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-saml": "^0.35.0",
-    "winston": "^3.1.0"
+    "winston": "^2.4.4",
+    "winston-daily-rotate-file": "3.3.3"
   },
   "devDependencies": {
-    "@types/bcrypt": "^2.0.0",
+    "@types/bcrypt": "^2.x.x",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.4",
     "@types/chai-as-promised": "^7.1.0",
@@ -57,7 +58,9 @@
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
+    "mochawesome": "3.0.3",
     "nyc": "^13.0.1",
+    "ts-node": "7.0.1",
     "typescript": "^3.0.3"
   }
 }

@@ -1,0 +1,22 @@
+<section class="login-form">
+  <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field hintLabel="Please enter your email">
+      <input 
+      matInput 
+      placeholder="email" 
+      formControlName="email"
+>
+      <mat-error *ngIf="!loginForm.hasError('required')">Email is invalid</mat-error>
+      <mat-error *ngIf="loginForm.hasError('required')">Email not be empty</mat-error>
+    </mat-form-field>
+    <mat-form-field hintLabel="Please enter your password">
+      <input 
+      matInput 
+      placeholder="password" 
+      formControlName="password">
+  
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Submit</button>
+  </form>
+  
+  </section>

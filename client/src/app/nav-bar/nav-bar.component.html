@@ -1,0 +1,15 @@
+<div class="tab-bar">
+  <div mat-card-avatar class="header-image1"></div>
+  <div>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link *ngFor="let link of navLinks" 
+      [routerLink]="link.path" 
+      routerLinkActive #rla="routerLinkActive" 
+      [active]="rla.isActive">
+      {{link.label}}
+      </a>
+    </nav>
+  </div>
+  <div mat-card-avatar class="header-image"></div>
+</div>
+<mat-divider></mat-divider>

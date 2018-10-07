@@ -6,7 +6,7 @@ import IUser from '../users/user.interface';
 import LocalStrategy from './passport.local';
 
 export const authenticate = passport.authenticate('local', { successRedirect: '/',
-                                                    failureRedirect: '/login',
+                                                    failureRedirect: '/',
                                                     failureFlash: false });
 
 export const init = (app: Application) => {
@@ -25,5 +25,5 @@ export const init = (app: Application) => {
 
     passport.use(LocalStrategy);
 
-    app.post('/login', authenticate);
+    app.post('/api/login', authenticate);
 };

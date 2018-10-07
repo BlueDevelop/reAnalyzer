@@ -1,4 +1,7 @@
 import * as express from 'express';
+
+import infoLogger from '../loggers/info.logger';
+import errorLogger from '../loggers/error.logger';
 import User from './user.model';
 import IUser from './user.interface';
 import userController from './user.controller';
@@ -17,9 +20,17 @@ router.post('/', async (req, res, next) => {
         password: req.body.password,
         name: req.body.name
       }));
-  
-      return user ? res.json(user) : res.sendStatus(400);
+      
+      infoLogger.info(`User ${user.uniqueId} - ${user.name} was created.`);
+
+      return res.json(user);
     } catch (err) {
+      errorLogger.error('%j', {
+        message: err.message,
+        stack: err.stack,
+        name:err.name
+      });
+      res.status(400);
       next(err);
     }
   });
