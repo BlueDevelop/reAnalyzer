@@ -29,13 +29,13 @@ const dev: IConfig = {
 };
 
 const test: IConfig = {
-    port: 3000,
-    connString: 'mongodb://mongodb:27017/reAnalyzer_test',
+    port: 3001,
+    connString: 'mongodb://localhost:27017/reAnalyzer_test',
     sessionSecret: 'OmerIsTheBestProgrammer',
     logLevel: 'verbose',
-    apmAdress: 'http://apm:8200',
+    apmAdress: 'http://localhost:8200',
     apmServiceName: 'reAnalyzer_test',
-    elasticsearch: 'http://elasticsearch:9200'
+    elasticsearch: 'http://localhost:9200'
 };
 
 export default () => {
