@@ -1,3 +1,13 @@
+import getConfig from './config';
+const config = getConfig();
+
+const apm = require('elastic-apm-node').start({
+    // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
+    serviceName: config.apmServiceName,
+  
+    // Set custom APM Server URL (default: http://localhost:8200)
+    serverUrl: config.apmAdress
+});
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
@@ -9,7 +19,6 @@ import morgan from 'morgan';
 import os from 'os';
 const MongoStore = require('connect-mongo')(session);
 
-import getConfig from './config';
 import * as passport from './auth/passport';
 import userRoutes from './users/user.router';
 import morganLogger from './loggers/morgan.logger';
@@ -19,7 +28,6 @@ import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
 
 
-const config = getConfig();
 export const app = express();
 
 (function init() {

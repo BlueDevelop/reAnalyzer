@@ -28,6 +28,8 @@ services:
   apm:
     image: docker.elastic.co/apm/apm-server:6.3.2
     container_name: apm
+    environment:
+      - "ES_HOSTS=http://elasticsearch:9200"
     ports: ['8200:8200']
     depends_on: ['elasticsearch', 'kibana']
   mongodb:

@@ -2,28 +2,40 @@ interface IConfig {
     port: number,
     connString: string,
     sessionSecret: string,
-    logLevel: string
+    logLevel: string,
+    apmAdress: string,
+    apmServiceName: string,
+    elasticsearch: string
 }
 
 const prod: IConfig = {
     port: 3000,
     connString: 'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replica=reAnalyzer',
     sessionSecret: 'OmerIsTheBestProgrammer',
-    logLevel: 'info'
+    logLevel: 'info',
+    apmAdress: 'http://apm:8200',
+    apmServiceName: 'reAnalyzer_prod',
+    elasticsearch: 'http://elasticsearch:9200'
 };
 
 const dev: IConfig = {
     port: 3000,
     connString: 'mongodb://mongodb:27017/reAnalyzer_dev',
     sessionSecret: 'OmerIsTheBestProgrammer',
-    logLevel: 'verbose'
+    logLevel: 'verbose',
+    apmAdress: 'http://apm:8200',
+    apmServiceName: 'reAnalyzer_dev',
+    elasticsearch: 'http://elasticsearch:9200'
 };
 
 const test: IConfig = {
     port: 3000,
-    connString: 'mongodb://localhost:27017/reAnalyzer_test',
+    connString: 'mongodb://mongodb:27017/reAnalyzer_test',
     sessionSecret: 'OmerIsTheBestProgrammer',
-    logLevel: 'verbose'
+    logLevel: 'verbose',
+    apmAdress: 'http://apm:8200',
+    apmServiceName: 'reAnalyzer_test',
+    elasticsearch: 'http://elasticsearch:9200'
 };
 
 export default () => {
