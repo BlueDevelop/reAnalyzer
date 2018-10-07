@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "build": "npm run build:tsc && cd client && ng build && cd ..",
-    "build:tsc": "tsc",
+    "build": "npm run build:tsc && cd client && npx ng build && cd ..",
+    "build:tsc": "npx tsc",
     "test": "npm run build:tsc && npm run test:run",
-    "test:run": "NODE_ENV=test mocha src/**/*.spec.ts --opts ./mocha.opts",
-    "test:coverage": "npm run build:tsc && nyc npm run test:run"
+    "test:run": "NODE_ENV=test npx mocha src/**/*.spec.ts --opts ./mocha.opts",
+    "test:coverage": "npm run build:tsc && npx nyc npm run test:run"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
