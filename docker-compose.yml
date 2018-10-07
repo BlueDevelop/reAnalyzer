@@ -8,6 +8,8 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
+    volumes:
+      - logs:/home/omer/Desktop/logs
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
     ports: ['9200:9200']
@@ -38,4 +40,6 @@ services:
       - 27017:27017
 volumes:
   esdata1:
+    driver: local
+  logs:
     driver: local

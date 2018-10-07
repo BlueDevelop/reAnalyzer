@@ -14,7 +14,7 @@ const prod: IConfig = {
 
 const dev: IConfig = {
     port: 3000,
-    connString: 'mongodb://localhost:27017/reAnalyzer_dev',
+    connString: 'mongodb://mongodb:27017/reAnalyzer_dev',
     sessionSecret: 'OmerIsTheBestProgrammer',
     logLevel: 'verbose'
 };
