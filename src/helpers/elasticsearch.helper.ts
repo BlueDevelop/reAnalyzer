@@ -6,23 +6,16 @@ const config = getConfig();
  * Elasticsearch class
  */
 export default class elasticsearch {
-    client: Client;
-    
-    /**
-     * Init elasticsearch connection.
-     */
-    constructor() {
-        this.client = new Client({
-            hosts: config.elasticsearch
-        });
-    }
+    static client: Client =  new Client({
+        hosts: config.elasticsearch
+    });
 
     /**
      * Get the client connection object.
      * 
      * @returns EsClient
      */
-    getClient() : Client {
-        return this.client;
+    static getClient() : Client {
+        return elasticsearch.client;
     }
 }

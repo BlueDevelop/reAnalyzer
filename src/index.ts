@@ -26,7 +26,7 @@ import errorLogger from './loggers/error.logger';
 import verboseLogger from './loggers/verbose.logger';
 import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
-
+import taskService from './tasks/task.service';
 
 export const app = express();
 
@@ -103,13 +103,6 @@ function setMiddlewares() {
 }
 
 function setRoutes() {
-    // Static files
-    app.use(express.static(path.join(__dirname, '../client/dist/App')));
-
-    app.get('*', (_, res) => {
-        res.sendFile(path.join(__dirname, '../client/dist/App/index.html'));
-    });
-
     app.use('/api/user', userRoutes);
 
     app.get('/api/isAlive', (_, res) => {
@@ -127,5 +120,18 @@ function setRoutes() {
         if (connection.readyState) {
             return res.send('ok');
         }
-        return res.status(500).send();    });
+        return res.status(500).send();    
+    });
+
+    app.get('/api/test', async (_, res) => {
+        const result = await taskService.getCountByStatus( Date.now() - 30*24*60*60*1000, Date.now());
+        return res.json(result);
+    });
+
+    // Static files
+    app.use(express.static(path.join(__dirname, '../client/dist/App')));
+
+    app.get('*', (_, res) => {
+        res.sendFile(path.join(__dirname, '../client/dist/App/index.html'));
+    });
 }
