@@ -6,9 +6,9 @@ export default class taskController {
     /**
      * validates queries and fetch the count of tasks per interval as given by a given field in given time range.
      * 
-     * @param {Request} req 
-     * @param {Response} res 
-     * @param {NextFunction} next 
+     * @param {Request} req
+     * @param {Response} res
+     * @param {NextFunction} next
      */
     static async getFieldCountPerInterval(req: Request, res: Response, next: NextFunction) {
         if (!req.query.field || !req.query.from || !req.query.to) {
@@ -33,9 +33,9 @@ export default class taskController {
     /**
      * validates queries and fetch the count of tasks per status in a given time range.
      * 
-     * @param {Request} req 
-     * @param {Response} res 
-     * @param {NextFunction} next 
+     * @param {Request} req
+     * @param {Response} res
+     * @param {NextFunction} next
      */
     static async getCountByStatus(req: Request, res: Response, next: NextFunction) {
         if (!req.query.from || !req.query.to) {
