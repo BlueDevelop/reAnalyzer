@@ -1,6 +1,5 @@
 import esClient from '../helpers/elasticsearch.helper';
 import ITask from './task.interface';
-import { resolve } from 'dns';
 
 export default class taskService {
     static client = esClient.getClient();

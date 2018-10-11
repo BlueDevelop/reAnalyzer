@@ -11,7 +11,7 @@ require('../helpers/spec.helper');
 const server = require('../index').app;
 const expect = chai.expect;
 
-chai.use(chaiAsPromised)
+chai.use(chaiAsPromised);
 chai.use(chaiHttp);
 
 const mockUser: IUser = new User({
@@ -30,7 +30,7 @@ describe('User Service', () => {
         it('Should create a user with password', async () => {
             const user = await userService.create(new User(mockUser));
 
-            expect(user).to.exist;            
+            expect(user).to.exist;
             expect(user).to.have.property('id');
             expect(user).to.have.property('name');
             expect(user).to.have.property('password');

@@ -21,12 +21,12 @@ const MongoStore = require('connect-mongo')(session);
 
 import * as passport from './auth/passport';
 import userRoutes from './users/user.router';
+import taskRouter from './tasks/task.router';
 import morganLogger from './loggers/morgan.logger';
 import errorLogger from './loggers/error.logger';
 import verboseLogger from './loggers/verbose.logger';
 import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
-import taskController from './tasks/task.controller';
 
 export const app = express();
 
@@ -104,7 +104,8 @@ function setMiddlewares() {
 
 function setRoutes() {
     app.use('/api/user', userRoutes);
-
+    app.use('/api/task', taskRouter);
+    
     app.get('/api/isAlive', (_, res) => {
         if (connection.readyState) {
             return res.send('ok');
