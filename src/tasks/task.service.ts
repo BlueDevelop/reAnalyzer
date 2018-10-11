@@ -31,7 +31,7 @@ export default class taskService {
             index: taskService.index,
             body: {
                 aggs: {
-                    3: {
+                    1: {
                         date_histogram: {
                             field,
                             interval: interval || '1d',
@@ -94,7 +94,7 @@ export default class taskService {
             index: taskService.index,
             body: {
                 aggs: {
-                    2: {
+                    1: {
                         terms: {
                             field: 'status.keyword',
                             size: 10,

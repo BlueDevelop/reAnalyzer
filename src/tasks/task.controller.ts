@@ -3,6 +3,13 @@ import { Request, Response, NextFunction } from 'express';
 
 export default class taskController {
 
+    /**
+     * validates queries and fetch the count of tasks per interval as given by a given field in given time range.
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @param {NextFunction} next 
+     */
     static async getFieldCountPerInterval(req: Request, res: Response, next: NextFunction) {
         if (!req.query.field || !req.query.from || !req.query.to) {
             return res.status(400);
@@ -19,10 +26,17 @@ export default class taskController {
                                                                     +req.query.to,
                                                                     req.query.interval);
 
-        res.json(response.hits.hits);
-        return next(response.hits.hits);
+        res.json(response.aggregations['1']['buckets']);
+        return next(response.aggregations['1']['buckets']);
     }
 
+    /**
+     * validates queries and fetch the count of tasks per status in a given time range.
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @param {NextFunction} next 
+     */
     static async getCountByStatus(req: Request, res: Response, next: NextFunction) {
         if (!req.query.from || !req.query.to) {
             return res.status(400);
@@ -33,7 +47,7 @@ export default class taskController {
 
         const response = await taskService.getCountByStatus(+req.query.from, +req.query.to);
         
-        res.json(response.hits.hits);
-        return next(response.hits.hits);
+        res.json(response.aggregations['1']['buckets']);
+        return next(response.aggregations['1']['buckets']);
     }
 }
