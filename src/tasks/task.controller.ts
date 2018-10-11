@@ -12,13 +12,16 @@ export default class taskController {
      */
     static async getFieldCountPerInterval(req: Request, res: Response, next: NextFunction) {
         if (!req.query.field || !req.query.from || !req.query.to) {
-            return res.status(400);
+            res.status(400);
+            return next();
         }
         if(req.query.field !== 'due' && req.query.field !== 'created') {
-            return res.status(400);
+            res.status(400);
+            return next();
         }
         if(isNaN(req.query.from) || isNaN(req.query.to)) {
-            return res.status(400);
+            res.status(400);
+            return next();
         }
 
         const response = await taskService.getFieldCountPerInterval(req.query.field,
@@ -39,10 +42,12 @@ export default class taskController {
      */
     static async getCountByStatus(req: Request, res: Response, next: NextFunction) {
         if (!req.query.from || !req.query.to) {
-            return res.status(400);
+            res.status(400);
+            return next();
         }
         if(isNaN(req.query.from) || isNaN(req.query.to)) {
-            return res.status(400);
+            res.status(400);
+            return next();
         }
 
         const response = await taskService.getCountByStatus(+req.query.from, +req.query.to);

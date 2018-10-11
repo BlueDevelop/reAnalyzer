@@ -26,7 +26,7 @@ import errorLogger from './loggers/error.logger';
 import verboseLogger from './loggers/verbose.logger';
 import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
-import taskService from './tasks/task.service';
+import taskController from './tasks/task.controller';
 
 export const app = express();
 
@@ -121,11 +121,6 @@ function setRoutes() {
             return res.send('ok');
         }
         return res.status(500).send();    
-    });
-
-    app.get('/api/test', async (_, res) => {
-        const result = await taskService.getCountByStatus( Date.now() - 30*24*60*60*1000, Date.now());
-        return res.json(result);
     });
 
     // Static files
