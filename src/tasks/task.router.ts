@@ -18,4 +18,13 @@ router.get('/countByStatus', authenticate, taskController.getCountByStatus);
  */
 router.get('/fieldCountPerInterval', authenticate, taskController.getFieldCountPerInterval);
 
+
+/**
+ * GET /task/tagCloud?from=123&to=124&size=40.
+ * the size field is optional and defaults to 40.
+ * @returns count of each unique tag according to size given.
+ */
+router.get('/tagCloud', authenticate, taskController.getTagCloud);
+
+
 export default router;
