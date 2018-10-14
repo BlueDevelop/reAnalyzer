@@ -21,12 +21,12 @@ const MongoStore = require('connect-mongo')(session);
 
 import * as passport from './auth/passport';
 import userRoutes from './users/user.router';
+import taskRouter from './tasks/task.router';
 import morganLogger from './loggers/morgan.logger';
 import errorLogger from './loggers/error.logger';
 import verboseLogger from './loggers/verbose.logger';
 import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
-
 
 export const app = express();
 
@@ -78,10 +78,10 @@ function initDbConnection() {
 
 function setMiddlewares() {
     app.disable('x-powered-by');
+    app.use(cors());
     app.use(json());
     app.use(urlencoded({extended: true}));
     app.use(cookieParser());
-    app.use(cors());
     app.use(morgan('combined', {
         skip: (_, res) => res.statusCode < 400,
         stream: {
@@ -103,15 +103,9 @@ function setMiddlewares() {
 }
 
 function setRoutes() {
-    // Static files
-    app.use(express.static(path.join(__dirname, '../client/dist/App')));
-
-    app.get('*', (_, res) => {
-        res.sendFile(path.join(__dirname, '../client/dist/App/index.html'));
-    });
-
     app.use('/api/user', userRoutes);
-
+    app.use('/api/task', taskRouter);
+    
     app.get('/api/isAlive', (_, res) => {
         if (connection.readyState) {
             return res.send('ok');
@@ -127,5 +121,13 @@ function setRoutes() {
         if (connection.readyState) {
             return res.send('ok');
         }
-        return res.status(500).send();    });
+        return res.status(500).send();    
+    });
+
+    // Static files
+    app.use(express.static(path.join(__dirname, '../client/dist/App')));
+
+    app.get('*', (_, res) => {
+        res.sendFile(path.join(__dirname, '../client/dist/App/index.html'));
+    });
 }

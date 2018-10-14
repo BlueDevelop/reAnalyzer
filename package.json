@@ -1,7 +1,11 @@
 {
   "name": "reanalyzer",
   "version": "1.0.0",
-  "description": "",
+  "description": "BI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BlueDevelop/reAnalyzer.git"
+  },
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
@@ -26,6 +30,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "elastic-apm-node": "1.12.0",
+    "elasticsearch": "15.1.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "mongoose": "^5.2.15",
@@ -37,6 +42,7 @@
     "winston-daily-rotate-file": "3.3.3"
   },
   "devDependencies": {
+    "@types/elasticsearch": "5.0.26",
     "@types/bcrypt": "^2.x.x",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.4",

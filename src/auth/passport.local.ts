@@ -23,7 +23,7 @@ const strategy = new Strategy({
       }
       if (!user.validPassword(password)) {
         infoLogger.info(`${req.ip} tried to login using this uniqueId: ${uniqueId} and failed.`);
-        return done(null, false, { message: 'ncorrect username or password.' });
+        return done(null, false, { message: 'Incorrect username or password.' });
       }
 
       infoLogger.info(`${req.ip} authenticated with uniqueId: ${uniqueId} successfully.`);
