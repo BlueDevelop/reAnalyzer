@@ -78,10 +78,10 @@ function initDbConnection() {
 
 function setMiddlewares() {
     app.disable('x-powered-by');
+    app.use(cors());
     app.use(json());
     app.use(urlencoded({extended: true}));
     app.use(cookieParser());
-    app.use(cors());
     app.use(morgan('combined', {
         skip: (_, res) => res.statusCode < 400,
         stream: {

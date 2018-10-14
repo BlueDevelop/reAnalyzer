@@ -1,7 +1,11 @@
 {
   "name": "reanalyzer",
   "version": "1.0.0",
-  "description": "",
+  "description": "BI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BlueDevelop/reAnalyzer.git"
+  },
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",

@@ -147,4 +147,70 @@ export default class taskService {
             }
         });
     }
+
+    /**
+     * Returns the count of unique tags in a given time range.
+     * 
+     * @param {number} from Date to search from in epoch_millis.
+     * @param {number} to Date to search to in epoch_millis.
+     * @param {number?} size The number of tags, defaults to 40.
+     */
+    static getTagCloud(from: number, to: number, size?: number) {
+        return taskService.client.search({
+            index: taskService.index,
+            body: {
+                aggs: {
+                    1: {
+                        terms: {
+                            field: "tags.keyword",
+                            size: size || 40,
+                            order: {
+                                _count: "desc"
+                            }
+                        }
+                    }
+                },
+                size: 0,
+                _source: {
+                    excludes: []
+                },
+                stored_fields: [
+                    "*"
+                ],
+                script_fields: {},
+                docvalue_fields: [
+                    "assignUpdates.created",
+                    "assignUpdates.updated",
+                    "comments.created",
+                    "comments.updated",
+                    "created",
+                    "due",
+                    "statusUpdates.created",
+                    "statusUpdates.updated",
+                    "updated"
+                ],
+                query: {
+                    bool: {
+                        must: [
+                            {
+                                match_all: {}
+                            },
+                            {
+                                range: {
+                                    created: {
+                                        gte: from,
+                                        lte: to,
+                                        format: "epoch_millis"
+                                    }
+                                }
+                            }
+                        ],
+                        filter: [],
+                        should: [],
+                        must_not: []
+                    }
+                }
+            }
+        });
+    }
 }
