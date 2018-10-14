@@ -7,7 +7,7 @@ import LocalStrategy from './passport.local';
 
 export const authenticate = passport.authenticate('local', { successRedirect: '/api/login/success',
                                                     failureRedirect: '/api/login/fail',
-                                                    failureFlash: true });
+                                                    failureFlash: false });
 
 export const init = (app: Application) => {
     app.use(passport.initialize());
