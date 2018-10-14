@@ -41,7 +41,7 @@ export default class taskController {
                 stack: err.stack,
                 name: err.name
             });
-            res.status(400);
+            res.status(500);
             next(err);
         }
     }
@@ -75,7 +75,7 @@ export default class taskController {
                 stack: err.stack,
                 name: err.name
             });
-            res.status(400);
+            res.status(500);
             next(err);
         }
     }
@@ -111,7 +111,7 @@ export default class taskController {
                 stack: err.stack,
                 name: err.name
             });
-            res.status(400);
+            res.status(500);
             next(err);
         }
     }
