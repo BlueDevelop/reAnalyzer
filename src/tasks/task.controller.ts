@@ -131,7 +131,7 @@ export default class taskController {
       res.status(500);
       next(err);
     }
-
+  }
 
     /**
      * validates queries and fetch the leaderboard data in a given time range.
