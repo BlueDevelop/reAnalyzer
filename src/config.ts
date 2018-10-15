@@ -1,3 +1,5 @@
+import hierarchyService from "./helpers/userhierarchy.helper";
+
 interface IConfig {
     port: number,
     connString: string,
@@ -5,7 +7,10 @@ interface IConfig {
     logLevel: string,
     apmAdress: string,
     apmServiceName: string,
-    elasticsearch: string
+    elasticsearch: string,
+    hierarchyServiceAddr?:string,
+    hierarchyServiceMockFile?:string,
+    hierarchyServiceAddrGetMembers?:(hierarchy:string)=>string,
 }
 
 const prod: IConfig = {
@@ -15,7 +20,9 @@ const prod: IConfig = {
     logLevel: 'info',
     apmAdress: 'http://apm:8200',
     apmServiceName: 'reAnalyzer_prod',
-    elasticsearch: 'http://elasticsearch:9200'
+    elasticsearch: 'http://elasticsearch:9200',
+    hierarchyServiceAddr:'http://hierarchyServiceAddress/api/hierarchy/',
+    hierarchyServiceAddrGetMembers:(hierarchyID:string)=>`${prod.hierarchyServiceAddr}${hierarchyID}/members`,
 };
 
 const dev: IConfig = {
@@ -25,7 +32,8 @@ const dev: IConfig = {
     logLevel: 'verbose',
     apmAdress: 'http://apm:8200',
     apmServiceName: 'reAnalyzer_dev',
-    elasticsearch: 'http://elasticsearch:9200'
+    elasticsearch: 'http://elasticsearch:9200',
+    hierarchyServiceMockFile:"./mock/members.json"
 };
 
 const test: IConfig = {
