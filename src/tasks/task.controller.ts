@@ -131,5 +131,42 @@ export default class taskController {
       res.status(500);
       next(err);
     }
-  }
+
+
+    /**
+     * validates queries and fetch the leaderboard data in a given time range.
+     * 
+     * @param {Request} req
+     * @param {Response} res
+     * @param {NextFunction} next
+     */
+    static async getLeaderboard(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (!req.query.from || !req.query.to) {
+                res.status(400);
+                return next();
+            }
+            if (isNaN(req.query.from) || isNaN(req.query.to) || (req.query.size && isNaN(req.query.size))) {
+                res.status(400);
+                return next();
+            }
+
+            const size = req.query.size ? +req.query.size : undefined;
+
+            const response = await taskService.getLeaderboard(+req.query.from, +req.query.to, size);
+
+            res.json(response.aggregations['1']['buckets']);
+            return next(response.aggregations['1']['buckets']);
+        }
+        catch (err) {
+            errorLogger.error('%j', {
+                message: err.message,
+                stack: err.stack,
+                name: err.name
+            });
+            res.status(500);
+            next(err);
+        }
+    }
 }
+

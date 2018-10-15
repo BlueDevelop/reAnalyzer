@@ -25,4 +25,11 @@ router.get('/fieldCountPerInterval', authenticate, taskController.getFieldCountP
  */
 router.get('/tagCloud', authenticate, taskController.getTagCloud);
 
+/**
+ * GET /task/leaderboard?from=123&to=124&size=10.
+ * the size field is optional and defaults to 10.
+ * @returns users according to size given ordered by the number of completed tasks.
+ */
+router.get('/leaderboard', authenticate, taskController.getLeaderboard);
+
 export default router;
