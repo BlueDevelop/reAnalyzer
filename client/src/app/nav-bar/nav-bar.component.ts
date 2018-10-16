@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../_services/user.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit {
+  currentUser;
+  nameInitials:string
 
   navLinks = [
     {path:[{outlets: {'app': ['dashboard']}}], label:"לוח ראשי"},
@@ -15,9 +18,11 @@ export class NavBarComponent implements OnInit {
     {path:[{outlets: {'app': ['settings']}}], label:"הגדרות"}
   ]
 
-  constructor() { }
-
+  constructor(private userService:UserService) {
+    this.nameInitials = userService.getNameInitials();
+   }
   ngOnInit() {
-  }
 
+  }
+  
 }
