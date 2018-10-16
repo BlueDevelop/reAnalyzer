@@ -1,5 +1,5 @@
-import { Client } from "elasticsearch";
-import getConfig from "../config";
+import { Client } from 'elasticsearch';
+import getConfig from '../config';
 const config = getConfig();
 
 /**
@@ -16,6 +16,6 @@ export default class Elasticsearch {
   }
 
   private static client: Client = new Client({
-    hosts: config.elasticsearch
+    hosts: config.elasticsearch,
   });
 }

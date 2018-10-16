@@ -1,8 +1,8 @@
-import getConfig from "../config";
+import getConfig from '../config';
 const config = getConfig();
-import * as _ from "lodash";
-import axios from "axios";
-import * as fs from "fs";
+import * as _ from 'lodash';
+import axios from 'axios';
+import * as fs from 'fs';
 /**
  *
  *
@@ -20,13 +20,13 @@ async function getHierarchy(rootHierarchy?: string) {
   } else if (config.hierarchyServiceMockFile) {
     // use a static mock json file
     const data = JSON.parse(
-      fs.readFileSync(config.hierarchyServiceMockFile, "utf8")
+      fs.readFileSync(config.hierarchyServiceMockFile, 'utf8')
     );
     const idList = _.map(data, person => person.id);
     return idList;
   } else {
     // TODO:throw error or do nothing
-    throw new Error("hierarchy not configured");
+    throw new Error('hierarchy not configured');
   }
 }
 

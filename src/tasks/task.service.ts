@@ -1,20 +1,17 @@
-import esClient from "../helpers/elasticsearch.helper";
-import Itask from "./task.interface";
+import esClient from '../helpers/elasticsearch.helper';
+import Itask from './task.interface';
 
 export default class TaskService {
-  static client = esClient.getClient();
-  static index = "tasks_test";
-
   /**
    * Returns the requested result from elasticsearch.
    * @param {string} value The value to search.
    * @param {string?} field The field to search by, defaults to '_id'.
    */
-  static getByField(value: string, field?: string) {
-    const searchField = field || "_id";
+  public static getByField(value: string, field?: string) {
+    const searchField = field || '_id';
     return TaskService.client.search<Itask>({
       index: TaskService.index,
-      q: searchField + ":" + value
+      q: searchField + ':' + value,
     });
   }
 
@@ -25,7 +22,7 @@ export default class TaskService {
    * @param {number} to Date to search to in epoch_millis.
    * @param {string?} interval The interval as DurationString, defaults to '1d'.
    */
-  static getFieldCountPerInterval(
+  public static getFieldCountPerInterval(
     field: string,
     from: number,
     to: number,
@@ -38,28 +35,28 @@ export default class TaskService {
           1: {
             date_histogram: {
               field,
-              interval: interval || "1d",
-              time_zone: "Asia/Jerusalem",
-              min_doc_count: 1
-            }
-          }
+              interval: interval || '1d',
+              time_zone: 'Asia/Jerusalem',
+              min_doc_count: 1,
+            },
+          },
         },
         size: 0,
         _source: {
-          excludes: []
+          excludes: [],
         },
-        stored_fields: ["*"],
+        stored_fields: ['*'],
         script_fields: {},
         docvalue_fields: [
-          "assignUpdates.created",
-          "assignUpdates.updated",
-          "comments.created",
-          "comments.updated",
-          "created",
-          "due",
-          "statusUpdates.created",
-          "statusUpdates.updated",
-          "updated"
+          'assignUpdates.created',
+          'assignUpdates.updated',
+          'comments.created',
+          'comments.updated',
+          'created',
+          'due',
+          'statusUpdates.created',
+          'statusUpdates.updated',
+          'updated',
         ],
         query: {
           bool: {
@@ -69,21 +66,21 @@ export default class TaskService {
                   created: {
                     gte: from,
                     lte: to,
-                    format: "epoch_millis"
-                  }
-                }
-              }
+                    format: 'epoch_millis',
+                  },
+                },
+              },
             ],
             filter: [
               {
-                match_all: {}
-              }
+                match_all: {},
+              },
             ],
             should: [],
-            must_not: []
-          }
-        }
-      }
+            must_not: [],
+          },
+        },
+      },
     });
   }
 
@@ -93,37 +90,37 @@ export default class TaskService {
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
    */
-  static getCountByStatus(from: number, to: number) {
+  public static getCountByStatus(from: number, to: number) {
     return TaskService.client.search({
       index: TaskService.index,
       body: {
         aggs: {
           1: {
             terms: {
-              field: "status.keyword",
+              field: 'status.keyword',
               size: 10,
               order: {
-                _count: "desc"
-              }
-            }
-          }
+                _count: 'desc',
+              },
+            },
+          },
         },
         size: 0,
         _source: {
-          excludes: []
+          excludes: [],
         },
-        stored_fields: ["*"],
+        stored_fields: ['*'],
         script_fields: {},
         docvalue_fields: [
-          "assignUpdates.created",
-          "assignUpdates.updated",
-          "comments.created",
-          "comments.updated",
-          "created",
-          "due",
-          "statusUpdates.created",
-          "statusUpdates.updated",
-          "updated"
+          'assignUpdates.created',
+          'assignUpdates.updated',
+          'comments.created',
+          'comments.updated',
+          'created',
+          'due',
+          'statusUpdates.created',
+          'statusUpdates.updated',
+          'updated',
         ],
         query: {
           bool: {
@@ -133,21 +130,21 @@ export default class TaskService {
                   created: {
                     gte: from,
                     lte: to,
-                    format: "epoch_millis"
-                  }
-                }
-              }
+                    format: 'epoch_millis',
+                  },
+                },
+              },
             ],
             filter: [
               {
-                match_all: {}
-              }
+                match_all: {},
+              },
             ],
             should: [],
-            must_not: []
-          }
-        }
-      }
+            must_not: [],
+          },
+        },
+      },
     });
   }
 
@@ -158,60 +155,60 @@ export default class TaskService {
    * @param {number} to Date to search to in epoch_millis.
    * @param {number?} size The number of tags, defaults to 40.
    */
-  static getTagCloud(from: number, to: number, size?: number) {
+  public static getTagCloud(from: number, to: number, size?: number) {
     return TaskService.client.search({
       index: TaskService.index,
       body: {
         aggs: {
           1: {
             terms: {
-              field: "tags.keyword",
+              field: 'tags.keyword',
               size: size || 40,
               order: {
-                _count: "desc"
-              }
-            }
-          }
+                _count: 'desc',
+              },
+            },
+          },
         },
         size: 0,
         _source: {
-          excludes: []
+          excludes: [],
         },
-        stored_fields: ["*"],
+        stored_fields: ['*'],
         script_fields: {},
         docvalue_fields: [
-          "assignUpdates.created",
-          "assignUpdates.updated",
-          "comments.created",
-          "comments.updated",
-          "created",
-          "due",
-          "statusUpdates.created",
-          "statusUpdates.updated",
-          "updated"
+          'assignUpdates.created',
+          'assignUpdates.updated',
+          'comments.created',
+          'comments.updated',
+          'created',
+          'due',
+          'statusUpdates.created',
+          'statusUpdates.updated',
+          'updated',
         ],
         query: {
           bool: {
             must: [
               {
-                match_all: {}
+                match_all: {},
               },
               {
                 range: {
                   created: {
                     gte: from,
                     lte: to,
-                    format: "epoch_millis"
-                  }
-                }
-              }
+                    format: 'epoch_millis',
+                  },
+                },
+              },
             ],
             filter: [],
             should: [],
-            must_not: []
-          }
-        }
-      }
+            must_not: [],
+          },
+        },
+      },
     });
   }
 
@@ -222,7 +219,7 @@ export default class TaskService {
    * @param {number} to Date to search to in epoch_millis.
    * @param {number?} size The number of tags, defaults to 10.
    */
-  static getLeaderboard(from: number, to: number, size?: number) {
+  public static getLeaderboard(from: number, to: number, size?: number) {
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -231,36 +228,39 @@ export default class TaskService {
             must: [
               {
                 terms: {
-                  "status.keyword": ["done"]
-                }
+                  'status.keyword': ['done'],
+                },
               },
               {
                 range: {
                   created: {
                     gte: from,
                     lte: to,
-                    format: "epoch_millis"
-                  }
-                }
-              }
+                    format: 'epoch_millis',
+                  },
+                },
+              },
             ],
             filter: [],
             should: [],
-            must_not: []
-          }
+            must_not: [],
+          },
         },
         aggregations: {
           1: {
             terms: {
-              field: "assign.id.keyword",
+              field: 'assign.id.keyword',
               size: size || 10,
               order: {
-                _count: "desc"
-              }
-            }
-          }
-        }
-      }
+                _count: 'desc',
+              },
+            },
+          },
+        },
+      },
     });
   }
+
+  private static client = esClient.getClient();
+  private static index = 'tasks_test';
 }

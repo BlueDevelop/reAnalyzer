@@ -1,13 +1,12 @@
 import userService from './user.service';
-import IUser from './user.interface';
+import Iuser from './user.interface';
 
-export default class userController {
-
-    /**
-     * Creates a new user in the database.
-     * @param user User to save
-     */
-    static create(user: IUser) {
-        return userService.create(user);
-    }
+export default class UserController {
+  /**
+   * Creates a new user in the database.
+   * @param user User to save
+   */
+  public static create(user: Iuser) {
+    return userService.create(user);
+  }
 }

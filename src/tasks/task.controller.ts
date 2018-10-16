@@ -1,7 +1,7 @@
-import taskService from "./task.service";
-import infoLogger from "../loggers/info.logger";
-import errorLogger from "../loggers/error.logger";
-import { Request, Response, NextFunction } from "express";
+import taskService from './task.service';
+import infoLogger from '../loggers/info.logger';
+import errorLogger from '../loggers/error.logger';
+import { Request, Response, NextFunction } from 'express';
 
 export default class TaskController {
   /**
@@ -21,7 +21,7 @@ export default class TaskController {
         res.status(400);
         return next();
       }
-      if (req.query.field !== "due" && req.query.field !== "created") {
+      if (req.query.field !== 'due' && req.query.field !== 'created') {
         res.status(400);
         return next();
       }
@@ -37,13 +37,13 @@ export default class TaskController {
         req.query.interval
       );
 
-      res.json(response.aggregations["1"].buckets);
-      return next(response.aggregations["1"].buckets);
+      res.json(response.aggregations['1'].buckets);
+      return next(response.aggregations['1'].buckets);
     } catch (err) {
-      errorLogger.error("%j", {
+      errorLogger.error('%j', {
         message: err.message,
         stack: err.stack,
-        name: err.name
+        name: err.name,
       });
       res.status(500);
       next(err);
@@ -77,13 +77,13 @@ export default class TaskController {
         +req.query.to
       );
 
-      res.json(response.aggregations["1"].buckets);
-      return next(response.aggregations["1"].buckets);
+      res.json(response.aggregations['1'].buckets);
+      return next(response.aggregations['1'].buckets);
     } catch (err) {
-      errorLogger.error("%j", {
+      errorLogger.error('%j', {
         message: err.message,
         stack: err.stack,
-        name: err.name
+        name: err.name,
       });
       res.status(500);
       next(err);
@@ -124,13 +124,13 @@ export default class TaskController {
         size
       );
 
-      res.json(response.aggregations["1"].buckets);
-      return next(response.aggregations["1"].buckets);
+      res.json(response.aggregations['1'].buckets);
+      return next(response.aggregations['1'].buckets);
     } catch (err) {
-      errorLogger.error("%j", {
+      errorLogger.error('%j', {
         message: err.message,
         stack: err.stack,
-        name: err.name
+        name: err.name,
       });
       res.status(500);
       next(err);
@@ -171,13 +171,13 @@ export default class TaskController {
         size
       );
 
-      res.json(response.aggregations["1"].buckets);
-      return next(response.aggregations["1"].buckets);
+      res.json(response.aggregations['1'].buckets);
+      return next(response.aggregations['1'].buckets);
     } catch (err) {
-      errorLogger.error("%j", {
+      errorLogger.error('%j', {
         message: err.message,
         stack: err.stack,
-        name: err.name
+        name: err.name,
       });
       res.status(500);
       next(err);
