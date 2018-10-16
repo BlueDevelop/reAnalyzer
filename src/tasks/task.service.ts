@@ -1,7 +1,7 @@
 import esClient from '../helpers/elasticsearch.helper';
-import ITask from './task.interface';
+import Itask from './task.interface';
 
-export default class taskService {
+export default class TaskService {
 	static client = esClient.getClient();
 	static index = 'tasks_test';
 
@@ -12,8 +12,8 @@ export default class taskService {
 	 */
 	static getByField(value: string, field?: string) {
 		const searchField = field || '_id';
-		return taskService.client.search<ITask>({
-			index: taskService.index,
+		return TaskService.client.search<Itask>({
+			index: TaskService.index,
 			q: searchField + ':' + value
 		});
 	}
@@ -26,8 +26,8 @@ export default class taskService {
 	 * @param {string?} interval The interval as DurationString, defaults to '1d'.
 	 */
 	static getFieldCountPerInterval(field: string, from: number, to: number, interval?: string) {
-		return taskService.client.search<ITask>({
-			index: taskService.index,
+		return TaskService.client.search<Itask>({
+			index: TaskService.index,
 			body: {
 				aggs: {
 					1: {
@@ -89,8 +89,8 @@ export default class taskService {
 	 * @param {number} to Date to search to in epoch_millis.
 	 */
 	static getCountByStatus(from: number, to: number) {
-		return taskService.client.search({
-			index: taskService.index,
+		return TaskService.client.search({
+			index: TaskService.index,
 			body: {
 				aggs: {
 					1: {
@@ -156,8 +156,8 @@ export default class taskService {
 	 * @param {number?} size The number of tags, defaults to 40.
 	 */
 	static getTagCloud(from: number, to: number, size?: number) {
-		return taskService.client.search({
-			index: taskService.index,
+		return TaskService.client.search({
+			index: TaskService.index,
 			body: {
 				aggs: {
 					1: {
@@ -215,15 +215,15 @@ export default class taskService {
 	}
 
 	/**
- * Returns the first {size} users ordered by completed tasks in a given time range.
- * 
- * @param {number} from Date to search from in epoch_millis.
- * @param {number} to Date to search to in epoch_millis.
- * @param {number?} size The number of tags, defaults to 10.
- */
+	 * Returns the first {size} users ordered by completed tasks in a given time range.
+	 * 
+	 * @param {number} from Date to search from in epoch_millis.
+	 * @param {number} to Date to search to in epoch_millis.
+	 * @param {number?} size The number of tags, defaults to 10.
+	 */
 	static getLeaderboard(from: number, to: number, size?: number) {
-		return taskService.client.search({
-			index: taskService.index,
+		return TaskService.client.search({
+			index: TaskService.index,
 			body: {
 				query: {
 					bool: {
