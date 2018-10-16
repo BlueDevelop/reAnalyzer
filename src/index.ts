@@ -1,45 +1,48 @@
-import getConfig from "./config";
+import getConfig from './config';
 const config = getConfig();
 
-import { start } from "elastic-apm-node";
+import { start } from 'elastic-apm-node';
 start({
   // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
   serviceName: config.apmServiceName,
 
   // Set custom APM Server URL (default: http://localhost:8200)
-  serverUrl: config.apmAdress
+  serverUrl: config.apmAdress,
 });
-import express from "express";
-import cors from "cors";
-import session from "express-session";
-import { connect, connection, Mongoose } from "mongoose";
-import { json, urlencoded } from "body-parser";
-import cookieParser from "cookie-parser";
-import path from "path";
-import morgan from "morgan";
-import os from "os";
-import * as MongoStore from "connect-mongo";
-// const MongoStore = require("connect-mongo")(session);
-MongoStore.default(session);
+import express from 'express';
+import cors from 'cors';
+import session from 'express-session';
+import { connect, connection } from 'mongoose';
+import { json, urlencoded } from 'body-parser';
+import cookieParser from 'cookie-parser';
+import path from 'path';
+import morgan from 'morgan';
+import os from 'os';
+import * as connectMongo from 'connect-mongo';
+import { MogooseConnectionOptions } from 'connect-mongo';
 
-import * as passport from "./auth/passport";
-import userRoutes from "./users/user.router";
-import taskRouter from "./tasks/task.router";
-import morganLogger from "./loggers/morgan.logger";
-import errorLogger from "./loggers/error.logger";
-import verboseLogger from "./loggers/verbose.logger";
-import infoLogger from "./loggers/info.logger";
-import authenticate from "./auth/auth.middleware";
+import * as passport from './auth/passport';
+import userRoutes from './users/user.router';
+import taskRouter from './tasks/task.router';
+import morganLogger from './loggers/morgan.logger';
+import errorLogger from './loggers/error.logger';
+import verboseLogger from './loggers/verbose.logger';
+import infoLogger from './loggers/info.logger';
+import authenticate from './auth/auth.middleware';
+
+const MongoStore: connectMongo.MongoStoreFactory = connectMongo.default(
+  session
+);
 
 export const app = express();
 
 (function init() {
-  process.on("uncaughtException", err => {
+  process.on('uncaughtException', err => {
     console.log(err);
-    errorLogger.error("%j", {
+    errorLogger.error('%j', {
       message: err.message,
       stack: err.stack,
-      name: err.name
+      name: err.name,
     });
     process.exit(1);
   });
@@ -60,43 +63,43 @@ function initDbConnection() {
     { useNewUrlParser: true },
     err => {
       if (err) {
-        errorLogger.error("%j", {
+        errorLogger.error('%j', {
           message: err.message,
           stack: err.stack,
-          name: err.name
+          name: err.name,
         });
         process.exit(1);
       }
     }
   );
 
-  connection.on("connected", () => {
+  connection.on('connected', () => {
     verboseLogger.info(`Server is connected to ${config.connString}`);
   });
 
-  connection.on("disconnected", () => {
+  connection.on('disconnected', () => {
     errorLogger.error(`Server disconnected from ${config.connString}`);
   });
 
-  connection.on("reconnected", () => {
+  connection.on('reconnected', () => {
     verboseLogger.info(`Server reconnected to ${config.connString}`);
   });
 }
 
 function setMiddlewares() {
-  app.disable("x-powered-by");
+  app.disable('x-powered-by');
   app.use(cors());
   app.use(json());
   app.use(urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(
-    morgan("combined", {
+    morgan('combined', {
       skip: (_, res) => res.statusCode < 400,
       stream: {
         write: meta => {
           morganLogger.error(meta);
-        }
-      }
+        },
+      },
     })
   );
 
@@ -106,39 +109,39 @@ function setMiddlewares() {
       resave: true,
       saveUninitialized: false,
       store: new MongoStore({
-        mongooseConnection: connection
-      })
+        mongooseConnection: connection,
+      } as MogooseConnectionOptions),
     })
   );
   passport.init(app);
 }
 
 function setRoutes() {
-  app.use("/api/user", userRoutes);
-  app.use("/api/task", taskRouter);
+  app.use('/api/user', userRoutes);
+  app.use('/api/task', taskRouter);
 
-  app.get("/api/isAlive", (_, res) => {
+  app.get('/api/isAlive', (_, res) => {
     if (connection.readyState) {
-      return res.send("ok");
+      return res.send('ok');
     }
     return res.status(500).send();
   });
 
-  app.get("/api/hostname", (_, res) => {
+  app.get('/api/hostname', (_, res) => {
     return res.send(os.hostname());
   });
 
-  app.get("/api/ruok", (_, res) => {
+  app.get('/api/ruok', (_, res) => {
     if (connection.readyState) {
-      return res.send("ok");
+      return res.send('ok');
     }
     return res.status(500).send();
   });
 
   // Static files
-  app.use(express.static(path.join(__dirname, "../client/dist/App")));
+  app.use(express.static(path.join(__dirname, '../client/dist/App')));
 
-  app.get("*", (_, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist/App/index.html"));
+  app.get('*', (_, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/App/index.html'));
   });
 }

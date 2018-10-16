@@ -1,14 +1,12 @@
 import User from './user.model';
-import IUser from './user.interface';
+import Iuser from './user.interface';
 
-export default class userService {
-
-    /**
-    * Creates a user.
-    * @param user User to create
-    */
-    static create(user: IUser) {
-        return user.save();
-    }
-
+export default class UserService {
+  /**
+   * Creates a user.
+   * @param user User to create
+   */
+  public static create(user: Iuser) {
+    return user.save();
+  }
 }

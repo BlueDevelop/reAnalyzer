@@ -1,21 +1,21 @@
-import { Strategy } from "passport-local";
-import User from "../users/user.model";
-import infoLogger from "../loggers/info.logger";
-import errorLogger from "../loggers/error.logger";
+import { Strategy } from 'passport-local';
+import User from '../users/user.model';
+import infoLogger from '../loggers/info.logger';
+import errorLogger from '../loggers/error.logger';
 
 const strategy = new Strategy(
   {
-    usernameField: "uniqueId",
-    passwordField: "password",
-    passReqToCallback: true
+    usernameField: 'uniqueId',
+    passwordField: 'password',
+    passReqToCallback: true,
   },
   (req, uniqueId, password, done) => {
     User.findOne({ uniqueId }, (err, user) => {
       if (err) {
-        errorLogger.error("%j", {
+        errorLogger.error('%j', {
           message: err.message,
           stack: err.stack,
-          name: err.name
+          name: err.name,
         });
         return done(err);
       }
@@ -24,7 +24,7 @@ const strategy = new Strategy(
           `${req.ip} tried to login using this unknown uniqueId: ${uniqueId}.`
         );
         return done(null, false, {
-          message: "Incorrect username or password."
+          message: 'Incorrect username or password.',
         });
       }
       if (!user.validPassword(password)) {
@@ -34,7 +34,7 @@ const strategy = new Strategy(
           } tried to login using this uniqueId: ${uniqueId} and failed.`
         );
         return done(null, false, {
-          message: "Incorrect username or password."
+          message: 'Incorrect username or password.',
         });
       }
 
