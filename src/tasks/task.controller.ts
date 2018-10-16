@@ -156,6 +156,7 @@ export default class TaskController {
    */
   public static async getEndTimeRatio(req: Request, res: Response) {
     try {
+      // Validate input.
       if (!req.query.from || !req.query.to) {
         return res.status(400);
       }
@@ -167,6 +168,7 @@ export default class TaskController {
         return res.status(400);
       }
 
+      // Get all the tasks with status done from elasticsearch.
       const doneTasks = (await taskService.getByField(
         'done',
         +req.query.from,
@@ -174,16 +176,25 @@ export default class TaskController {
         'status'
       )).hits.hits;
 
+      // Calculate ratio for each task.
       const ratios = doneTasks.map(task => {
+        // Extract data from the task.
         const sourceTask: any = task._source;
+
+        // Due date of the task.
         const due = new Date(sourceTask.due).getTime();
+
+        // Initiating value for the first assign date.
         let minAssignDate = new Date(
           sourceTask.assignUpdates[0].created
         ).getTime();
+
+        // Initiating value for the last "done" status date.
         let maxStatusDate = new Date(
           sourceTask.statusUpdates[0].created
         ).getTime();
 
+        // Go through all the assign updates and finding the first.
         for (const update of sourceTask.assignUpdates) {
           const currDate = new Date(update.created).getTime();
           if (minAssignDate > currDate) {
@@ -191,6 +202,8 @@ export default class TaskController {
           }
         }
 
+        // Go through all the status updates and finding the last(will always be a done status,
+        // otherwise it wont get it from elasticsearch).
         for (const update of sourceTask.statusUpdates) {
           const currDate = new Date(update.created).getTime();
           if (maxStatusDate < currDate) {
@@ -198,6 +211,7 @@ export default class TaskController {
           }
         }
 
+        // Calculate ratio - ((done-start) / (due-start))*100 - for precentage.
         const ratio =
           (Math.abs(maxStatusDate - minAssignDate) /
             Math.abs(due - minAssignDate)) *
@@ -206,12 +220,16 @@ export default class TaskController {
         return ratio;
       });
 
+      // Calculate avarage difference for grouping by it.
       const interval = this.averageDiff(ratios);
+
+      // Initializing return obj.
       const groupedRatios: {
         interval: number;
         ratios: number[];
       } = { interval, ratios: [] };
 
+      // Count the number of tasks in each group.
       for (const ratio of ratios) {
         const index = Math.floor(ratio / interval);
         if (groupedRatios.ratios[index]) {
@@ -221,6 +239,7 @@ export default class TaskController {
         }
       }
 
+      // If there are groups without values(tasks) init them to zero.
       for (let i = 0; i < groupedRatios.ratios.length; ++i) {
         if (!groupedRatios.ratios[i]) {
           groupedRatios.ratios[i] = 0;
@@ -238,6 +257,11 @@ export default class TaskController {
     }
   }
 
+  /**
+   * Calculate avarage difference for a set of numbers.
+   *
+   * @param collection A set of numbers.
+   */
   private static averageDiff(collection: number[]) {
     return (
       collection.reduce((sum: number = 0, value: number, i: number) => {
