@@ -9,8 +9,7 @@ const router = express.Router();
  * GET /task/countByStatus?from=123&to=124.
  * returns count of tasks per status.
  */
-// router.get('/countByStatus', authenticate, taskController.getCountByStatus);
-router.get('/countByStatus', taskController.getCountByStatus);
+router.get('/countByStatus', authenticate, taskController.getCountByStatus);
 
 /**
  * GET /task/fieldCountPerInterval?field=due&from=123&to=124&interval=1d.
