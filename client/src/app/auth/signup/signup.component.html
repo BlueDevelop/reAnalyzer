@@ -1,27 +1,27 @@
 <section class="signup-form">
-<form #y="ngForm" (ngSubmit)="onSubmit(y)">
+<form  [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+  <mat-form-field hintLabel="Insert your name">
+    <input 
+    matInput 
+    placeholder="name" 
+    formControlName="name">
+  </mat-form-field>
+  
   <mat-form-field>
     <input 
     matInput 
     placeholder="email" 
-    ngModel name="email"
-    email
-    required
-    #emailInput="ngModel">
-    <mat-error *ngIf="!emailInput.hasError('required')">Email is invalid</mat-error>
-    <mat-error *ngIf="emailInput.hasError('required')">Email not be empty</mat-error>
+    formControlName="uniqueId">
+    <mat-error *ngIf="!signupForm.hasError('required')">Email is invalid</mat-error>
+    <mat-error *ngIf="signupForm.hasError('required')">Email not be empty</mat-error>
   </mat-form-field>
   <mat-form-field hintLabel="Should be at least 6 characters long.">
     <input 
     matInput 
     placeholder="password" 
-    ngModel name="password"
-    required
-    minlength="6"
-    #pwInput="ngModel">
-    <mat-hint>{{pwInput.value?.length}} / 6</mat-hint>
+    formControlName="password">
   </mat-form-field>
-  <button type="submit" mat-raised-button color="primary" [disabled]="y.invalid">Submit</button>
+  <button type="submit" mat-raised-button color="primary" [disabled]="signupForm.invalid">Submit</button>
 </form>
 </section>
 <section>
