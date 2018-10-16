@@ -14,7 +14,7 @@ export class BarComponent implements OnInit {
   single: any[];
   multi: any[];
 
-  view: any[] = [1200, 400];
+  view: any[] = [1200, undefined];
 
   // options
   showXAxis = true;
