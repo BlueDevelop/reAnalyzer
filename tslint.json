@@ -9,6 +9,9 @@
   },
   "rulesDirectory": [],
   "linterOptions": {
-    "exclude": ["**/*.spec.*"]
+    "exclude": [
+      "**/*.spec.*",
+      "src/helpers/spec.helper.ts"
+    ]
   }
 }
