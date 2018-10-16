@@ -213,8 +213,18 @@ export default class TaskController {
       } = { interval, ratios: [] };
 
       for (const ratio of ratios) {
-        // TODO: initiate to 0 and add one.
-        groupedRatios.ratios[Math.floor(ratio / interval)] = ratio;
+        const index = Math.floor(ratio / interval);
+        if (groupedRatios.ratios[index]) {
+          groupedRatios.ratios[index]++;
+        } else {
+          groupedRatios.ratios[index] = 1;
+        }
+      }
+
+      for (let i = 0; i < groupedRatios.ratios.length; ++i) {
+        if (!groupedRatios.ratios[i]) {
+          groupedRatios.ratios[i] = 0;
+        }
       }
 
       return res.json(groupedRatios);
