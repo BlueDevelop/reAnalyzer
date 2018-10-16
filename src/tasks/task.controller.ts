@@ -160,11 +160,7 @@ export default class TaskController {
       if (!req.query.from || !req.query.to) {
         return res.status(400);
       }
-      if (
-        isNaN(req.query.from) ||
-        isNaN(req.query.to) ||
-        (req.query.size && isNaN(req.query.size))
-      ) {
+      if (isNaN(req.query.from) || isNaN(req.query.to)) {
         return res.status(400);
       }
 
