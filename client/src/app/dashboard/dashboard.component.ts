@@ -9,27 +9,28 @@ import * as _ from 'lodash';
 })
 export class DashboardComponent implements OnInit {
   selected = 'option2';
-  data;
+
   constructor(private taskService: TaskService) { }
 
   ngOnInit() {
     
   }
 
-  // editData(data): void {
-  //   this.data = _.map(data,(bucket)=>{
-  //     return {
-  //       name:bucket.key,
-  //       value:bucket.doc_count
-  //     }
-  //   })
-  // }
+//   editData(data): void {
+//     this.data = _.map(data,(bucket)=>{
+//       return {
+//         name:bucket.key,
+//         value:bucket.doc_count
+//       }
+//     })
+//   }
 
-  // getCountByStatus(): void {
-  //   this.taskService.getTaskCountByStatus()
-  //     .subscribe(data => {
-  //       this.editData(data);
-  //     });
-  // }
+//   getCountByStatus(): void {
+// debugger
+//     this.taskService.getLeaderboard()
+//       .subscribe(data => {
+//         this.editData(data);
+//       });
+//   }
 
 }

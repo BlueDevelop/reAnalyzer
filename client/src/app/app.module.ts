@@ -20,6 +20,8 @@ import { HomeComponent } from './home/home.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { TagCloudComponent } from './tag-cloud/tag-cloud.component';
 import { PieStatusComponent } from './pie-status/pie-status.component';
+import { BarHorizontalComponent } from './charts/bar-horizontal/bar-horizontal.component';
+import { LeaderBoardComponent } from './leader-board/leader-board.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { PieStatusComponent } from './pie-status/pie-status.component';
     HomeComponent,
     AvatarComponent,
     TagCloudComponent,
-    PieStatusComponent
+    PieStatusComponent,
+    BarHorizontalComponent,
+    LeaderBoardComponent
   ],
   imports: [
     BrowserModule,
