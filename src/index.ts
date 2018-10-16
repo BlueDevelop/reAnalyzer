@@ -19,7 +19,7 @@ import path from 'path';
 import morgan from 'morgan';
 import os from 'os';
 import * as connectMongo from 'connect-mongo';
-import { MogooseConnectionOptions } from 'connect-mongo';
+import { MogooseConnectionOptions, MongoStoreFactory } from 'connect-mongo';
 
 import * as passport from './auth/passport';
 import userRoutes from './users/user.router';
@@ -30,9 +30,7 @@ import verboseLogger from './loggers/verbose.logger';
 import infoLogger from './loggers/info.logger';
 import authenticate from './auth/auth.middleware';
 
-const MongoStore: connectMongo.MongoStoreFactory = connectMongo.default(
-  session
-);
+const MongoStore: MongoStoreFactory = connectMongo.default(session);
 
 export const app = express();
 
@@ -102,7 +100,6 @@ function setMiddlewares() {
       },
     })
   );
-
   app.use(
     session({
       secret: config.sessionSecret,
