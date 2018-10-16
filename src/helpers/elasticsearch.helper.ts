@@ -1,21 +1,21 @@
-import {Client} from 'elasticsearch';
+import { Client } from 'elasticsearch';
 import getConfig from '../config';
 const config = getConfig();
 
 /**
  * Elasticsearch class
  */
-export default class elasticsearch {
-    static client: Client =  new Client({
-        hosts: config.elasticsearch
-    });
+export default class Elasticsearch {
+  /**
+   * Get the client connection object.
+   *
+   * @returns EsClient
+   */
+  public static getClient(): Client {
+    return Elasticsearch.client;
+  }
 
-    /**
-     * Get the client connection object.
-     * 
-     * @returns EsClient
-     */
-    static getClient() : Client {
-        return elasticsearch.client;
-    }
+  private static client: Client = new Client({
+    hosts: config.elasticsearch,
+  });
 }

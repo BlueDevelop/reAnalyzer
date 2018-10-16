@@ -1,3 +1,1 @@
-export default interface ITask {
-
-}
+export default interface Itask {}

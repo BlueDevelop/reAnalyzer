@@ -16,7 +16,11 @@ router.get('/countByStatus', authenticate, taskController.getCountByStatus);
  * the interval field is optional and defaults to 1d.
  * @returns count of field per interval.
  */
-router.get('/fieldCountPerInterval', authenticate, taskController.getFieldCountPerInterval);
+router.get(
+  '/fieldCountPerInterval',
+  authenticate,
+  taskController.getFieldCountPerInterval
+);
 
 /**
  * GET /task/tagCloud?from=123&to=124&size=40.
