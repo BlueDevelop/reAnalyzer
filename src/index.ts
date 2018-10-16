@@ -12,15 +12,14 @@ start({
 import express from "express";
 import cors from "cors";
 import session from "express-session";
-import { connect, connection, Mongoose } from "mongoose";
+import { connect, connection } from "mongoose";
 import { json, urlencoded } from "body-parser";
 import cookieParser from "cookie-parser";
 import path from "path";
 import morgan from "morgan";
 import os from "os";
-import * as MongoStore from "connect-mongo";
-// const MongoStore = require("connect-mongo")(session);
-MongoStore.default(session);
+import * as connectMongo from "connect-mongo";
+import { MogooseConnectionOptions } from "connect-mongo";
 
 import * as passport from "./auth/passport";
 import userRoutes from "./users/user.router";
@@ -30,6 +29,10 @@ import errorLogger from "./loggers/error.logger";
 import verboseLogger from "./loggers/verbose.logger";
 import infoLogger from "./loggers/info.logger";
 import authenticate from "./auth/auth.middleware";
+
+const MongoStore: connectMongo.MongoStoreFactory = connectMongo.default(
+  session
+);
 
 export const app = express();
 
@@ -107,7 +110,7 @@ function setMiddlewares() {
       saveUninitialized: false,
       store: new MongoStore({
         mongooseConnection: connection
-      })
+      } as MogooseConnectionOptions)
     })
   );
   passport.init(app);
