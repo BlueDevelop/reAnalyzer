@@ -7,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class BarComponent implements OnInit {
   @Input() data: any[];
+  @Input() legendTitle: any[];
+  
   constructor() { }
 
   ngOnInit() {
@@ -17,7 +19,7 @@ export class BarComponent implements OnInit {
   view: any[] = [1200, undefined];
 
   // options
-  showXAxis = true;
+  showXAxis = false;
   showYAxis = true;
   gradient = false;
   showLegend = true;

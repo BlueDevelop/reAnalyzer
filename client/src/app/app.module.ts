@@ -5,6 +5,7 @@ import { MaterialModule } from '../modules/material.module';
 import { AppRoutingModule } from '../modules/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TagCloudModule } from 'angular-tag-cloud-module';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -17,6 +18,8 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { TagCloudComponent } from './tag-cloud/tag-cloud.component';
+import { PieStatusComponent } from './pie-status/pie-status.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { AvatarComponent } from './avatar/avatar.component';
     SignupComponent,
     LoginComponent,
     HomeComponent,
-    AvatarComponent
+    AvatarComponent,
+    TagCloudComponent,
+    PieStatusComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +45,7 @@ import { AvatarComponent } from './avatar/avatar.component';
     NgxChartsModule,
     FormsModule,
     ReactiveFormsModule,
+    TagCloudModule
   ],
   providers: [],
   bootstrap: [AppComponent]
