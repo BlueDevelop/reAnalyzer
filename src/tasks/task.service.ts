@@ -1,17 +1,50 @@
 import esClient from '../helpers/elasticsearch.helper';
 import Itask from './task.interface';
+import { SearchParams } from 'elasticsearch';
 
 export default class TaskService {
   /**
    * Returns the requested result from elasticsearch.
    * @param {string} value The value to search.
    * @param {string?} field The field to search by, defaults to '_id'.
+   * @param {number} from Date to search from in epoch_millis.
+   * @param {number} to Date to search to in epoch_millis.
    */
-  public static getByField(value: string, field?: string) {
+  public static getByField(
+    value: string,
+    from: number,
+    to: number,
+    field?: string
+  ) {
     const searchField = field || '_id';
+    const body: any = {
+      query: {
+        bool: {
+          must: [
+            {
+              range: {
+                created: {
+                  gte: from,
+                  lte: to,
+                  format: 'epoch_millis',
+                },
+              },
+            },
+            {
+              match: {},
+            },
+          ],
+          filter: [],
+          should: [],
+          must_not: [],
+        },
+      },
+    };
+
+    body.query.bool.must[1].match[searchField] = value;
     return TaskService.client.search<Itask>({
       index: TaskService.index,
-      q: searchField + ':' + value,
+      body,
     });
   }
 
