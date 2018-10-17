@@ -32,7 +32,7 @@ router.post('/', async (req, res, next) => {
       stack: err.stack,
       name: err.name,
     });
-    return res.status(400);
+    return res.sendStatus(400);
   }
 });
 

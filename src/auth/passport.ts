@@ -12,13 +12,13 @@ export const authenticate = (
 ) => {
   passport.authenticate('local', (err: Error, user: Iuser) => {
     if (err) {
-      res.status(500).send(err);
+      res.sendStatus(401);
     } else if (!user) {
-      res.status(500).send({ message: 'User does not exist' });
+      res.sendStatus(401);
     } else {
       req.logIn(user, (error: Error) => {
         if (error) {
-          res.status(500).send({ message: 'Login error' });
+          res.sendStatus(401);
         } else {
           res.status(200).send(user);
         }
@@ -48,6 +48,6 @@ export const init = (app: Application) => {
     return res.status(200).send({ user: req.user });
   });
   app.get('/api/login/fail', (_, res: Response) => {
-    return res.status(401);
+    return res.sendStatus(401);
   });
 };

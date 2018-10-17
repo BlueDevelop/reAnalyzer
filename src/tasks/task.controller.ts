@@ -14,13 +14,13 @@ export default class TaskController {
   public static async getFieldCountPerInterval(req: Request, res: Response) {
     try {
       if (!req.query.field || !req.query.from || !req.query.to) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
       if (req.query.field !== 'due' && req.query.field !== 'created') {
-        return res.status(400);
+        return res.sendStatus(400);
       }
       if (isNaN(req.query.from) || isNaN(req.query.to)) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
 
       const response = await taskService.getFieldCountPerInterval(
@@ -37,7 +37,7 @@ export default class TaskController {
         stack: err.stack,
         name: err.name,
       });
-      return res.status(500);
+      return res.sendStatus(500);
     }
   }
 
@@ -50,10 +50,10 @@ export default class TaskController {
   public static async getCountByStatus(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
       if (isNaN(req.query.from) || isNaN(req.query.to)) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
 
       const response = await taskService.getCountByStatus(
@@ -68,7 +68,7 @@ export default class TaskController {
         stack: err.stack,
         name: err.name,
       });
-      return res.status(500);
+      return res.sendStatus(500);
     }
   }
 
@@ -81,14 +81,14 @@ export default class TaskController {
   public static async getTagCloud(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
       if (
         isNaN(req.query.from) ||
         isNaN(req.query.to) ||
         (req.query.size && isNaN(req.query.size))
       ) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
 
       const size = req.query.size ? +req.query.size : undefined;
@@ -106,7 +106,7 @@ export default class TaskController {
         stack: err.stack,
         name: err.name,
       });
-      return res.status(500);
+      return res.sendStatus(500);
     }
   }
 
@@ -119,14 +119,14 @@ export default class TaskController {
   public static async getLeaderboard(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
       if (
         isNaN(req.query.from) ||
         isNaN(req.query.to) ||
         (req.query.size && isNaN(req.query.size))
       ) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
 
       const size = req.query.size ? +req.query.size : undefined;
@@ -144,7 +144,7 @@ export default class TaskController {
         stack: err.stack,
         name: err.name,
       });
-      return res.status(500);
+      return res.sendStatus(500);
     }
   }
 
@@ -158,10 +158,10 @@ export default class TaskController {
     try {
       // Validate input.
       if (!req.query.from || !req.query.to) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
       if (isNaN(req.query.from) || isNaN(req.query.to)) {
-        return res.status(400);
+        return res.sendStatus(400);
       }
 
       // Get all the tasks with status done from elasticsearch.
