@@ -38,6 +38,17 @@ const dev: IConfig = {
   hierarchyServiceMockFile: './mock/members.json',
 };
 
+const local: IConfig = {
+  port: 3000,
+  connString: 'mongodb://localhost:27017/reAnalyzer_dev',
+  sessionSecret: 'OmerIsTheBestProgrammer',
+  logLevel: 'verbose',
+  apmAdress: 'http://localhost:8200',
+  apmServiceName: 'reAnalyzer_dev',
+  elasticsearch: 'http://localhost:9200',
+  hierarchyServiceMockFile: './mock/members.json',
+};
+
 const test: IConfig = {
   port: 3001,
   connString: 'mongodb://localhost:27017/reAnalyzer_test',
@@ -56,6 +67,10 @@ export default () => {
 
     case 'dev': {
       return dev;
+    }
+
+    case 'local': {
+      return local;
     }
 
     case 'test': {
