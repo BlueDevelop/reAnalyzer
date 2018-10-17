@@ -218,7 +218,12 @@ export default class TaskController {
       });
 
       // Calculate avarage difference to use as interval.
-      const interval = this.averageDiff(ratios);
+      let sum = 0;
+      for (let i = 0; i < ratios.length; ++i) {
+        sum += i === 0 ? ratios[i] : ratios[i] - ratios[i - 1];
+      }
+
+      const interval = sum / ratios.length;
 
       // Initializing return obj.
       const groupedRatios: {
@@ -252,20 +257,5 @@ export default class TaskController {
       });
       return res.status(500);
     }
-  }
-
-  /**
-   * Calculate avarage difference for a set of numbers.
-   *
-   * @param collection A set of numbers.
-   */
-  private static averageDiff(collection: number[]) {
-    return (
-      collection.reduce((sum: number = 0, value: number, i: number) => {
-        return (
-          sum + (i === 0 ? collection[i] : collection[i] - collection[i - 1])
-        );
-      }) / collection.length
-    );
   }
 }
