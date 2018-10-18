@@ -24,7 +24,7 @@ async function getHierarchy(rootHierarchy?: string) {
   }
   return data.map((person: any) => {
     return person.id;
-  });
+  }) as string[];
 }
 
 const hierarchyService = { getHierarchy };

@@ -6,14 +6,16 @@ export default class TaskService {
   /**
    * Returns the requested result from elasticsearch.
    * @param {string} value The value to search.
-   * @param {string?} field The field to search by, defaults to '_id'.
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
+   * @param {string[]} filter filter by users.
+   * @param {string?} field The field to search by, defaults to '_id'.
    */
   public static getByField(
     value: string,
     from: number,
     to: number,
+    filter: string[] = [],
     field?: string
   ) {
     const searchField = field || '_id';
@@ -35,7 +37,19 @@ export default class TaskService {
             },
           ],
           filter: [],
-          should: [],
+          should: [
+            {
+              terms: {
+                'creator.id.keyword': filter,
+              },
+            },
+            {
+              terms: {
+                'assign.id.keyword': filter,
+              },
+            },
+          ],
+          minimum_should_match: 1,
           must_not: [],
         },
       },
@@ -53,12 +67,14 @@ export default class TaskService {
    * @param {string} field The field to search by, must be a Date field.
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
+   * @param {string[]} filter filter by users.
    * @param {string?} interval The interval as DurationString, defaults to '1d'.
    */
   public static getFieldCountPerInterval(
     field: string,
     from: number,
     to: number,
+    filter: string[] = [],
     interval?: string
   ) {
     return TaskService.client.search<Itask>({
@@ -109,7 +125,19 @@ export default class TaskService {
                 match_all: {},
               },
             ],
-            should: [],
+            should: [
+              {
+                terms: {
+                  'creator.id.keyword': filter,
+                },
+              },
+              {
+                terms: {
+                  'assign.id.keyword': filter,
+                },
+              },
+            ],
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -122,8 +150,13 @@ export default class TaskService {
    *
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
+   * @param {string[]} filter filter by users.
    */
-  public static getCountByStatus(from: number, to: number) {
+  public static getCountByStatus(
+    from: number,
+    to: number,
+    filter: string[] = []
+  ) {
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -173,7 +206,19 @@ export default class TaskService {
                 match_all: {},
               },
             ],
-            should: [],
+            should: [
+              {
+                terms: {
+                  'creator.id.keyword': filter,
+                },
+              },
+              {
+                terms: {
+                  'assign.id.keyword': filter,
+                },
+              },
+            ],
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -186,9 +231,15 @@ export default class TaskService {
    *
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
+   * @param {string[]} filter filter by users.
    * @param {number?} size The number of tags, defaults to 40.
    */
-  public static getTagCloud(from: number, to: number, size?: number) {
+  public static getTagCloud(
+    from: number,
+    to: number,
+    filter: string[] = [],
+    size?: number
+  ) {
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -237,7 +288,19 @@ export default class TaskService {
               },
             ],
             filter: [],
-            should: [],
+            should: [
+              {
+                terms: {
+                  'creator.id.keyword': filter,
+                },
+              },
+              {
+                terms: {
+                  'assign.id.keyword': filter,
+                },
+              },
+            ],
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -250,9 +313,15 @@ export default class TaskService {
    *
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
+   * @param {Array} filter filter by users.
    * @param {number?} size The number of tags, defaults to 10.
    */
-  public static getLeaderboard(from: number, to: number, size?: number) {
+  public static getLeaderboard(
+    from: number,
+    to: number,
+    filter: string[] = [],
+    size?: number
+  ) {
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -275,7 +344,19 @@ export default class TaskService {
               },
             ],
             filter: [],
-            should: [],
+            should: [
+              {
+                terms: {
+                  'creator.id.keyword': filter,
+                },
+              },
+              {
+                terms: {
+                  'assign.id.keyword': filter,
+                },
+              },
+            ],
+            minimum_should_match: 1,
             must_not: [],
           },
         },
