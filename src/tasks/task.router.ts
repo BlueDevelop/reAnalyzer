@@ -36,4 +36,10 @@ router.get('/tagCloud', authenticate, taskController.getTagCloud);
  */
 router.get('/leaderboard', authenticate, taskController.getLeaderboard);
 
+/**
+ * GET /task/endTimeRatio?from=123&to=124.
+ * @returns ratio of end task time.
+ */
+router.get('/endTimeRatio', authenticate, taskController.getEndTimeRatio);
+
 export default router;
