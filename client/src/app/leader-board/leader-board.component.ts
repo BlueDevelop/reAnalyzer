@@ -16,16 +16,15 @@ export class LeaderBoardComponent implements OnInit {
   }
 
   editData(data): void {
-    this.data = _.map(data,(bucket)=>{
+    this.data = _.map(data, (bucket) => {
       return {
-        name:bucket.key,
-        value:bucket.doc_count
+        name: bucket.key,
+        value: bucket.doc_count
       }
     })
   }
 
   getLeaderboard(): void {
-debugger
     this.taskService.getLeaderboard()
       .subscribe(data => {
         this.editData(data);
