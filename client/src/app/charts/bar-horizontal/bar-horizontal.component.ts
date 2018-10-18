@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-bar',
-  templateUrl: './bar.component.html',
-  styleUrls: ['./bar.component.css']
+  selector: 'app-bar-horizontal',
+  templateUrl: './bar-horizontal.component.html',
+  styleUrls: ['./bar-horizontal.component.css']
 })
-export class BarComponent implements OnInit {
+export class BarHorizontalComponent implements OnInit {
+
   @Input() data: any[];
   @Input() legendTitle: any[];
   
@@ -16,7 +17,7 @@ export class BarComponent implements OnInit {
   single: any[];
   multi: any[];
 
-  view: any[] = [1200, undefined];
+  view: any[] = [];
 
   // options
   showXAxis = false;
@@ -31,8 +32,6 @@ export class BarComponent implements OnInit {
   colorScheme = {
     domain: ['#a8385d','#7aa3e5','#a27ea8','#aae3f5','#adcded','#a95963','#8796c0','#7ed3ed','#50abcc','#ad6886']
   };
-
-
 
   onSelect(event) {
     console.log(event);

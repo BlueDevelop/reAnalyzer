@@ -7,6 +7,7 @@ import { Component, OnInit, NgModule , Input} from '@angular/core';
 })
 export class PieComponent implements OnInit {
   @Input() data: any[];
+  @Input() legendTitle: any[];
  
   view: any[] = [600, 400];
 
