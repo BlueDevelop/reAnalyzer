@@ -19,45 +19,47 @@ interface IConfig {
 }
 
 const prod: IConfig = {
-  port: 3000,
+  port: process.env.port ? +process.env.port : 3000,
   connString:
-    "mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replica=reAnalyzer",
-  sessionSecret: "OmerIsTheBestProgrammer",
-  logLevel: "info",
-  apmAdress: "http://apm:8200",
-  apmServiceName: "reAnalyzer_prod",
-  elasticsearch: "http://elasticsearch:9200",
-  hierarchyServiceAddr: "http://hierarchyServiceAddress/api/",
-  hierarchyFile: "./mock/hierarchy.json",
+    process.env.MONGO ||
+    'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replica=reAnalyzer',
+  sessionSecret: process.env.secret || 'OmerIsTheBestProgrammer',
+  logLevel: process.env.logLevel || 'info',
+  apmAdress: process.env.apm || 'http://apm:8200',
+  apmServiceName: 'reAnalyzer_prod',
+  elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
+  hierarchyServiceAddr:
+    process.env.hierarchyAPI || 'http://hierarchyServiceAddress/api/',
+  hierarchyFile: './mock/hierarchy.json',
   hierarchyServiceUseMock: false,
   hierarchyServiceAddrGetMembers: (hierarchyID: string) =>
     `${prod.hierarchyServiceAddr}hierarchy/${hierarchyID}/members`,
   hierarchyServiceAddrGetUser: (userID: string) =>
-    `${prod.hierarchyServiceAddr}user/${userID}`
+    `${prod.hierarchyServiceAddr}user/${userID}`,
 };
 
 const dev: IConfig = {
-  port: 3000,
-  connString: "mongodb://mongodb:27017/reAnalyzer_dev",
-  sessionSecret: "OmerIsTheBestProgrammer",
-  logLevel: "verbose",
-  apmAdress: "http://apm:8200",
-  apmServiceName: "reAnalyzer_dev",
-  elasticsearch: "http://elasticsearch:9200",
-  hierarchyServiceMockFile: "./mock/members.json",
+  port: process.env.port ? +process.env.port : 3000,
+  connString: process.env.MONGO || 'mongodb://test:27017/reAnalyzer_dev',
+  sessionSecret: 'OmerIsTheBestProgrammer',
+  logLevel: 'verbose',
+  apmAdress: 'http://apm:8200',
+  apmServiceName: 'reAnalyzer_dev',
+  elasticsearch: 'http://elasticsearch:9200',
+  hierarchyServiceMockFile: './mock/members.json',
   hierarchyServiceUseMock: true,
-  hierarchyUserIDToHierarchyFile: "./mock/userIDToHierarchy.json"
+  hierarchyUserIDToHierarchyFile: './mock/userIDToHierarchy.json',
 };
 
 const test: IConfig = {
   port: 3001,
-  connString: "mongodb://localhost:27017/reAnalyzer_test",
-  sessionSecret: "OmerIsTheBestProgrammer",
-  logLevel: "verbose",
-  apmAdress: "http://localhost:8200",
-  apmServiceName: "reAnalyzer_test",
-  elasticsearch: "http://localhost:9200",
-  hierarchyServiceUseMock: false
+  connString: 'mongodb://localhost:27017/reAnalyzer_test',
+  sessionSecret: 'OmerIsTheBestProgrammer',
+  logLevel: 'verbose',
+  apmAdress: 'http://localhost:8200',
+  apmServiceName: 'reAnalyzer_test',
+  elasticsearch: 'http://localhost:9200',
+  hierarchyServiceUseMock: false,
 };
 
 export default () => {
