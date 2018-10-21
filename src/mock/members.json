@@ -1,3 +1,29 @@
+{
+
+"someGroupName":
+[
+  {
+    "id": "email@email.com",
+    "email": "email@email.com",
+    "username": "username",
+    "password": "password"
+  },
+
+  {
+    "id": "email2@email.com",
+    "email": "email2@email.com",
+    "username": "username2",
+    "password": "password"
+  },
+
+  {
+    "id": "email3@email.com",
+    "email": "email3@email.com",
+    "username": "username3",
+    "password": "password"
+  }
+],
+"someGroupID":
 [
   {
     "id": "email@email.com",
@@ -20,3 +46,5 @@
     "password": "password"
   }
 ]
+
+}
