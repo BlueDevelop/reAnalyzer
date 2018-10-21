@@ -1,17 +1,17 @@
-import { connect, connection, disconnect } from "mongoose";
-import getConfig from "../config";
+import { connect, connection, disconnect } from 'mongoose';
+import getConfig from '../config';
 
 const config = getConfig();
 
-before("connect mongo", async () => {
+before('connect mongo', async () => {
   try {
     connect(
       config.connString,
       { useNewUrlParser: true }
     );
-    console.log("Succesfully connected to " + config.connString);
+    console.log('Succesfully connected to ' + config.connString);
   } catch (err) {
-    console.log("Could not connect to " + config.connString);
+    console.log('Could not connect to ' + config.connString);
     console.error(err);
   }
 });

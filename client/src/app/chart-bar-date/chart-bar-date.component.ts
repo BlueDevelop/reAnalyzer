@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TaskService } from '../_services/task.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-chart-bar-date',
@@ -6,36 +8,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chart-bar-date.component.css']
 })
 export class ChartBarDateComponent implements OnInit {
-  data= [
-    {
-      "name": "Germany",
-      "value": 40632
-    },
-    {
-      "name": "United States",
-      "value": 49737
-    },
-    {
-      "name": "France",
-      "value": 36745
-    },
-    {
-      "name": "United Kingdom",
-      "value": 36240
-    },
-    {
-      "name": "Spain",
-      "value": 33000
-    },
-    {
-      "name": "Italy",
-      "value": 35800
-    }
-  ]
-  constructor() {
+  data;
+  constructor(private taskService: TaskService) {
     
   }
   ngOnInit() {
+    this.getFieldCountPerInterval()
   }
 
+  editData(data): void {
+    this.data = _.map(data,(bucket)=>{
+      return {
+        name:new Date(bucket.key).getDay() + "/" + new Date(bucket.key).getMonth()+ "/" + new Date(bucket.key).getFullYear(),
+        value:bucket.doc_count
+      }
+    })
+  }
+
+  getFieldCountPerInterval(): void {
+    this.taskService.getFieldCountPerInterval()
+      .subscribe(data => {
+        this.editData(data);
+      });
+  }
 }

@@ -16,7 +16,11 @@ router.get('/countByStatus', authenticate, taskController.getCountByStatus);
  * the interval field is optional and defaults to 1d.
  * @returns count of field per interval.
  */
-router.get('/fieldCountPerInterval', authenticate, taskController.getFieldCountPerInterval);
+router.get(
+  '/fieldCountPerInterval',
+  authenticate,
+  taskController.getFieldCountPerInterval
+);
 
 /**
  * GET /task/tagCloud?from=123&to=124&size=40.
@@ -31,5 +35,11 @@ router.get('/tagCloud', authenticate, taskController.getTagCloud);
  * @returns users according to size given ordered by the number of completed tasks.
  */
 router.get('/leaderboard', authenticate, taskController.getLeaderboard);
+
+/**
+ * GET /task/endTimeRatio?from=123&to=124.
+ * @returns ratio of end task time.
+ */
+router.get('/endTimeRatio', authenticate, taskController.getEndTimeRatio);
 
 export default router;

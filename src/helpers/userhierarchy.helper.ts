@@ -87,7 +87,7 @@ async function getHierarchyOfUser(
     return user.directGroup;
   } else {
     // TODO:throw error or do nothing
-    throw new Error("hierarchy not configured");
+    throw new Error('hierarchy not configured');
   }
 }
 /**

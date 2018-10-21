@@ -1,4 +1,4 @@
-import hierarchyService from "./helpers/userhierarchy.helper";
+import hierarchyService from './helpers/userhierarchy.helper';
 
 interface IConfig {
   port: number;
@@ -62,15 +62,15 @@ const test: IConfig = {
 
 export default () => {
   switch (process.env.NODE_ENV) {
-    case "prod": {
+    case 'prod': {
       return prod;
     }
 
-    case "dev": {
+    case 'dev': {
       return dev;
     }
 
-    case "test": {
+    case 'test': {
       return test;
     }
 
