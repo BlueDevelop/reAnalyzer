@@ -51,7 +51,9 @@ NODE_ENV=prod && npm start
 
 ## Authors
 
-* **Omer Zamir** - *Initial work* - [Omer Zamir](https://github.com/omerzamir)
+* **Omer Zamir** - *Initial work - Backend* - [Omer Zamir](https://github.com/omerzamir)
+* **Sraya Avraham** - *Frontend* - [Sraya Avraham](https://github.com/srayaAvraham)
+
 
 See also the list of [contributors](https://github.com/omerzamir/reAnalyzer/graphs/contributors) who participated in this project.
 
