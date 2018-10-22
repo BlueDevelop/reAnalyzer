@@ -22,7 +22,7 @@ const prod: IConfig = {
   port: process.env.port ? +process.env.port : 3000,
   connString:
     process.env.MONGO ||
-    'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replica=reAnalyzer',
+    'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replicaSet=reAnalyzer',
   sessionSecret: process.env.secret || 'OmerIsTheBestProgrammer',
   logLevel: process.env.logLevel || 'info',
   apmAdress: process.env.apm || 'http://apm:8200',
@@ -46,6 +46,19 @@ const dev: IConfig = {
   apmAdress: 'http://apm:8200',
   apmServiceName: 'reAnalyzer_dev',
   elasticsearch: 'http://elasticsearch:9200',
+  hierarchyServiceMockFile: './mock/members.json',
+  hierarchyServiceUseMock: true,
+  hierarchyUserIDToHierarchyFile: './mock/userIDToHierarchy.json',
+};
+
+const local: IConfig = {
+  port: process.env.port ? +process.env.port : 3000,
+  connString: process.env.MONGO || 'mongodb://localhost:27017/reAnalyzer_dev',
+  sessionSecret: 'OmerIsTheBestProgrammer',
+  logLevel: 'verbose',
+  apmAdress: 'http://localhost:8200',
+  apmServiceName: 'reAnalyzer_dev',
+  elasticsearch: 'http://localhost:9200',
   hierarchyServiceMockFile: './mock/members.json',
   hierarchyServiceUseMock: true,
   hierarchyUserIDToHierarchyFile: './mock/userIDToHierarchy.json',

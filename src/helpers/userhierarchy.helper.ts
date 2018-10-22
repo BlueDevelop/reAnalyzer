@@ -4,14 +4,14 @@ Terminology Notes:
 *user\member will be used interchangeably
 */
 
-import getConfig from "../config";
+import getConfig from '../config';
 const config = getConfig();
-import * as _ from "lodash";
-import axios from "axios";
-import * as fs from "fs";
+import * as _ from 'lodash';
+import axios from 'axios';
+import * as fs from 'fs';
 
 const readAndParseJSON = (fileName: string) =>
-  JSON.parse(fs.readFileSync(fileName, "utf8"));
+  JSON.parse(fs.readFileSync(fileName, 'utf8'));
 const memoizedReadAndParseJSON = _.memoize(readAndParseJSON); // after calling this function once it will cache the output and instantly return it
 
 /**
@@ -28,7 +28,7 @@ async function userIDToHierarchyID(userID: string) {
   } else {
     return getHierarchyOfUser(userID);
   }
-  throw new Error("hierarchy not configured correctly");
+  throw new Error('hierarchy not configured correctly');
 }
 
 /**
@@ -89,9 +89,6 @@ async function getHierarchyOfUser(
     // TODO:throw error or do nothing
     throw new Error('hierarchy not configured');
   }
-  return data.map((person: any) => {
-    return person.id;
-  }) as string[];
 }
 /**
  *
@@ -151,7 +148,7 @@ const hierarchyService = {
   getIndirectMembersOfHierarchy,
   getMembersByUser,
   getHierarchyOfUser,
-  userIDToHierarchyID
+  userIDToHierarchyID,
 };
 
 export default hierarchyService;
