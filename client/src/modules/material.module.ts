@@ -1,7 +1,31 @@
 import { NgModule } from '@angular/core';
-import {MatButtonModule,
-        MatIconModule, 
-        MatInputModule, 
+import { MatMomentDateModule } from '@angular/material-moment-adapter'
+import {
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatCheckboxModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MatCardModule,
+    MatDividerModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatBadgeModule,
+    MatListModule,
+    MatTabsModule,
+    MatSelectModule,
+} from '@angular/material';
+
+@NgModule({
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
         MatFormFieldModule,
         MatDatepickerModule,
         MatCheckboxModule,
@@ -16,50 +40,30 @@ import {MatButtonModule,
         MatBadgeModule,
         MatListModule,
         MatTabsModule,
-        MatSelectModule
-    } from '@angular/material';
-
-@NgModule({
-    imports:[
-             MatButtonModule, 
-             MatIconModule, 
-             MatInputModule, 
-             MatFormFieldModule,
-             MatDatepickerModule,
-             MatCheckboxModule,
-             MatSidenavModule,
-             MatToolbarModule,
-             MatGridListModule,
-             MatCardModule,
-             MatDividerModule,
-             MatChipsModule,
-             MatDialogModule,
-             MatMenuModule,
-             MatBadgeModule,
-             MatListModule,
-             MatTabsModule,
-             MatSelectModule
-            ],
-    exports:[
-             MatButtonModule, 
-             MatIconModule, 
-             MatInputModule, 
-             MatFormFieldModule,
-             MatDatepickerModule,
-             MatCheckboxModule,
-             MatSidenavModule,
-             MatToolbarModule,
-             MatGridListModule,
-             MatCardModule,
-             MatDividerModule,
-             MatChipsModule,
-             MatDialogModule,
-             MatMenuModule,
-             MatBadgeModule,
-             MatListModule,
-             MatTabsModule,
-             MatSelectModule
-            ]
+        MatSelectModule,
+        MatMomentDateModule
+    ],
+    exports: [
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        MatCheckboxModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatGridListModule,
+        MatCardModule,
+        MatDividerModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatMenuModule,
+        MatBadgeModule,
+        MatListModule,
+        MatTabsModule,
+        MatSelectModule,
+        MatMomentDateModule
+    ]
 })
 
-export class MaterialModule {}
+export class MaterialModule { }

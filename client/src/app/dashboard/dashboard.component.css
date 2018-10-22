@@ -11,9 +11,10 @@ mat-grid-tile {
   font-size: 5vh
 }
 
-.project-select, .discussion-select{
+.project-select, .discussion-select, .start-date, .end-date{
  margin-left: 20px;
 }
+
 .entity-filter{
   margin-right: 15%;
   display: flex;
