@@ -28,7 +28,6 @@ async function userIDToHierarchyID(userID: string) {
   } else {
     return getHierarchyOfUser(userID);
   }
-  throw new Error('hierarchy not configured correctly');
 }
 
 /**

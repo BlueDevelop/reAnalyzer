@@ -1,4 +1,5 @@
 import hierarchyService from './helpers/userhierarchy.helper';
+import path from 'path';
 
 interface IConfig {
   port: number;
@@ -30,7 +31,7 @@ const prod: IConfig = {
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
   hierarchyServiceAddr:
     process.env.hierarchyAPI || 'http://hierarchyServiceAddress/api/',
-  hierarchyFile: './mock/hierarchy.json',
+  hierarchyFile: path.join(__dirname, '../src/someGroupIDmock/hierarchy.json'),
   hierarchyServiceUseMock: false,
   hierarchyServiceAddrGetMembers: (hierarchyID: string) =>
     `${prod.hierarchyServiceAddr}hierarchy/${hierarchyID}/members`,
@@ -46,9 +47,12 @@ const dev: IConfig = {
   apmAdress: 'http://apm:8200',
   apmServiceName: 'reAnalyzer_dev',
   elasticsearch: 'http://elasticsearch:9200',
-  hierarchyServiceMockFile: './mock/members.json',
+  hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
-  hierarchyUserIDToHierarchyFile: './mock/userIDToHierarchy.json',
+  hierarchyUserIDToHierarchyFile: path.join(
+    __dirname,
+    '../src/mock/userIDToHierarchy.json'
+  ),
 };
 
 const local: IConfig = {
@@ -59,9 +63,12 @@ const local: IConfig = {
   apmAdress: 'http://localhost:8200',
   apmServiceName: 'reAnalyzer_dev',
   elasticsearch: 'http://localhost:9200',
-  hierarchyServiceMockFile: './mock/members.json',
+  hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
-  hierarchyUserIDToHierarchyFile: './mock/userIDToHierarchy.json',
+  hierarchyUserIDToHierarchyFile: path.join(
+    __dirname,
+    '../src/mock/userIDToHierarchy.json'
+  ),
 };
 
 const test: IConfig = {
@@ -84,7 +91,9 @@ export default () => {
     case 'dev': {
       return dev;
     }
-
+    case 'local': {
+      return local;
+    }
     case 'test': {
       return test;
     }

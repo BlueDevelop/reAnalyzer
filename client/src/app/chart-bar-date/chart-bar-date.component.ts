@@ -6,32 +6,28 @@ import * as _moment from 'moment';
 @Component({
   selector: 'app-chart-bar-date',
   templateUrl: './chart-bar-date.component.html',
-  styleUrls: ['./chart-bar-date.component.css']
+  styleUrls: ['./chart-bar-date.component.css'],
 })
 export class ChartBarDateComponent implements OnInit {
   data;
-  constructor(private taskService: TaskService) {
-
-  }
+  constructor(private taskService: TaskService) {}
   ngOnInit() {
-    this.getFieldCountPerInterval()
+    this.getFieldCountPerInterval();
   }
 
   editData(data): void {
-    debugger
-    this.data = _.map(data, (bucket) => {
+    this.data = _.map(data, bucket => {
       return {
         //name: new Date(bucket.key).getDay() + "/" + new Date(bucket.key).getMonth() + "/" + new Date(bucket.key).getFullYear(),
-        name: _moment(bucket.key).format("DD/MM/YYYY"),
-        value: bucket.doc_count
-      }
-    })
+        name: _moment(bucket.key).format('DD/MM/YYYY'),
+        value: bucket.doc_count,
+      };
+    });
   }
 
   getFieldCountPerInterval(): void {
-    this.taskService.getFieldCountPerInterval()
-      .subscribe(data => {
-        this.editData(data);
-      });
+    this.taskService.getFieldCountPerInterval().subscribe(data => {
+      this.editData(data);
+    });
   }
 }
