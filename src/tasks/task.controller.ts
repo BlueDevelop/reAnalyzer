@@ -24,7 +24,7 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: string[] = (await filterHelper.getHierarchy(
+      const filter: string[] = (await filterHelper.getMembersByUser(
         req.user
       )) as string[];
 
