@@ -39,7 +39,7 @@ const prod: IConfig = {
   hierarchyServiceAddrGetUser: (userID: string) =>
     `${prod.hierarchyServiceAddr}user/${userID}`,
   debug: process.env.debug
-    ? process.env.debug == 'true'
+    ? process.env.debug === 'true'
       ? true
       : false
     : false,
@@ -60,7 +60,7 @@ const dev: IConfig = {
     '../src/mock/userIDToHierarchy.json'
   ),
   debug: process.env.debug
-    ? process.env.debug == 'true'
+    ? process.env.debug === 'true'
       ? true
       : false
     : false,
@@ -81,7 +81,7 @@ const local: IConfig = {
     '../src/mock/userIDToHierarchy.json'
   ),
   debug: process.env.debug
-    ? process.env.debug == 'true'
+    ? process.env.debug === 'true'
       ? true
       : false
     : false,
