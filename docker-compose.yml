@@ -5,9 +5,10 @@ services:
     image: reanalyzer
     build: .
     environment:
-      NODE_ENV: production
+      NODE_ENV: dev
       MONGO: mongodb://mongodb:27017/reAnalyzer_dev
       port: 3000
+      debug: 'false'
     ports:
       - 3000:3000
     volumes:

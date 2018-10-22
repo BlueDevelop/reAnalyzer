@@ -17,6 +17,7 @@ interface IConfig {
   hierarchyUserIDToHierarchyFile?: string; // local file containing a mapping between userIDS and its hierarchy
   hierarchyServiceAddrGetMembers?: (hierarchy: string) => string; // function that generates the route to get all members\users under a given hierarchy from the api
   hierarchyServiceAddrGetUser?: (userID: string) => string; // function that generates the route to get a single user\member info
+  debug?: boolean;
 }
 
 const prod: IConfig = {
@@ -37,11 +38,16 @@ const prod: IConfig = {
     `${prod.hierarchyServiceAddr}hierarchy/${hierarchyID}/members`,
   hierarchyServiceAddrGetUser: (userID: string) =>
     `${prod.hierarchyServiceAddr}user/${userID}`,
+  debug: process.env.debug
+    ? process.env.debug == 'true'
+      ? true
+      : false
+    : false,
 };
 
 const dev: IConfig = {
   port: process.env.port ? +process.env.port : 3000,
-  connString: process.env.MONGO || 'mongodb://test:27017/reAnalyzer_dev',
+  connString: process.env.MONGO || 'mongodb://mongodb:27017/reAnalyzer_dev',
   sessionSecret: 'OmerIsTheBestProgrammer',
   logLevel: 'verbose',
   apmAdress: 'http://apm:8200',
@@ -53,6 +59,11 @@ const dev: IConfig = {
     __dirname,
     '../src/mock/userIDToHierarchy.json'
   ),
+  debug: process.env.debug
+    ? process.env.debug == 'true'
+      ? true
+      : false
+    : false,
 };
 
 const local: IConfig = {
@@ -69,6 +80,11 @@ const local: IConfig = {
     __dirname,
     '../src/mock/userIDToHierarchy.json'
   ),
+  debug: process.env.debug
+    ? process.env.debug == 'true'
+      ? true
+      : false
+    : false,
 };
 
 const test: IConfig = {
