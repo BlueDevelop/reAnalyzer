@@ -24,9 +24,9 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: string[] = (await filterHelper.getMembersByUser(
+      const filter: object[] = (await filterHelper.getMembersByUser(
         req.user.uniqueId
-      )) as string[];
+      )) as object[];
 
       const response = await taskService.getFieldCountPerInterval(
         req.query.field,
@@ -62,9 +62,9 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: string[] = (await filterHelper.getMembersByUser(
+      const filter: object[] = (await filterHelper.getMembersByUser(
         req.user.uniqueId
-      )) as string[];
+      )) as object[];
 
       const response = await taskService.getCountByStatus(
         +req.query.from,
@@ -104,9 +104,9 @@ export default class TaskController {
 
       const size = req.query.size ? +req.query.size : undefined;
 
-      const filter: string[] = (await filterHelper.getMembersByUser(
+      const filter: object[] = (await filterHelper.getMembersByUser(
         req.user.uniqueId
-      )) as string[];
+      )) as object[];
 
       const response = await taskService.getTagCloud(
         +req.query.from,
@@ -147,9 +147,9 @@ export default class TaskController {
 
       const size = req.query.size ? +req.query.size : undefined;
 
-      const filter: string[] = (await filterHelper.getMembersByUser(
+      const filter: object[] = (await filterHelper.getMembersByUser(
         req.user.uniqueId
-      )) as string[];
+      )) as object[];
 
       const response = await taskService.getLeaderboard(
         +req.query.from,
@@ -185,9 +185,9 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: string[] = (await filterHelper.getMembersByUser(
+      const filter: object[] = (await filterHelper.getMembersByUser(
         req.user.uniqueId
-      )) as string[];
+      )) as object[];
 
       // Get all the tasks with status done from elasticsearch.
       const doneTasks = (await taskService.getByField(

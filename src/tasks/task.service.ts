@@ -15,12 +15,12 @@ export default class TaskService {
     value: string,
     from: number,
     to: number,
-    filter: string[] = [],
+    filter: object[] = [],
     field?: string
   ) {
     const searchField = field || '_id';
 
-    const should = TaskService.prefixQuery(filter);
+    const should = TaskService.prefixQuery(filter) || [];
 
     const body: any = {
       query: {
@@ -66,7 +66,7 @@ export default class TaskService {
     field: string,
     from: number,
     to: number,
-    filter: string[] = [],
+    filter: object[] = [],
     interval?: string
   ) {
     const should = TaskService.prefixQuery(filter);
@@ -138,7 +138,7 @@ export default class TaskService {
   public static getCountByStatus(
     from: number,
     to: number,
-    filter: string[] = []
+    filter: object[] = []
   ) {
     const should = TaskService.prefixQuery(filter);
 
@@ -211,7 +211,7 @@ export default class TaskService {
   public static getTagCloud(
     from: number,
     to: number,
-    filter: string[] = [],
+    filter: object[] = [],
     size?: number
   ) {
     const should = TaskService.prefixQuery(filter);
@@ -284,7 +284,7 @@ export default class TaskService {
   public static getLeaderboard(
     from: number,
     to: number,
-    filter: string[] = [],
+    filter: object[] = [],
     size?: number
   ) {
     const should = TaskService.prefixQuery(filter);
@@ -334,20 +334,21 @@ export default class TaskService {
   private static client = esClient.getClient();
   private static index = 'tasks_test';
 
-  private static prefixQuery(filter: string[]) {
+  private static prefixQuery(filter: object[]) {
     const should: any[] = [];
-    return filter.map(id => {
+    filter.map((user: any) => {
       should.push({
         prefix: {
-          'creator.id.keyword': filter,
+          'creator.id.keyword': user.id,
         },
       });
 
       should.push({
         prefix: {
-          'assign.id.keyword': filter,
+          'assign.id.keyword': user.id,
         },
       });
     });
+    return should;
   }
 }
