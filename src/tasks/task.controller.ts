@@ -25,7 +25,8 @@ export default class TaskController {
       }
 
       const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId
+        req.user.uniqueId,
+        TaskController.cut
       )) as object[];
 
       const response = await taskService.getFieldCountPerInterval(
@@ -63,7 +64,8 @@ export default class TaskController {
       }
 
       const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId
+        req.user.uniqueId,
+        TaskController.cut
       )) as object[];
 
       const response = await taskService.getCountByStatus(
@@ -105,7 +107,8 @@ export default class TaskController {
       const size = req.query.size ? +req.query.size : undefined;
 
       const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId
+        req.user.uniqueId,
+        TaskController.cut
       )) as object[];
 
       const response = await taskService.getTagCloud(
@@ -148,7 +151,8 @@ export default class TaskController {
       const size = req.query.size ? +req.query.size : undefined;
 
       const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId
+        req.user.uniqueId,
+        TaskController.cut
       )) as object[];
 
       const response = await taskService.getLeaderboard(
@@ -186,7 +190,8 @@ export default class TaskController {
       }
 
       const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId
+        req.user.uniqueId,
+        TaskController.cut
       )) as object[];
 
       // Get all the tasks with status done from elasticsearch.
@@ -283,5 +288,14 @@ export default class TaskController {
       });
       return res.status(500);
     }
+  }
+
+  /**
+   * returns formatted email as userId.
+   *
+   * @param str gets email to be formatted as userId.
+   */
+  private static cut(str: string) {
+    return str.split('@')[0];
   }
 }
