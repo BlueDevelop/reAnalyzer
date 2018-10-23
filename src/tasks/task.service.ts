@@ -19,6 +19,9 @@ export default class TaskService {
     field?: string
   ) {
     const searchField = field || '_id';
+
+    const should = TaskService.prefixQuery(filter);
+
     const body: any = {
       query: {
         bool: {
@@ -37,18 +40,7 @@ export default class TaskService {
             },
           ],
           filter: [],
-          should: [
-            {
-              terms: {
-                'creator.id.keyword': filter,
-              },
-            },
-            {
-              terms: {
-                'assign.id.keyword': filter,
-              },
-            },
-          ],
+          should,
           minimum_should_match: 1,
           must_not: [],
         },
@@ -77,6 +69,8 @@ export default class TaskService {
     filter: string[] = [],
     interval?: string
   ) {
+    const should = TaskService.prefixQuery(filter);
+
     return TaskService.client.search<Itask>({
       index: TaskService.index,
       body: {
@@ -125,18 +119,7 @@ export default class TaskService {
                 match_all: {},
               },
             ],
-            should: [
-              {
-                terms: {
-                  'creator.id.keyword': filter,
-                },
-              },
-              {
-                terms: {
-                  'assign.id.keyword': filter,
-                },
-              },
-            ],
+            should,
             minimum_should_match: 1,
             must_not: [],
           },
@@ -157,6 +140,8 @@ export default class TaskService {
     to: number,
     filter: string[] = []
   ) {
+    const should = TaskService.prefixQuery(filter);
+
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -206,18 +191,7 @@ export default class TaskService {
                 match_all: {},
               },
             ],
-            should: [
-              {
-                terms: {
-                  'creator.id.keyword': filter,
-                },
-              },
-              {
-                terms: {
-                  'assign.id.keyword': filter,
-                },
-              },
-            ],
+            should,
             minimum_should_match: 1,
             must_not: [],
           },
@@ -240,6 +214,8 @@ export default class TaskService {
     filter: string[] = [],
     size?: number
   ) {
+    const should = TaskService.prefixQuery(filter);
+
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -288,18 +264,7 @@ export default class TaskService {
               },
             ],
             filter: [],
-            should: [
-              {
-                terms: {
-                  'creator.id.keyword': filter,
-                },
-              },
-              {
-                terms: {
-                  'assign.id.keyword': filter,
-                },
-              },
-            ],
+            should,
             minimum_should_match: 1,
             must_not: [],
           },
@@ -322,6 +287,8 @@ export default class TaskService {
     filter: string[] = [],
     size?: number
   ) {
+    const should = TaskService.prefixQuery(filter);
+
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -344,18 +311,7 @@ export default class TaskService {
               },
             ],
             filter: [],
-            should: [
-              {
-                terms: {
-                  'creator.id.keyword': filter,
-                },
-              },
-              {
-                terms: {
-                  'assign.id.keyword': filter,
-                },
-              },
-            ],
+            should,
             minimum_should_match: 1,
             must_not: [],
           },
@@ -377,4 +333,21 @@ export default class TaskService {
 
   private static client = esClient.getClient();
   private static index = 'tasks_test';
+
+  private static prefixQuery(filter: string[]) {
+    const should: any[] = [];
+    return filter.map(id => {
+      should.push({
+        prefix: {
+          'creator.id.keyword': filter,
+        },
+      });
+
+      should.push({
+        prefix: {
+          'assign.id.keyword': filter,
+        },
+      });
+    });
+  }
 }
