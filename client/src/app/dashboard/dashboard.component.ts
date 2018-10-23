@@ -6,7 +6,6 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { isFormattedError } from '@angular/compiler';
 
 export const MY_FORMATS = {
   parse: {
@@ -62,8 +61,6 @@ export class DashboardComponent implements OnInit {
       this.taskService.lastDay = this.endDate.value.valueOf();
     }
 
-    //this.taskService.firstDay = this.startDate.value.valueOf();
-    //this.taskService.lastDay = this.endDate.value.valueOf();
     this.barDate.getFieldCountPerInterval();
     this.pieStatus.getCountByStatus();
     this.leaderBoard.getLeaderboard();
@@ -71,7 +68,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(_moment().subtract(1, 'month').format('DD/MM/YYYY'));
+
   }
 
 }

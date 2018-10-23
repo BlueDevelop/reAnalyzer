@@ -11,8 +11,8 @@ import { CloudData, CloudOptions, ZoomOnHoverOptions } from 'angular-tag-cloud-m
 export class TagCloudComponent implements OnInit {
   options: CloudOptions = {
     // if width is between 0 and 1 it will be set to the size of the upper element multiplied by the value 
-    width : 1200,
-    height : 700,
+    width: 1200,
+    height: 700,
     overflow: false,
   };
 
@@ -21,7 +21,7 @@ export class TagCloudComponent implements OnInit {
     transitionTime: 1.2, // it will take 1.2 seconds until the zoom level defined in scale property has been reached
     delay: 0.4 // Zoom will take affect after 0.8 seconds
   };
-  
+
   data: CloudData[] = [];
   constructor(private taskService: TaskService) { }
 
@@ -30,20 +30,22 @@ export class TagCloudComponent implements OnInit {
   }
 
   editData(data): void {
-    debugger
-    this.data = _.map(data,(bucket)=>{
+    this.data = _.map(data, (bucket) => {
       return {
-        text:bucket.key,
-        weight:bucket.doc_count
+        text: bucket.key,
+        weight: bucket.doc_count
       }
     })
   }
 
   getTagClouds(): void {
-    debugger
     this.taskService.getTagClouds()
       .subscribe(data => {
         this.editData(data);
       });
+  }
+
+  onClickTag(tagClicked: CloudData) {
+    console.log(tagClicked);
   }
 }

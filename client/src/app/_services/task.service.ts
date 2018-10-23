@@ -17,12 +17,10 @@ export class TaskService {
   constructor(private http: HttpClient) { }
 
   getTaskCountByStatus() {
-    console.log(this.firstDay);
     return this.http.get(`${environment.apiUrl}/task/countByStatus?from=${this.firstDay}&to=${this.lastDay}`);
   }
 
   getFieldCountPerInterval() {
-    console.log(this.firstDay);
     let field = "due";
     let interval = "1d";
     return this.http.get(`${environment.apiUrl}/task/fieldCountPerInterval?field=${field}&from=${this.firstDay}&to=${this.lastDay}&interval=${interval}`);
