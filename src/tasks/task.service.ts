@@ -8,7 +8,7 @@ export default class TaskService {
    * @param {string} value The value to search.
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
-   * @param {string[]} filter filter by users.
+   * @param {object[]} filter filter by users.
    * @param {string?} field The field to search by, defaults to '_id'.
    */
   public static getByField(
@@ -59,7 +59,7 @@ export default class TaskService {
    * @param {string} field The field to search by, must be a Date field.
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
-   * @param {string[]} filter filter by users.
+   * @param {object[]} filter filter by users.
    * @param {string?} interval The interval as DurationString, defaults to '1d'.
    */
   public static getFieldCountPerInterval(
@@ -133,7 +133,7 @@ export default class TaskService {
    *
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
-   * @param {string[]} filter filter by users.
+   * @param {object[]} filter filter by users.
    */
   public static getCountByStatus(
     from: number,
@@ -205,7 +205,7 @@ export default class TaskService {
    *
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
-   * @param {string[]} filter filter by users.
+   * @param {object[]} filter filter by users.
    * @param {number?} size The number of tags, defaults to 40.
    */
   public static getTagCloud(
@@ -278,7 +278,7 @@ export default class TaskService {
    *
    * @param {number} from Date to search from in epoch_millis.
    * @param {number} to Date to search to in epoch_millis.
-   * @param {Array} filter filter by users.
+   * @param {object[]} filter filter by users.
    * @param {number?} size The number of tags, defaults to 10.
    */
   public static getLeaderboard(
@@ -334,6 +334,11 @@ export default class TaskService {
   private static client = esClient.getClient();
   private static index = 'tasks_test';
 
+  /**
+   * returns the should query.
+   *
+   * @param filter gets an array of user objects.
+   */
   private static prefixQuery(filter: object[]) {
     const should: any[] = [];
     filter.map((user: any) => {
