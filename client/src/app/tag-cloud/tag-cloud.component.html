@@ -1,7 +1,8 @@
 <div>
-  <angular-tag-cloud
+  <angular-tag-cloud class="custom-css"
     [data]="data"
     [zoomOnHover]="zoomOnHoverOptions"
+    (clicked)="onClickTag($event)"
  >
   </angular-tag-cloud>
 </div>

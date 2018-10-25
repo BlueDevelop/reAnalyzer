@@ -39,11 +39,9 @@ export class DashboardComponent implements OnInit {
   startDate = new FormControl(this.date);
   endDate = new FormControl(_moment());
 
-  // myFilter = (d: Date): boolean => {
-  //   const day = d.getDay();
-  //   // Prevent Saturday and Sunday from being selected.
-  //   return day !== 0 && day !== 6;
-  // }
+  myFilter = (d): boolean => {
+    return d.isAfter(this.startDate.value.valueOf());
+  }
 
   constructor(private taskService: TaskService) {
     this.taskService.firstDay = this.startDate.value.valueOf();
@@ -51,8 +49,18 @@ export class DashboardComponent implements OnInit {
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.taskService.firstDay = this.startDate.value.valueOf();
-    this.taskService.lastDay = this.endDate.value.valueOf();
+
+    if (this.taskService.firstDay != this.startDate.value.valueOf()) {
+      this.taskService.firstDay = this.startDate.value.valueOf();
+      if (this.taskService.firstDay > this.taskService.lastDay) {
+        this.endDate.setValue(this.startDate.value);
+        this.taskService.lastDay = this.taskService.firstDay;
+      }
+    }
+    else if (this.taskService.lastDay != this.endDate.value.valueOf()) {
+      this.taskService.lastDay = this.endDate.value.valueOf();
+    }
+
     this.barDate.getFieldCountPerInterval();
     this.pieStatus.getCountByStatus();
     this.leaderBoard.getLeaderboard();
@@ -60,7 +68,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(_moment().subtract(1, 'month').format('DD/MM/YYYY'));
+
   }
 
 }

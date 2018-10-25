@@ -1,16 +1,44 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-bar',
-  templateUrl: './bar.component.html',
-  styleUrls: ['./bar.component.css']
+  selector: 'app-grouped-vertical-bar',
+  templateUrl: './grouped-vertical-bar.component.html',
+  styleUrls: ['./grouped-vertical-bar.component.css']
 })
-export class BarComponent implements OnInit {
-  @Input() data: any[];
+export class GroupedVerticalBarComponent implements OnInit {
+  data = [
+    {
+      "name": "Germany",
+      "series": [
+        {
+          "name": "2010",
+          "value": 7300000
+        },
+        {
+          "name": "2011",
+          "value": 8940000
+        }
+      ]
+    },
+
+    {
+      "name": "USA",
+      "series": [
+        {
+          "name": "2010",
+          "value": 7870000
+        },
+        {
+          "name": "2011",
+          "value": 8270000
+        }
+      ]
+    }
+  ]
+  //@Input() data: any[];
   @Input() legendTitle: any[];
   @Input() xAxisLabel: any[];
   @Input() yAxisLabel: any[];
-  @Input() view: any[];
   constructor() { }
 
   ngOnInit() {
@@ -19,7 +47,7 @@ export class BarComponent implements OnInit {
   single: any[];
   multi: any[];
 
-  //view: any[] = [undefined, undefined];
+  view: any[] = [1200, undefined];
 
   // options
   showXAxis = true;

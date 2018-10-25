@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { User } from '../_models/user';
-import  { config } from '../../config';
+//import  { config } from '../../config';
+import { environment } from '../../environments/environment';
 
 
-interface SignupObj{
-    uniqueId : string;
-    name : string;
-    password:string;
+interface SignupObj {
+  uniqueId: string;
+  name: string;
+  password: string;
 }
 
 
@@ -19,7 +20,7 @@ interface SignupObj{
 
 export class UserService {
 
-  
+
   constructor(private http: HttpClient) { }
 
   // getAll() {
@@ -30,20 +31,20 @@ export class UserService {
   //     return this.http.get(`${config.apiUrl}/users/` + id);
   // }
 
-  getCurrentUser(){
+  getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'))
   }
 
-  getNameInitials(){
-    let name:string = this.getCurrentUser().name;
+  getNameInitials() {
+    let name: string = this.getCurrentUser().name;
     let firstLetter = name[0];
-    let secLetter = name.indexOf(' ')==-1?'':name[name.indexOf(' ')+1]; 
-    return firstLetter+secLetter;
+    let secLetter = name.indexOf(' ') == -1 ? '' : name[name.indexOf(' ') + 1];
+    return firstLetter + secLetter;
   }
   register(user: SignupObj) {
     console.dir("SignUpObj:");
     console.dir(user);
-      return this.http.post(`${config.apiUrl}/user`, user);
+    return this.http.post(`${environment.apiUrl}/user`, user);
   }
 
   // update(user: User) {

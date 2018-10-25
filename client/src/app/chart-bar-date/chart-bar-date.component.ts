@@ -10,19 +10,22 @@ import * as _moment from 'moment';
 })
 export class ChartBarDateComponent implements OnInit {
   data;
-  constructor(private taskService: TaskService) {}
+
+  constructor(private taskService: TaskService) {
+  }
+
   ngOnInit() {
     this.getFieldCountPerInterval();
   }
 
   editData(data): void {
-    this.data = _.map(data, bucket => {
+
+    this.data = _.map(data, (bucket) => {
       return {
-        //name: new Date(bucket.key).getDay() + "/" + new Date(bucket.key).getMonth() + "/" + new Date(bucket.key).getFullYear(),
-        name: _moment(bucket.key).format('DD/MM/YYYY'),
-        value: bucket.doc_count,
-      };
-    });
+        name: _moment(bucket.key).format("DD/MM/YYYY"),
+        value: bucket.doc_count
+      }
+    })
   }
 
   getFieldCountPerInterval(): void {

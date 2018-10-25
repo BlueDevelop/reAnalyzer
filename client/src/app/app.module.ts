@@ -22,6 +22,8 @@ import { TagCloudComponent } from './tag-cloud/tag-cloud.component';
 import { PieStatusComponent } from './pie-status/pie-status.component';
 import { BarHorizontalComponent } from './charts/bar-horizontal/bar-horizontal.component';
 import { LeaderBoardComponent } from './leader-board/leader-board.component';
+import { GroupedVerticalBarComponent } from './charts/grouped-vertical-bar/grouped-vertical-bar.component';
+import { TimeRatesComponent } from './time-rates/time-rates.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { LeaderBoardComponent } from './leader-board/leader-board.component';
     TagCloudComponent,
     PieStatusComponent,
     BarHorizontalComponent,
-    LeaderBoardComponent
+    LeaderBoardComponent,
+    GroupedVerticalBarComponent,
+    TimeRatesComponent
   ],
   imports: [
     BrowserModule,
