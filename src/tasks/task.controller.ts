@@ -173,7 +173,7 @@ export default class TaskController {
       )).hits.hits;
 
       // Calculate ratio for each task.
-      const ratios = doneTasks.map(task => {
+      const ratios: number[] = doneTasks.map(task => {
         // Extract data from the task.
         const sourceTask: any = task._source;
 
@@ -218,12 +218,21 @@ export default class TaskController {
       });
 
       // Calculate avarage difference to use as interval.
-      let sum = 0;
-      for (let i = 0; i < ratios.length; ++i) {
-        sum += i === 0 ? ratios[i] : ratios[i] - ratios[i - 1];
-      }
+      const max = _.max(ratios) || 0;
+      const min = _.min(ratios) || 0;
 
-      const interval = sum / ratios.length;
+      const epsilon = 1;
+      const sortedRatios = ratios.sort();
+      let pivot = sortedRatios[0];
+      let count = 1;
+      for (let i = 0; i < sortedRatios.length; i++) {
+        if (sortedRatios[i] - pivot > epsilon) {
+          count++;
+          pivot = sortedRatios[i];
+        }
+      }
+      let interval = (max - min) / count;
+      interval = Math.ceil(interval);
 
       // Initializing return obj.
       const groupedRatios: {
@@ -233,7 +242,7 @@ export default class TaskController {
 
       // Count the number of tasks in each group.
       for (const ratio of ratios) {
-        const index = Math.floor(ratio / interval);
+        const index = ratio % interval == 0 ? Math.floor(ratio / interval) - 1 : Math.floor(ratio / interval);
         if (groupedRatios.ratios[index]) {
           groupedRatios.ratios[index]++;
         } else {

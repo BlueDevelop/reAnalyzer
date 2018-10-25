@@ -71,3 +71,6 @@ html, body{
 body{
     margin: 0;
 }
+
+/* css for angular-tag-cloud component */
+angular-tag-cloud.custom-css > span:hover { cursor: pointer; }
