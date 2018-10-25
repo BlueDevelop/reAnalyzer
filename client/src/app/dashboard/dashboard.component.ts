@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('pieStatus') pieStatus;
   @ViewChild('leaderBoard') leaderBoard;
   @ViewChild('tagCloud') tagCloud;
+  @ViewChild('timeRates') timeRates;
 
   selected = 'option2';
 
@@ -49,7 +50,6 @@ export class DashboardComponent implements OnInit {
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-
     if (this.taskService.firstDay != this.startDate.value.valueOf()) {
       this.taskService.firstDay = this.startDate.value.valueOf();
       if (this.taskService.firstDay > this.taskService.lastDay) {
@@ -65,6 +65,7 @@ export class DashboardComponent implements OnInit {
     this.pieStatus.getCountByStatus();
     this.leaderBoard.getLeaderboard();
     this.tagCloud.getTagClouds();
+    this.timeRates.getTimeRates();
   }
 
   ngOnInit() {
