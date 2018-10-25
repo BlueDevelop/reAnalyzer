@@ -18,7 +18,6 @@ export class TimeRatesComponent implements OnInit {
   editData(data): void {
     let interval: any = data.interval;
     let ratios = data.ratios;
-    debugger;
     for (let i: number = 0; i < ratios.length; i++) {
       ratios[i] = { name: `${(interval * i)}%-${(interval * (i + 1))}%`, value: ratios[i] }
     }

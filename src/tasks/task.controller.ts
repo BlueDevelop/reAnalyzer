@@ -4,6 +4,7 @@ import taskService from './task.service';
 import infoLogger from '../loggers/info.logger';
 import errorLogger from '../loggers/error.logger';
 import filterHelper from '../helpers/userhierarchy.helper';
+import _ from 'lodash';
 
 export default class TaskController {
   /**
