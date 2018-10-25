@@ -6,7 +6,7 @@ import * as _moment from 'moment';
 @Component({
   selector: 'app-chart-bar-date',
   templateUrl: './chart-bar-date.component.html',
-  styleUrls: ['./chart-bar-date.component.css']
+  styleUrls: ['./chart-bar-date.component.css'],
 })
 export class ChartBarDateComponent implements OnInit {
   data;
@@ -19,6 +19,7 @@ export class ChartBarDateComponent implements OnInit {
   }
 
   editData(data): void {
+
     this.data = _.map(data, (bucket) => {
       return {
         name: _moment(bucket.key).format("DD/MM/YYYY"),
@@ -28,9 +29,8 @@ export class ChartBarDateComponent implements OnInit {
   }
 
   getFieldCountPerInterval(): void {
-    this.taskService.getFieldCountPerInterval()
-      .subscribe(data => {
-        this.editData(data);
-      });
+    this.taskService.getFieldCountPerInterval().subscribe(data => {
+      this.editData(data);
+    });
   }
 }

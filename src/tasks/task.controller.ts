@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
+
 import taskService from './task.service';
 import infoLogger from '../loggers/info.logger';
 import errorLogger from '../loggers/error.logger';
-import { Request, Response } from 'express';
-import * as _ from 'lodash';
+import filterHelper from '../helpers/userhierarchy.helper';
 
 export default class TaskController {
   /**
@@ -23,10 +24,16 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
+      const filter: object[] = (await filterHelper.getMembersByUser(
+        req.user.uniqueId,
+        TaskController.cut
+      )) as object[];
+
       const response = await taskService.getFieldCountPerInterval(
         req.query.field,
         +req.query.from,
         +req.query.to,
+        filter,
         req.query.interval
       );
 
@@ -56,9 +63,15 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
+      const filter: object[] = (await filterHelper.getMembersByUser(
+        req.user.uniqueId,
+        TaskController.cut
+      )) as object[];
+
       const response = await taskService.getCountByStatus(
         +req.query.from,
-        +req.query.to
+        +req.query.to,
+        filter
       );
 
       return res.json(response.aggregations['1'].buckets);
@@ -93,9 +106,15 @@ export default class TaskController {
 
       const size = req.query.size ? +req.query.size : undefined;
 
+      const filter: object[] = (await filterHelper.getMembersByUser(
+        req.user.uniqueId,
+        TaskController.cut
+      )) as object[];
+
       const response = await taskService.getTagCloud(
         +req.query.from,
         +req.query.to,
+        filter,
         size
       );
 
@@ -131,9 +150,15 @@ export default class TaskController {
 
       const size = req.query.size ? +req.query.size : undefined;
 
+      const filter: object[] = (await filterHelper.getMembersByUser(
+        req.user.uniqueId,
+        TaskController.cut
+      )) as object[];
+
       const response = await taskService.getLeaderboard(
         +req.query.from,
         +req.query.to,
+        filter,
         size
       );
 
@@ -164,11 +189,17 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
+      const filter: object[] = (await filterHelper.getMembersByUser(
+        req.user.uniqueId,
+        TaskController.cut
+      )) as object[];
+
       // Get all the tasks with status done from elasticsearch.
       const doneTasks = (await taskService.getByField(
         'done',
         +req.query.from,
         +req.query.to,
+        filter,
         'status'
       )).hits.hits;
 
@@ -266,5 +297,14 @@ export default class TaskController {
       });
       return res.status(500);
     }
+  }
+
+  /**
+   * returns formatted email as userId.
+   *
+   * @param str gets email to be formatted as userId.
+   */
+  private static cut(str: string) {
+    return str.split('@')[0];
   }
 }

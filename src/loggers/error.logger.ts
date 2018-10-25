@@ -3,6 +3,7 @@ require('winston-daily-rotate-file');
 import getConfig from '../config';
 
 const logLevel = getConfig().logLevel;
+const debug = getConfig().debug || false;
 
 export default new Logger({
   transports: [
@@ -14,6 +15,10 @@ export default new Logger({
       humanReadableUnhandledException: true,
       maxsize: '1000m',
       maxFiles: '30d',
+    }),
+    new transports.Console({
+      level: logLevel,
+      silent: !debug,
     }),
   ],
   exitOnError: false,

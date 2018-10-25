@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
-import { CloudData, CloudOptions, ZoomOnHoverOptions } from 'angular-tag-cloud-module';
+import {
+  CloudData,
+  CloudOptions,
+  ZoomOnHoverOptions,
+} from 'angular-tag-cloud-module';
 
 @Component({
   selector: 'app-tag-cloud',
   templateUrl: './tag-cloud.component.html',
-  styleUrls: ['./tag-cloud.component.css']
+  styleUrls: ['./tag-cloud.component.css'],
 })
 export class TagCloudComponent implements OnInit {
   options: CloudOptions = {
@@ -19,11 +23,11 @@ export class TagCloudComponent implements OnInit {
   zoomOnHoverOptions: ZoomOnHoverOptions = {
     scale: 1.3, // Elements will become 130 % of current zize on hover
     transitionTime: 1.2, // it will take 1.2 seconds until the zoom level defined in scale property has been reached
-    delay: 0.4 // Zoom will take affect after 0.8 seconds
+    delay: 0.4, // Zoom will take affect after 0.8 seconds
   };
 
   data: CloudData[] = [];
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
     this.getTagClouds();
@@ -43,6 +47,7 @@ export class TagCloudComponent implements OnInit {
       .subscribe(data => {
         this.editData(data);
       });
+
   }
 
   onClickTag(tagClicked: CloudData) {

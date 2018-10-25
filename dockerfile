@@ -5,5 +5,6 @@ COPY . .
 RUN  npm install -g node-gyp node-pre-gyp
 RUN  npm install
 RUN cd client && npm install && cd ..
+RUN npm run build
 EXPOSE 3000
-CMD npm start
+CMD node dist/index.js
