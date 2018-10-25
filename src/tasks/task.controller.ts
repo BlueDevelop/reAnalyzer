@@ -257,10 +257,10 @@ export default class TaskController {
       const sortedRatios = ratios.sort();
       let pivot = sortedRatios[0];
       let count = 1;
-      for (let i = 0; i < sortedRatios.length; i++) {
-        if (sortedRatios[i] - pivot > epsilon) {
+      for (const ratio of sortedRatios) {
+        if (ratio - pivot > epsilon) {
           count++;
-          pivot = sortedRatios[i];
+          pivot = ratio;
         }
       }
       let interval = (max - min) / count;
@@ -274,7 +274,10 @@ export default class TaskController {
 
       // Count the number of tasks in each group.
       for (const ratio of ratios) {
-        const index = ratio % interval == 0 ? Math.floor(ratio / interval) - 1 : Math.floor(ratio / interval);
+        const index =
+          ratio % interval === 0
+            ? Math.floor(ratio / interval) - 1
+            : Math.floor(ratio / interval);
         if (groupedRatios.ratios[index]) {
           groupedRatios.ratios[index]++;
         } else {
