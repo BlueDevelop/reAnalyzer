@@ -1,10 +1,10 @@
 {
-    "someGroupName":[
+    "someGroupName": [
         "subGroupID1",
         "subGroupID2",
         "subGroupID3"
     ],
-    "someGroupID":[
+    "someGroupID": [
         "subGroupID1",
         "subGroupID2",
         "subGroupID3"
