@@ -1,42 +1,42 @@
 {
 
   "someGroupName": [{
-      "id": "fuckerson@gmail.com",
+      "id": "fuckerson",
       "email": "fuckerson@gmail.com",
       "username": "fuckerson@gmail.com",
       "password": "1234"
     },
 
     {
-      "id": "omer@omer.com",
+      "id": "omer",
       "email": "omer@omer.com",
       "username": "omer@omer.com",
       "password": "omeromer"
     },
 
     {
-      "id": "email3@email.com",
+      "id": "email3",
       "email": "email3@email.com",
       "username": "username3",
       "password": "password"
     }
   ],
   "someGroupID": [{
-      "id": "fuckerson@gmail.com",
+      "id": "fuckerson",
       "email": "fuckerson@gmail.com",
       "username": "fuckerson@gmail.com",
       "password": "1234"
     },
 
     {
-      "id": "omer@omer.com",
+      "id": "omer",
       "email": "omer@omer.com",
       "username": "omer@omer.com",
       "password": "omeromer"
     },
 
     {
-      "id": "email3@email.com",
+      "id": "email3",
       "email": "email3@email.com",
       "username": "username3",
       "password": "password"
