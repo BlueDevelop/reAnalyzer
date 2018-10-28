@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import taskService from './task.service';
 import infoLogger from '../loggers/info.logger';
+import verboseLogger from '../loggers/verbose.logger';
 import errorLogger from '../loggers/error.logger';
 import filterHelper from '../helpers/userhierarchy.helper';
 import _ from 'lodash';
@@ -16,19 +17,36 @@ export default class TaskController {
   public static async getFieldCountPerInterval(req: Request, res: Response) {
     try {
       if (!req.query.field || !req.query.from || !req.query.to) {
+        errorLogger.info(
+          `getFieldCountPerInterval - field, from or to queries are missing - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
       if (req.query.field !== 'due' && req.query.field !== 'created') {
+        errorLogger.info(
+          `getFieldCountPerInterval - field is not due or created - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
       if (isNaN(req.query.from) || isNaN(req.query.to)) {
+        errorLogger.info(
+          `getFieldCountPerInterval - from or to are not a number - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
+
+      verboseLogger.verbose(`getFieldCountPerInterval function was called.`);
 
       const filter: object[] = (await filterHelper.getMembersByUser(
         req.user.uniqueId,
         TaskController.cut
       )) as object[];
+
+      verboseLogger.verbose(
+        `getFieldCountPerInterval filter for user ${
+          req.user.uniqueId
+        } is ${filter}.`
+      );
 
       const response = await taskService.getFieldCountPerInterval(
         req.query.field,
@@ -36,6 +54,12 @@ export default class TaskController {
         +req.query.to,
         filter,
         req.query.interval
+      );
+
+      verboseLogger.verbose(
+        `getFieldCountPerInterval function returned ${
+          response.aggregations['1'].buckets
+        }.`
       );
 
       return res.json(response.aggregations['1'].buckets);
@@ -58,9 +82,15 @@ export default class TaskController {
   public static async getCountByStatus(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
+        errorLogger.info(
+          `getCountByStatus - from or to queries are missing - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
       if (isNaN(req.query.from) || isNaN(req.query.to)) {
+        errorLogger.info(
+          `getCountByStatus - from or to are not a number - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
 
@@ -69,12 +99,21 @@ export default class TaskController {
         TaskController.cut
       )) as object[];
 
+      verboseLogger.verbose(
+        `getCountByStatus filter for user ${req.user.uniqueId} is ${filter}.`
+      );
+
       const response = await taskService.getCountByStatus(
         +req.query.from,
         +req.query.to,
         filter
       );
 
+      verboseLogger.verbose(
+        `getCountByStatus function returned ${
+          response.aggregations['1'].buckets
+        }.`
+      );
       return res.json(response.aggregations['1'].buckets);
     } catch (err) {
       errorLogger.error('%j', {
@@ -95,6 +134,9 @@ export default class TaskController {
   public static async getTagCloud(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
+        errorLogger.info(
+          `getTagCloud - from or to queries are missing - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
       if (
@@ -102,6 +144,9 @@ export default class TaskController {
         isNaN(req.query.to) ||
         (req.query.size && isNaN(req.query.size))
       ) {
+        errorLogger.info(
+          `getTagCloud - from, to or size are not a number - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
 
@@ -112,11 +157,19 @@ export default class TaskController {
         TaskController.cut
       )) as object[];
 
+      verboseLogger.verbose(
+        `getTagCloud filter for user ${req.user.uniqueId} is ${filter}.`
+      );
+
       const response = await taskService.getTagCloud(
         +req.query.from,
         +req.query.to,
         filter,
         size
+      );
+
+      verboseLogger.verbose(
+        `getTagCloud function returned ${response.aggregations['1'].buckets}.`
       );
 
       return res.json(response.aggregations['1'].buckets);
@@ -139,6 +192,9 @@ export default class TaskController {
   public static async getLeaderboard(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
+        errorLogger.info(
+          `getLeaderboard - from or to queries are missing - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
       if (
@@ -146,6 +202,9 @@ export default class TaskController {
         isNaN(req.query.to) ||
         (req.query.size && isNaN(req.query.size))
       ) {
+        errorLogger.info(
+          `getLeaderboard - from, to or size are not a number - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
 
@@ -156,11 +215,21 @@ export default class TaskController {
         TaskController.cut
       )) as object[];
 
+      verboseLogger.verbose(
+        `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
+      );
+
       const response = await taskService.getLeaderboard(
         +req.query.from,
         +req.query.to,
         filter,
         size
+      );
+
+      verboseLogger.verbose(
+        `getLeaderboard function returned ${
+          response.aggregations['1'].buckets
+        }.`
       );
 
       return res.json(response.aggregations['1'].buckets);
@@ -184,9 +253,15 @@ export default class TaskController {
     try {
       // Validate input.
       if (!req.query.from || !req.query.to) {
+        errorLogger.info(
+          `getLeaderboard - from or to queries are missing - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
       if (isNaN(req.query.from) || isNaN(req.query.to)) {
+        errorLogger.info(
+          `getCountByStatus - from or to are not a number - status 400 returned.`
+        );
         return res.sendStatus(400);
       }
 
@@ -194,6 +269,10 @@ export default class TaskController {
         req.user.uniqueId,
         TaskController.cut
       )) as object[];
+
+      verboseLogger.verbose(
+        `getEndTimeRatio filter for user ${req.user.uniqueId} is ${filter}.`
+      );
 
       // Get all the tasks with status done from elasticsearch.
       const doneTasks = (await taskService.getByField(
@@ -203,6 +282,10 @@ export default class TaskController {
         filter,
         'status'
       )).hits.hits;
+
+      verboseLogger.verbose(
+        `getByField service function returned ${doneTasks}.`
+      );
 
       // Calculate ratio for each task.
       const ratios: number[] = doneTasks.map(task => {
@@ -291,6 +374,10 @@ export default class TaskController {
           groupedRatios.ratios[i] = 0;
         }
       }
+
+      verboseLogger.verbose(
+        `getEndTimeRatio function returned ${groupedRatios}.`
+      );
 
       return res.json(groupedRatios);
     } catch (err) {

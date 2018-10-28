@@ -36,7 +36,6 @@ export const app = express();
 
 (function init() {
   process.on('uncaughtException', err => {
-    console.log(err);
     errorLogger.error('%j', {
       message: err.message,
       stack: err.stack,
