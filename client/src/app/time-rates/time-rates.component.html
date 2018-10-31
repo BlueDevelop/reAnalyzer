@@ -1,1 +1,5 @@
-<app-bar [data]="data" legendTitle="אחוזים" xAxisLabel="ציר אחוזים" yAxisLabel="כמות המשימות"></app-bar>
+<app-bar [data]="data" legendTitle="אחוזים" xAxisLabel="ציר אחוזים" yAxisLabel="כמות המשימות" *ngIf="data.length>0 else spinner"></app-bar>
+<ng-template #spinner>
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>
+</ng-template>

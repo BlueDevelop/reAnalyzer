@@ -9,17 +9,39 @@ import * as _moment from 'moment';
   styleUrls: ['./chart-bar-date.component.css'],
 })
 export class ChartBarDateComponent implements OnInit {
-  data;
+  data: object[];
+  loading: boolean;
+
+  intervals: string[] = ['1d', '1w', '1m', '1y'];
+  autoTicks = true;
+  disabled = false;
+  invert = false;
+  max = 3;
+  min = 0;
+  showTicks = true;
+  step = 1;
+  thumbLabel = true;
+  interval = 1;
+  vertical = true;
+
 
   constructor(private taskService: TaskService) {
   }
 
   ngOnInit() {
-    this.getFieldCountPerInterval();
+    this.getFieldCountPerInterval(this.intervals[this.interval]);
+  }
+
+  changeInterval() {
+    this.getFieldCountPerInterval(this.intervals[this.interval]);
+  }
+
+  formatLabel(ind: number | null) {
+    const values = ['יום', 'שבוע', 'חודש', 'שנה'];
+    return values[ind];
   }
 
   editData(data): void {
-
     this.data = _.map(data, (bucket) => {
       return {
         name: _moment(bucket.key).format("DD/MM/YYYY"),
@@ -28,8 +50,10 @@ export class ChartBarDateComponent implements OnInit {
     })
   }
 
-  getFieldCountPerInterval(): void {
-    this.taskService.getFieldCountPerInterval().subscribe(data => {
+  getFieldCountPerInterval(interval: string | null): void {
+    this.loading = true;
+    this.taskService.getFieldCountPerInterval(interval).subscribe(data => {
+      this.loading = false;
       this.editData(data);
     });
   }

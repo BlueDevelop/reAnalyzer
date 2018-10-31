@@ -25,4 +25,5 @@ mat-form-field, mat-select, mat-option
   text-align: right;
   /* font-family: 'Alef' !important; */
   font-family: var(--main-font); 
+  font-size: medium;
 }

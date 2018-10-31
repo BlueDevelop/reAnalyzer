@@ -24,9 +24,10 @@ export class TaskService {
     );
   }
 
-  getFieldCountPerInterval(): Observable<any> {
+  getFieldCountPerInterval(interval): Observable<any> {
     let field = "due";
-    let interval = "1d";
+    console.log(interval);
+    //let interval = "1d";
     return this.http.get(`${environment.apiUrl}/task/fieldCountPerInterval?field=${field}&from=${this.firstDay}&to=${this.lastDay}&interval=${interval}`).pipe(
       tap(data => this.log('fetched data from getFieldCountPerInterval')),
       catchError(this.handleError('getFieldCountPerInterval', []))

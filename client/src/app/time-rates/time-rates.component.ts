@@ -8,6 +8,8 @@ import * as _ from 'lodash';
 })
 export class TimeRatesComponent implements OnInit {
   data: any;
+  loading: boolean;
+
   constructor(private taskService: TaskService) { }
 
   ngOnInit() {
@@ -25,8 +27,10 @@ export class TimeRatesComponent implements OnInit {
   }
 
   getTimeRates(): void {
+    this.loading = true;
     this.taskService.getTimeRates()
       .subscribe(data => {
+        this.loading = false;
         this.data = this.editData(data);
       });
   }
