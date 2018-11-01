@@ -54,21 +54,21 @@ export class DashboardComponent implements OnInit {
   addOnBlur = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   //fruitCtrl = new FormControl();
-  filteredFruits: Observable<string[]>;
-  fruits: string[];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
-  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
-  @ViewChild('autoDiscussion') matAutocomplete: MatAutocomplete;
+  filteredDiscussions: Observable<string[]>;
+  discussions: string[] = [];
+  allDiscussions: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', 'rrrrrrrrrrrrr', 'wehf uwhyefpoi owieh wdhf wekfh '];
+  @ViewChild('discussionInput') discussionInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoDiscussion') autocompleteDiscussion: MatAutocomplete;
 
 
-  myFilter = (d): boolean => {
+  dateFilter = (d): boolean => {
     return d.isAfter(this.startDate.value.valueOf());
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.allFruits.filter(option => option.toLowerCase().includes(filterValue));
+    return this.allDiscussions.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   constructor(private taskService: TaskService) {
@@ -101,21 +101,21 @@ export class DashboardComponent implements OnInit {
     //     startWith(''),
     //     map(value => this._filter(value))
     //   );
-    this.filteredFruits = this.discussionSelected.valueChanges.pipe(
+    this.filteredDiscussions = this.discussionSelected.valueChanges.pipe(
       startWith(null),
-      map((fruit: string | null) => fruit ? this._filter(fruit) : this.allFruits.slice()));
+      map((fruit: string | null) => fruit ? this._filter(fruit) : this.allDiscussions.slice()));
   }
 
   add(event: MatChipInputEvent): void {
     // Add fruit only when MatAutocomplete is not open
     // To make sure this does not conflict with OptionSelected Event
-    if (!this.matAutocomplete.isOpen) {
+    if (!this.autocompleteDiscussion.isOpen) {
       const input = event.input;
       const value = event.value;
 
       // Add our fruit
       if ((value || '').trim()) {
-        this.fruits.push(value.trim());
+        this.discussions.push(value.trim());
       }
 
       // Reset the input value
@@ -128,16 +128,16 @@ export class DashboardComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
+    this.discussions.push(event.option.viewValue);
+    this.discussionInput.nativeElement.value = '';
     this.discussionSelected.setValue(null);
   }
 
   remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
+    const index = this.discussions.indexOf(fruit);
 
     if (index >= 0) {
-      this.fruits.splice(index, 1);
+      this.discussions.splice(index, 1);
     }
   }
 
