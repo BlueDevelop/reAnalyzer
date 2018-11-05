@@ -9,6 +9,8 @@ import * as _ from 'lodash';
 })
 export class LeaderBoardComponent implements OnInit {
   data;
+  loading: boolean;
+
   constructor(private taskService: TaskService) { }
 
   ngOnInit() {
@@ -25,8 +27,10 @@ export class LeaderBoardComponent implements OnInit {
   }
 
   getLeaderboard(): void {
+    this.loading = true;
     this.taskService.getLeaderboard()
       .subscribe(data => {
+        this.loading = false;
         this.editData(data);
       });
   }

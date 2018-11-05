@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="data.length>0 else spinner">
   <angular-tag-cloud class="custom-css"
     [data]="data"
     [zoomOnHover]="zoomOnHoverOptions"
@@ -6,3 +6,7 @@
  >
   </angular-tag-cloud>
 </div>
+<ng-template #spinner>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>
+</ng-template>

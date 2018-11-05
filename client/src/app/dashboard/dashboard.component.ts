@@ -1,11 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
 import { FormControl } from '@angular/forms';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete } from '@angular/material';
 import * as _moment from 'moment';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 export const MY_FORMATS = {
   parse: {
@@ -33,15 +37,38 @@ export class DashboardComponent implements OnInit {
   @ViewChild('tagCloud') tagCloud;
   @ViewChild('timeRates') timeRates;
 
-  selected = 'option2';
+  //selected = 'option2';
 
   events: string[] = [];
   date = _moment().subtract(1, 'month');
   startDate = new FormControl(this.date);
   endDate = new FormControl(_moment());
 
-  myFilter = (d): boolean => {
+  discussionSelected = new FormControl();
+  options: string[] = ['One', 'Two', 'Three'];
+  filteredOptions: Observable<string[]>;
+
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  //fruitCtrl = new FormControl();
+  filteredDiscussions: Observable<string[]>;
+  discussions: string[] = [];
+  allDiscussions: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', 'rrrrrrrrrrrrr', 'wehf uwhyefpoi owieh wdhf wekfh '];
+  @ViewChild('discussionInput') discussionInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoDiscussion') autocompleteDiscussion: MatAutocomplete;
+
+
+  dateFilter = (d): boolean => {
     return d.isAfter(this.startDate.value.valueOf());
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.allDiscussions.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   constructor(private taskService: TaskService) {
@@ -69,7 +96,49 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.filteredOptions = this.discussionSelected.valueChanges
+    //   .pipe(
+    //     startWith(''),
+    //     map(value => this._filter(value))
+    //   );
+    this.filteredDiscussions = this.discussionSelected.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) => fruit ? this._filter(fruit) : this.allDiscussions.slice()));
+  }
 
+  add(event: MatChipInputEvent): void {
+    // Add fruit only when MatAutocomplete is not open
+    // To make sure this does not conflict with OptionSelected Event
+    if (!this.autocompleteDiscussion.isOpen) {
+      const input = event.input;
+      const value = event.value;
+
+      // Add our fruit
+      if ((value || '').trim()) {
+        this.discussions.push(value.trim());
+      }
+
+      // Reset the input value
+      if (input) {
+        input.value = '';
+      }
+
+      this.discussionSelected.setValue(null);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.discussions.push(event.option.viewValue);
+    this.discussionInput.nativeElement.value = '';
+    this.discussionSelected.setValue(null);
+  }
+
+  remove(fruit: string): void {
+    const index = this.discussions.indexOf(fruit);
+
+    if (index >= 0) {
+      this.discussions.splice(index, 1);
+    }
   }
 
 }

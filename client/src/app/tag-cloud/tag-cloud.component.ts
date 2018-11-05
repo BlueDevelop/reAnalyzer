@@ -27,7 +27,8 @@ export class TagCloudComponent implements OnInit {
   };
 
   data: CloudData[] = [];
-  constructor(private taskService: TaskService) {}
+  loading: boolean;
+  constructor(private taskService: TaskService) { }
 
   ngOnInit() {
     this.getTagClouds();
@@ -43,8 +44,10 @@ export class TagCloudComponent implements OnInit {
   }
 
   getTagClouds(): void {
+    this.loading = true;
     this.taskService.getTagClouds()
       .subscribe(data => {
+        this.loading = false;
         this.editData(data);
       });
 

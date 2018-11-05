@@ -19,10 +19,26 @@ mat-grid-tile {
   margin-right: 15%;
   display: flex;
 } 
+mat-expansion-panel{
+  margin: 10px 0;
+}
+
+.mat-expansion-panel-header-title{
+  flex-grow: 0;
+}
+mat-chip{
+  /* height: 25px; */
+}
+
+mat-expansion-panel-header > * {
+  height: auto !important;
+  min-height: 46px !important;
+}
 
 mat-form-field, mat-select, mat-option
 {
   text-align: right;
   /* font-family: 'Alef' !important; */
   font-family: var(--main-font); 
+  font-size: medium;
 }

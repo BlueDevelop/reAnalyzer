@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 })
 export class PieStatusComponent implements OnInit {
   data;
+  loading: boolean;
 
   constructor(private taskService: TaskService) { }
 
@@ -26,8 +27,10 @@ export class PieStatusComponent implements OnInit {
   }
 
   getCountByStatus(): void {
+    this.loading = true;
     this.taskService.getTaskCountByStatus()
       .subscribe(data => {
+        this.loading = false;
         this.editData(data);
       });
   }
