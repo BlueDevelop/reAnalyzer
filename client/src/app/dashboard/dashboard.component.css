@@ -11,7 +11,7 @@ mat-grid-tile {
   font-size: 5vh
 }
 
-.project-select, .discussion-select, .start-date, .end-date{
+.project-select, .discussion-select, .unit-select, .start-date, .end-date{
  margin-left: 20px;
 }
 
@@ -26,14 +26,21 @@ mat-expansion-panel{
 .mat-expansion-panel-header-title{
   flex-grow: 0;
 }
-mat-chip{
-  /* height: 25px; */
-}
+ mat-chip{
+} 
 
-mat-expansion-panel-header > * {
+mat-expansion-panel-header {
   height: auto !important;
-  min-height: 46px !important;
+  /* min-height: 46px !important; */
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
+mat-expansion-panel-header{
+  line-height: 20px !important;
+}
+mat-chip-list {
+  margin: auto 0;
+} 
 
 mat-form-field, mat-select, mat-option
 {

@@ -37,45 +37,61 @@ export class DashboardComponent implements OnInit {
   @ViewChild('tagCloud') tagCloud;
   @ViewChild('timeRates') timeRates;
 
-  //selected = 'option2';
+  @ViewChild('discussionInput') discussionInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoDiscussion') autocompleteDiscussion: MatAutocomplete;
 
-  events: string[] = [];
+  @ViewChild('unitInput') unitInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoUnit') autocompleteUnit: MatAutocomplete;
+
+  @ViewChild('projectInput') projectInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoProjct') autocompleteProject: MatAutocomplete;
+
+  visible = true;
+  selectable = false;
+  removable = true;
+  addOnBlur = true;
+
+  model: object;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+
   date = _moment().subtract(1, 'month');
   startDate = new FormControl(this.date);
   endDate = new FormControl(_moment());
 
   discussionSelected = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]>;
+  unitSelected = new FormControl();
+  projectSelected = new FormControl();
 
-  visible = true;
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  //fruitCtrl = new FormControl();
   filteredDiscussions: Observable<string[]>;
+  filteredUnits: Observable<string[]>;
+  filteredProjects: Observable<string[]>;
+
   discussions: string[] = [];
-  allDiscussions: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', 'rrrrrrrrrrrrr', 'wehf uwhyefpoi owieh wdhf wekfh '];
-  @ViewChild('discussionInput') discussionInput: ElementRef<HTMLInputElement>;
-  @ViewChild('autoDiscussion') autocompleteDiscussion: MatAutocomplete;
+  allDiscussions: string[] = ['דיון 1', 'דיון מתוך פרויקט', 'דיון מתוך דיון מתוך משימה'];
 
+  units: string[] = [];
+  allUnits: string[] = ['גוגל', 'מיקרוסופט', 'לינובט', 'פייסבוק'];
 
-  dateFilter = (d): boolean => {
-    return d.isAfter(this.startDate.value.valueOf());
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allDiscussions.filter(option => option.toLowerCase().includes(filterValue));
-  }
+  projects: string[] = [];
+  allProjects: string[] = ['פרויקט 3', 'פרויקט מתוך פרויקט', 'פרויקט מתוך משימה ', 'פרויקט x'];
 
   constructor(private taskService: TaskService) {
     this.taskService.firstDay = this.startDate.value.valueOf();
     this.taskService.lastDay = this.endDate.value.valueOf();
   }
 
+  //Filter for date
+  dateFilter = (d): boolean => {
+    return d.isAfter(this.startDate.value.valueOf());
+  }
+
+  //Filter for autocomplete
+  private _filter(value: string, type: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.model[type].allItems.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  //Update data after date range change 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     if (this.taskService.firstDay != this.startDate.value.valueOf()) {
       this.taskService.firstDay = this.startDate.value.valueOf();
@@ -96,26 +112,58 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.filteredOptions = this.discussionSelected.valueChanges
-    //   .pipe(
-    //     startWith(''),
-    //     map(value => this._filter(value))
-    //   );
-    this.filteredDiscussions = this.discussionSelected.valueChanges.pipe(
+    this.model = {
+      units: {
+        autocompleteType: this.autocompleteUnit,
+        items: this.units,
+        itemSelected: this.unitSelected,
+        itemInput: this.unitInput,
+        filteredItems: this.filteredUnits,
+        allItems: this.allUnits
+      },
+      discussions: {
+        autocompleteType: this.autocompleteDiscussion,
+        items: this.discussions,
+        itemSelected: this.discussionSelected,
+        itemInput: this.discussionInput,
+        filteredItems: this.filteredDiscussions,
+        allItems: this.allDiscussions
+      },
+      projects: {
+        autocompleteType: this.autocompleteProject,
+        items: this.projects,
+        itemSelected: this.projectSelected,
+        itemInput: this.projectInput,
+        filteredItems: this.filteredProjects,
+        allItems: this.allProjects
+      }
+    };
+
+    //for (let type in this.model) {
+    this.filteredUnits = this.model['units'].itemSelected.valueChanges.pipe(
       startWith(null),
-      map((fruit: string | null) => fruit ? this._filter(fruit) : this.allDiscussions.slice()));
+      map((fruit: string | null) => fruit ? this._filter(fruit, 'units') : this.model['units'].allItems.slice()));
+
+    this.filteredDiscussions = this.model['discussions'].itemSelected.valueChanges.pipe(
+      startWith(null),
+      map((item: string | null) => item ? this._filter(item, 'discussions') : this.model['discussions'].allItems.slice()));
+
+    this.filteredProjects = this.model['projects'].itemSelected.valueChanges.pipe(
+      startWith(null),
+      map((item: string | null) => item ? this._filter(item, 'projects') : this.model['projects'].allItems.slice()));
+    //}
   }
 
-  add(event: MatChipInputEvent): void {
-    // Add fruit only when MatAutocomplete is not open
+  add(event: MatChipInputEvent, model: string): void {
+    // Add item only when MatAutocomplete is not open
     // To make sure this does not conflict with OptionSelected Event
-    if (!this.autocompleteDiscussion.isOpen) {
+    if (!this.model[model].autocompleteType.isOpen) {
       const input = event.input;
       const value = event.value;
 
-      // Add our fruit
+      // Add our item
       if ((value || '').trim()) {
-        this.discussions.push(value.trim());
+        this.model[model].items.push(value.trim());
       }
 
       // Reset the input value
@@ -123,21 +171,21 @@ export class DashboardComponent implements OnInit {
         input.value = '';
       }
 
-      this.discussionSelected.setValue(null);
+      this.model[model].itemSelected.setValue(null);
     }
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.discussions.push(event.option.viewValue);
-    this.discussionInput.nativeElement.value = '';
-    this.discussionSelected.setValue(null);
+  selected(event: MatAutocompleteSelectedEvent, model: string): void {
+    this.model[model].items.push(event.option.viewValue);
+    this.model[model].itemInput.nativeElement.value = '';
+    this.model[model].itemSelected.setValue(null);
   }
 
-  remove(fruit: string): void {
-    const index = this.discussions.indexOf(fruit);
+  remove(item: string, model: string): void {
+    const index = this.model[model].items.indexOf(item);
 
     if (index >= 0) {
-      this.discussions.splice(index, 1);
+      this.model[model].items.splice(index, 1);
     }
   }
 
