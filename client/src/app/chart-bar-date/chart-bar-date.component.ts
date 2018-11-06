@@ -50,7 +50,7 @@ export class ChartBarDateComponent implements OnInit {
     })
   }
 
-  getFieldCountPerInterval(interval: string | null): void {
+  getFieldCountPerInterval(interval: string | '1d'): void {
     this.loading = true;
     this.taskService.getFieldCountPerInterval(interval).subscribe(data => {
       this.loading = false;

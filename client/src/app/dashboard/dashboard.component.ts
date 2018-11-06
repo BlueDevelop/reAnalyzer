@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('autoUnit') autocompleteUnit: MatAutocomplete;
 
   @ViewChild('projectInput') projectInput: ElementRef<HTMLInputElement>;
-  @ViewChild('autoProjct') autocompleteProject: MatAutocomplete;
+  @ViewChild('autoProject') autocompleteProject: MatAutocomplete;
 
   visible = true;
   selectable = false;
@@ -57,6 +57,9 @@ export class DashboardComponent implements OnInit {
   date = _moment().subtract(1, 'month');
   startDate = new FormControl(this.date);
   endDate = new FormControl(_moment());
+
+  startDateTemp = this.date;
+  endDateTemp = _moment();
 
   discussionSelected = new FormControl();
   unitSelected = new FormControl();
@@ -76,13 +79,13 @@ export class DashboardComponent implements OnInit {
   allProjects: string[] = ['פרויקט 3', 'פרויקט מתוך פרויקט', 'פרויקט מתוך משימה ', 'פרויקט x'];
 
   constructor(private taskService: TaskService) {
-    this.taskService.firstDay = this.startDate.value.valueOf();
-    this.taskService.lastDay = this.endDate.value.valueOf();
+    this.taskService.filterParams.date.firstDay = this.startDate.value.valueOf();
+    this.taskService.filterParams.date.lastDay = this.endDate.value.valueOf();
   }
 
   //Filter for date
   dateFilter = (d): boolean => {
-    return d.isAfter(this.startDate.value.valueOf());
+    return d.isSameOrAfter(this.startDate.value.valueOf());
   }
 
   //Filter for autocomplete
@@ -93,22 +96,27 @@ export class DashboardComponent implements OnInit {
 
   //Update data after date range change 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    if (this.taskService.firstDay != this.startDate.value.valueOf()) {
-      this.taskService.firstDay = this.startDate.value.valueOf();
-      if (this.taskService.firstDay > this.taskService.lastDay) {
-        this.endDate.setValue(this.startDate.value);
-        this.taskService.lastDay = this.taskService.firstDay;
-      }
-    }
-    else if (this.taskService.lastDay != this.endDate.value.valueOf()) {
-      this.taskService.lastDay = this.endDate.value.valueOf();
+
+    if (this.startDate.value.isAfter(this.endDate.value)) {
+      this.endDate.setValue(this.startDate.value);
     }
 
-    this.barDate.getFieldCountPerInterval();
-    this.pieStatus.getCountByStatus();
-    this.leaderBoard.getLeaderboard();
-    this.tagCloud.getTagClouds();
-    this.timeRates.getTimeRates();
+    // if (this.taskService.firstDay != this.startDate.value.valueOf()) {
+    //   this.taskService.firstDay = this.startDate.value.valueOf();
+    //   if (this.taskService.firstDay > this.taskService.lastDay) {
+    //     this.endDate.setValue(this.startDate.value);
+    //     this.taskService.lastDay = this.taskService.firstDay;
+    //   }
+    // }
+    // else if (this.taskService.lastDay != this.endDate.value.valueOf()) {
+    //   this.taskService.lastDay = this.endDate.value.valueOf();
+    // }
+
+    // this.barDate.getFieldCountPerInterval();
+    // this.pieStatus.getCountByStatus();
+    // this.leaderBoard.getLeaderboard();
+    // this.tagCloud.getTagClouds();
+    // this.timeRates.getTimeRates();
   }
 
   ngOnInit() {
@@ -187,6 +195,16 @@ export class DashboardComponent implements OnInit {
     if (index >= 0) {
       this.model[model].items.splice(index, 1);
     }
+  }
+
+  dataFilering() {
+    this.startDateTemp = this.startDate.value;
+    this.endDateTemp = this.endDate.value;
+    this.taskService.filterParams.discussions = this.discussions;
+    this.taskService.filterParams.projects = this.projects;
+    this.taskService.filterParams.units = this.units;
+    this.taskService.filterParams.date.firstDay = this.startDate.value.valueOf();
+    this.taskService.filterParams.date.lastDay = this.endDate.value.valueOf();
   }
 
 }

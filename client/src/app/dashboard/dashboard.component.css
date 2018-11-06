@@ -1,24 +1,32 @@
 mat-grid-tile {
-    /* background: lightblue; */
     -webkit-box-shadow: 0px 0px 6px 1px #C9C9C9; 
     box-shadow: 0px 0px 6px 1px #C9C9C9;
   }
 
 .title{
   margin-left: 20px;
-  /* font-family: 'Alef' !important; */
   font-family: var(--main-font); 
   font-size: 5vh
 }
 
-.project-select, .discussion-select, .unit-select, .start-date, .end-date{
- margin-left: 20px;
+.filter-inputs{
+  margin: 0 auto;
+  width: 60%;
+}
+
+.project-select, .discussion-select, .unit-select, .filter-button{
+ width: 100%;
+}
+
+.start-date, .end-date{
+ width: 50%;
 }
 
 .entity-filter{
   margin-right: 15%;
   display: flex;
 } 
+
 mat-expansion-panel{
   margin: 10px 0;
 }
@@ -31,7 +39,6 @@ mat-expansion-panel{
 
 mat-expansion-panel-header {
   height: auto !important;
-  /* min-height: 46px !important; */
   padding-top: 5px;
   padding-bottom: 5px;
 }
