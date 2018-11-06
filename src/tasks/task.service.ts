@@ -2,6 +2,7 @@ import esClient from '../helpers/elasticsearch.helper';
 import Itask from './task.interface';
 
 export default class TaskService {
+  public static index = 'tasks_test';
   /**
    * Returns the requested result from elasticsearch.
    * @param {string} value The value to search.
@@ -331,7 +332,6 @@ export default class TaskService {
   }
 
   private static client = esClient.getClient();
-  private static index = 'tasks_test';
 
   /**
    * returns the should query.
