@@ -1,6 +1,5 @@
 import esClient from '../helpers/elasticsearch.helper';
 import Itask from './task.interface';
-import { SearchParams } from 'elasticsearch';
 
 export default class TaskService {
   /**
