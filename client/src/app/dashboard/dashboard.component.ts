@@ -200,11 +200,17 @@ export class DashboardComponent implements OnInit {
   dataFilering() {
     this.startDateTemp = this.startDate.value;
     this.endDateTemp = this.endDate.value;
-    this.taskService.filterParams.discussions = this.discussions;
-    this.taskService.filterParams.projects = this.projects;
-    this.taskService.filterParams.units = this.units;
+    this.taskService.filterParams.discussions = [...this.discussions];
+    this.taskService.filterParams.projects = [...this.projects];//JSON.parse(JSON.stringify(this.projects));
+    this.taskService.filterParams.units = [...this.units];
     this.taskService.filterParams.date.firstDay = this.startDate.value.valueOf();
     this.taskService.filterParams.date.lastDay = this.endDate.value.valueOf();
+
+    this.barDate.getFieldCountPerInterval();
+    this.pieStatus.getCountByStatus();
+    this.leaderBoard.getLeaderboard();
+    this.tagCloud.getTagClouds();
+    this.timeRates.getTimeRates();
   }
 
 }

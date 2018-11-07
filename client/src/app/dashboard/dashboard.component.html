@@ -8,17 +8,17 @@
     <mat-panel-description>
       <p> חברות:</p>
       <mat-chip-list #chipListUnit>
-        <mat-chip *ngFor="let unit of units" [selectable]="selectable" [removable]="removable" (removed)="remove(unit, 'units')">
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        <mat-chip *ngFor="let unit of taskService.filterParams.units" >
+          <!-- <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon> -->
           {{unit}}
         </mat-chip>
       </mat-chip-list>
     </mat-panel-description>
     <mat-panel-description>
       <p> פרויקטים:</p>
-      <mat-chip-list #chipListProject>
-        <mat-chip *ngFor="let project of projects" [selectable]="selectable" [removable]="removable" (removed)="remove(project, 'projects')">
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      <mat-chip-list #chipListProject2>
+        <mat-chip *ngFor="let project of taskService.filterParams.projects">
+          <!-- <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon> -->
           {{project}}
         </mat-chip>
       </mat-chip-list>
@@ -26,8 +26,8 @@
     <mat-panel-description>
       <p> דיונים:</p>
       <mat-chip-list #chipListDiscussion>
-        <mat-chip *ngFor="let discussion of discussions" [selectable]="selectable" [removable]="removable" (removed)="remove(discussion, 'discussions')">
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        <mat-chip *ngFor="let discussion of taskService.filterParams.discussions">
+          <!-- <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon> -->
           {{discussion}}
         </mat-chip>
       </mat-chip-list>
@@ -36,6 +36,7 @@
       <p> מתאריך {{taskService.filterParams.date.firstDay | date: "dd/MM/yyyy"}} עד תאריך {{taskService.filterParams.date.lastDay | date : "dd/MM/yyyy"}}</p>
     </mat-panel-description>
   </mat-expansion-panel-header>
+  <mat-divider></mat-divider>
   <div class="filter-inputs">
     <mat-form-field class="unit-select">
         <mat-chip-list #chipListUnit>

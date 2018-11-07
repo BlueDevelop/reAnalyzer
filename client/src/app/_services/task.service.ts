@@ -23,9 +23,6 @@ interface FilterParams {
 
 export class TaskService {
 
-  // firstDay;
-  // lastDay;
-
   filterParams: FilterParams = {
     date: { firstDay: 0, lastDay: 0 },
     units: [],
@@ -44,8 +41,6 @@ export class TaskService {
 
   getFieldCountPerInterval(interval): Observable<any> {
     let field = "due";
-    console.log(interval);
-    //let interval = "1d";
     return this.http.get(`${environment.apiUrl}/task/fieldCountPerInterval?field=${field}&from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}&interval=${interval}`).pipe(
       tap(data => this.log('fetched data from getFieldCountPerInterval')),
       catchError(this.handleError('getFieldCountPerInterval', []))

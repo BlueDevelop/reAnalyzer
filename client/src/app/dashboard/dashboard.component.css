@@ -19,7 +19,15 @@ mat-grid-tile {
 }
 
 .start-date, .end-date{
- width: 50%;
+ width: 47%;
+}
+
+.start-date{
+  float: right;
+}
+
+.end-date{
+  float: left;
 }
 
 .entity-filter{
