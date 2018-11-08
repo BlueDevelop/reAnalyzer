@@ -1,4 +1,4 @@
-<ngx-charts-bar-vertical
+<ngx-charts-bar-vertical *ngIf="data.length>0 else noData"
   [view]="view"
   [scheme]="colorScheme"
   [results]="data"
@@ -6,10 +6,13 @@
   [xAxis]="showXAxis"
   [yAxis]="showYAxis"
   [legend]="showLegend"
+  [legendTitle]="legendTitle"
   [showXAxisLabel]="showXAxisLabel"
   [showYAxisLabel]="showYAxisLabel"
   [xAxisLabel]="xAxisLabel"
   [yAxisLabel]="yAxisLabel"
   [roundDomains]="roundDomains"
+  [showDataLabel]="showDataLabel"
   (select)="onSelect($event)">
 </ngx-charts-bar-vertical>
+<ng-template #noData>אין נתונים להצגה</ng-template>

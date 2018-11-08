@@ -15,13 +15,13 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private authenticationService: AuthenticationService
-            ) { }
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
-      email: new FormControl('',{validators: [Validators.required, Validators.email ]}),
+      email: new FormControl('', { validators: [Validators.required, Validators.email] }),
       password: new FormControl(),
     })
 
@@ -35,27 +35,23 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  onSubmit(){
-            
-        // stop here if form is invalid
-        if (this.loginForm.invalid) {
-            return;
-        }
+  onSubmit() {
 
-        this.loading = true;
-        this.authenticationService.login(this.f.email.value, this.f.password.value)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    console.dir("LOGIN RESULT");
-                    console.dir(data);
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                  console.dir("Error!");
-                  console.dir(error);
-                    this.loading = false;
-                });
+    // stop here if form is invalid
+    if (this.loginForm.invalid) {
+      return;
     }
+
+    this.loading = true;
+    this.authenticationService.login(this.f.email.value, this.f.password.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.router.navigateByUrl(this.returnUrl);
+        },
+        error => {
+          this.loading = false;
+        });
   }
+}
 

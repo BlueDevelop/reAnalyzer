@@ -1,11 +1,14 @@
-<ngx-charts-pie-chart
+<ngx-charts-pie-chart *ngIf="data.length>0 else noData"
 [view]="view"
 [scheme]="colorScheme"
 [results]="data"
 [legend]="showLegend"
+[legendTitle]="legendTitle"
 [explodeSlices]="explodeSlices"
 [labels]="showLabels"
 [doughnut]="doughnut"
-[gradient]="gradient"
 (select)="onSelect($event)">
 </ngx-charts-pie-chart>
+<ng-template #noData>
+אין נתונים להצגה
+</ng-template>

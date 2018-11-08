@@ -1,0 +1,12 @@
+{
+    "someGroupName": [
+        "subGroupID1",
+        "subGroupID2",
+        "subGroupID3"
+    ],
+    "someGroupID": [
+        "subGroupID1",
+        "subGroupID2",
+        "subGroupID3"
+    ]
+}

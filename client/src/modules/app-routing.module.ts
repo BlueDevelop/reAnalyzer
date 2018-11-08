@@ -10,7 +10,7 @@ import { HomeComponent } from '../app/home/home.component';
 
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full'},
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
     {
         path: 'home', component: HomeComponent, canActivate: [AuthGuard], children: [
             { path: 'dashboard', component: DashboardComponent, outlet: 'app' },
@@ -24,7 +24,7 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: ''}
+    { path: '**', redirectTo: '' }
 ]
 
 @NgModule({

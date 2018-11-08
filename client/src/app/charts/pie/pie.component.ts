@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule , Input} from '@angular/core';
+import { Component, OnInit, NgModule, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pie',
@@ -7,14 +7,16 @@ import { Component, OnInit, NgModule , Input} from '@angular/core';
 })
 export class PieComponent implements OnInit {
   @Input() data: any[];
- 
+  @Input() legendTitle: any[];
+
   view: any[] = [600, 400];
 
   // options
   showLegend = true;
 
   colorScheme = {
-    domain: ['#a8385d','#7aa3e5','#a27ea8','#aae3f5','#adcded','#a95963','#8796c0','#7ed3ed','#50abcc','#ad6886']
+    //domain: ['#a8385d','#7aa3e5','#a27ea8','#aae3f5','#adcded','#a95963','#8796c0','#7ed3ed','#50abcc','#ad6886']
+    domain: ['#5D8AA8', '#346382', '#17405C', '#062235', '#91B6CE', '#D1E6F4']
   };
 
   showLabels = true;
