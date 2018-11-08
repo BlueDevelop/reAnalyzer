@@ -7,7 +7,7 @@ import * as _ from 'lodash';
   styleUrls: ['./time-rates.component.css']
 })
 export class TimeRatesComponent implements OnInit {
-  data: any;
+  data: object[] = [];
   loading: boolean;
 
   constructor(private taskService: TaskService) { }
@@ -17,7 +17,7 @@ export class TimeRatesComponent implements OnInit {
   }
 
 
-  editData(data): void {
+  editData(data): object[] {
     let interval: any = data.interval;
     let ratios = data.ratios;
     for (let i: number = 0; i < ratios.length; i++) {

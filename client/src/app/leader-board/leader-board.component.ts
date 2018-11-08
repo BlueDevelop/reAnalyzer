@@ -8,7 +8,7 @@ import * as _ from 'lodash';
   styleUrls: ['./leader-board.component.css']
 })
 export class LeaderBoardComponent implements OnInit {
-  data;
+  data: object[] = [];
   loading: boolean;
 
   constructor(private taskService: TaskService) { }

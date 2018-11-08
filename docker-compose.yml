@@ -7,8 +7,8 @@ services:
     environment:
       NODE_ENV: dev
       MONGO: mongodb://mongodb:27017/reAnalyzer_dev
-      port: 3000
-      debug: 'false'
+      PORT: 3000
+      DEBUG: 'false'
     ports:
       - 3000:3000
     volumes:
