@@ -1,4 +1,3 @@
-import hierarchyService from './helpers/userhierarchy.helper';
 import path from 'path';
 
 interface IConfig {
@@ -21,14 +20,14 @@ interface IConfig {
 }
 
 const prod: IConfig = {
-  port: process.env.port ? +process.env.port : 3000,
+  port: process.env.PORT ? +process.env.PORT : 3000,
   connString:
     process.env.MONGO ||
     'mongodb://localhost:27017,localhost:27017,localhost:27017/reAnalyzer_prod?replicaSet=reAnalyzer',
   sessionSecret: process.env.secret || 'OmerIsTheBestProgrammer',
-  logLevel: process.env.logLevel || 'info',
-  apmAdress: process.env.apm || 'http://apm:8200',
-  apmServiceName: 'reAnalyzer_prod',
+  logLevel: process.env.LOGLEVEL || 'info',
+  apmAdress: process.env.APM_ADDR || 'http://apm:8200',
+  apmServiceName: process.env.APM_NAME || 'reAnalyzer_prod',
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
   hierarchyServiceAddr:
     process.env.hierarchyAPI || 'http://hierarchyServiceAddress/api/',
@@ -38,50 +37,50 @@ const prod: IConfig = {
     `${prod.hierarchyServiceAddr}hierarchy/${hierarchyID}/members`,
   hierarchyServiceAddrGetUser: (userID: string) =>
     `${prod.hierarchyServiceAddr}user/${userID}`,
-  debug: process.env.debug
-    ? process.env.debug === 'true'
+  debug: process.env.DEBUG
+    ? process.env.DEBUG === 'true'
       ? true
       : false
     : false,
 };
 
 const dev: IConfig = {
-  port: process.env.port ? +process.env.port : 3000,
+  port: process.env.PORT ? +process.env.PORT : 3000,
   connString: process.env.MONGO || 'mongodb://mongodb:27017/reAnalyzer_dev',
   sessionSecret: 'OmerIsTheBestProgrammer',
-  logLevel: 'verbose',
-  apmAdress: 'http://apm:8200',
-  apmServiceName: 'reAnalyzer_dev',
-  elasticsearch: 'http://elasticsearch:9200',
+  logLevel: process.env.LOGLEVEL || 'verbose',
+  apmAdress: process.env.APM_ADDR || 'http://apm:8200',
+  apmServiceName: process.env.APM_NAME || 'reAnalyzer_dev',
+  elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
     '../src/mock/userIDToHierarchy.json'
   ),
-  debug: process.env.debug
-    ? process.env.debug === 'true'
+  debug: process.env.DEBUG
+    ? process.env.DEBUG === 'true'
       ? true
       : false
     : false,
 };
 
 const local: IConfig = {
-  port: process.env.port ? +process.env.port : 3000,
+  port: process.env.PORT ? +process.env.PORT : 3000,
   connString: process.env.MONGO || 'mongodb://localhost:27017/reAnalyzer_dev',
   sessionSecret: 'OmerIsTheBestProgrammer',
-  logLevel: 'verbose',
-  apmAdress: 'http://localhost:8200',
-  apmServiceName: 'reAnalyzer_dev',
-  elasticsearch: 'http://localhost:9200',
+  logLevel: process.env.LOGLEVEL || 'verbose',
+  apmAdress: process.env.APM_ADDR || 'http://localhost:8200',
+  apmServiceName: process.env.APM_NAME || 'reAnalyzer_dev',
+  elasticsearch: process.env.ELASTIC || 'http://localhost:9200',
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
     '../src/mock/userIDToHierarchy.json'
   ),
-  debug: process.env.debug
-    ? process.env.debug === 'true'
+  debug: process.env.DEBUG
+    ? process.env.DEBUG === 'true'
       ? true
       : false
     : false,
