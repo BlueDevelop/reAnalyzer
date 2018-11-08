@@ -6,19 +6,34 @@ import { catchError, map, tap } from 'rxjs/operators';
 //import { config } from '../../config';
 import { environment } from '../../environments/environment';
 
+interface FilterParams {
+  date: {
+    firstDay: number,
+    lastDay: number
+  },
+  units: string[],
+  discussions: string[],
+  projects: string[]
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class TaskService {
 
-  firstDay;
-  lastDay;
+  filterParams: FilterParams = {
+    date: { firstDay: 0, lastDay: 0 },
+    units: [],
+    discussions: [],
+    projects: []
+  };
 
   constructor(private http: HttpClient) { }
 
   getTaskCountByStatus(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/task/countByStatus?from=${this.firstDay}&to=${this.lastDay}`).pipe(
+    return this.http.get(`${environment.apiUrl}/task/countByStatus?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
       tap(data => this.log('fetched data from TaskCountByStatus')),
       catchError(this.handleError('getTaskCountByStatus', []))
     );
@@ -26,9 +41,7 @@ export class TaskService {
 
   getFieldCountPerInterval(interval): Observable<any> {
     let field = "due";
-    console.log(interval);
-    //let interval = "1d";
-    return this.http.get(`${environment.apiUrl}/task/fieldCountPerInterval?field=${field}&from=${this.firstDay}&to=${this.lastDay}&interval=${interval}`).pipe(
+    return this.http.get(`${environment.apiUrl}/task/fieldCountPerInterval?field=${field}&from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}&interval=${interval}`).pipe(
       tap(data => this.log('fetched data from getFieldCountPerInterval')),
       catchError(this.handleError('getFieldCountPerInterval', []))
     );
@@ -37,7 +50,7 @@ export class TaskService {
 
   getTagClouds(): Observable<any> {
     let size = 40;
-    return this.http.get(`${environment.apiUrl}/task/tagCloud?from=${this.firstDay}&to=${this.lastDay}`).pipe(
+    return this.http.get(`${environment.apiUrl}/task/tagCloud?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
       tap(data => this.log('fetched data from TagClouds')),
       catchError(this.handleError('getTagClouds', []))
     );
@@ -45,7 +58,7 @@ export class TaskService {
 
   getLeaderboard(): Observable<any> {
     let size = 40;
-    return this.http.get(`${environment.apiUrl}/task/leaderboard?from=${this.firstDay}&to=${this.lastDay}`).pipe(
+    return this.http.get(`${environment.apiUrl}/task/leaderboard?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
       tap(data => this.log('fetched data from Leaderboard')),
       catchError(this.handleError('getLeaderboard', []))
     );
@@ -53,7 +66,7 @@ export class TaskService {
 
 
   getTimeRates(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/task/endTimeRatio?from=${this.firstDay}&to=${this.lastDay}`).pipe(
+    return this.http.get(`${environment.apiUrl}/task/endTimeRatio?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
       tap(data => this.log('fetched data from TimeRates')),
       catchError(this.handleError('getTimeRates', []))
     );
