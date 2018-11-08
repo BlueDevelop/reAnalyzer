@@ -7,7 +7,7 @@
     </mat-panel-title>
     <mat-panel-description>
       <p> חברות:</p>
-      <mat-chip-list #chipListUnit>
+      <mat-chip-list #chipListUnit *ngIf="taskService.filterParams.units.length>0 else All">
         <mat-chip *ngFor="let unit of taskService.filterParams.units" >
           <!-- <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon> -->
           {{unit}}
@@ -16,7 +16,7 @@
     </mat-panel-description>
     <mat-panel-description>
       <p> פרויקטים:</p>
-      <mat-chip-list #chipListProject2>
+      <mat-chip-list #chipListProject *ngIf="taskService.filterParams.projects.length>0 else All">
         <mat-chip *ngFor="let project of taskService.filterParams.projects">
           <!-- <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon> -->
           {{project}}
@@ -25,7 +25,7 @@
     </mat-panel-description>
     <mat-panel-description>
       <p> דיונים:</p>
-      <mat-chip-list #chipListDiscussion>
+      <mat-chip-list #chipListDiscussion *ngIf="taskService.filterParams.discussions.length>0 else All">
         <mat-chip *ngFor="let discussion of taskService.filterParams.discussions">
           <!-- <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon> -->
           {{discussion}}
@@ -35,6 +35,7 @@
     <mat-panel-description>
       <p> מתאריך {{taskService.filterParams.date.firstDay | date: "dd/MM/yyyy"}} עד תאריך {{taskService.filterParams.date.lastDay | date : "dd/MM/yyyy"}}</p>
     </mat-panel-description>
+    <ng-template #All><p>הכל</p></ng-template>
   </mat-expansion-panel-header>
   <mat-divider></mat-divider>
   <div class="filter-inputs">
