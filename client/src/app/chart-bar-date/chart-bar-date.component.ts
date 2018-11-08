@@ -9,7 +9,7 @@ import * as _moment from 'moment';
   styleUrls: ['./chart-bar-date.component.css'],
 })
 export class ChartBarDateComponent implements OnInit {
-  data: object[];
+  data: object[] = [];
   loading: boolean;
 
   intervals: string[] = ['1d', '1w', '1m', '1y'];
@@ -53,8 +53,10 @@ export class ChartBarDateComponent implements OnInit {
   getFieldCountPerInterval(interval: string = '1d'): void {
     this.loading = true;
     this.taskService.getFieldCountPerInterval(interval).subscribe(data => {
-      //Move slide to currct 
+
+      //Move slide to correct position
       this.interval = this.intervals.indexOf(interval);
+
       this.loading = false;
       this.editData(data);
     });
