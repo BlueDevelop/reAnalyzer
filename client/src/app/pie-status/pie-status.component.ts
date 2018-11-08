@@ -8,7 +8,7 @@ import * as _ from 'lodash';
   styleUrls: ['./pie-status.component.css']
 })
 export class PieStatusComponent implements OnInit {
-  data;
+  data: object[] = [];
   loading: boolean;
 
   constructor(private taskService: TaskService) { }
