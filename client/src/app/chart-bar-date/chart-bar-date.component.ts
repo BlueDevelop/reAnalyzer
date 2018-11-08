@@ -21,7 +21,7 @@ export class ChartBarDateComponent implements OnInit {
   showTicks = true;
   step = 1;
   thumbLabel = true;
-  interval = 1;
+  interval = 0;
   vertical = true;
 
 
@@ -50,9 +50,11 @@ export class ChartBarDateComponent implements OnInit {
     })
   }
 
-  getFieldCountPerInterval(interval: string | null): void {
+  getFieldCountPerInterval(interval: string = '1d'): void {
     this.loading = true;
     this.taskService.getFieldCountPerInterval(interval).subscribe(data => {
+      //Move slide to currct 
+      this.interval = this.intervals.indexOf(interval);
       this.loading = false;
       this.editData(data);
     });
