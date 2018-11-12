@@ -24,6 +24,7 @@ import { BarHorizontalComponent } from './charts/bar-horizontal/bar-horizontal.c
 import { LeaderBoardComponent } from './leader-board/leader-board.component';
 import { GroupedVerticalBarComponent } from './charts/grouped-vertical-bar/grouped-vertical-bar.component';
 import { TimeRatesComponent } from './time-rates/time-rates.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { TimeRatesComponent } from './time-rates/time-rates.component';
     BarHorizontalComponent,
     LeaderBoardComponent,
     GroupedVerticalBarComponent,
-    TimeRatesComponent
+    TimeRatesComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

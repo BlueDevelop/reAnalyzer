@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
+import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
 import {
   CloudData,
@@ -28,19 +29,23 @@ export class TagCloudComponent implements OnInit {
 
   data: CloudData[] = [];
   loading: boolean;
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.getTagClouds();
   }
 
-  editData(data): void {
-    this.data = _.map(data, (bucket) => {
+  editData(data: any): void {
+    const docCounts = _.map(data, (bucket => bucket.doc_count));
+    let uniqueCounts = _.uniq(docCounts).sort();
+    let colors = this.settingsService.getColorDomain(uniqueCounts.length);
+    this.data = _.map(data, (bucket, index) => {
       return {
         text: bucket.key,
-        weight: bucket.doc_count
+        weight: bucket.doc_count,
+        color: colors[_.indexOf(uniqueCounts, bucket.doc_count)]
       }
-    })
+    });
   }
 
   getTagClouds(): void {
@@ -50,7 +55,6 @@ export class TagCloudComponent implements OnInit {
         this.loading = false;
         this.editData(data);
       });
-
   }
 
   onClickTag(tagClicked: CloudData) {

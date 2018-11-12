@@ -44,7 +44,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getFieldCountPerInterval filter for user ${
-          req.user.uniqueId
+        req.user.uniqueId
         } is ${filter}.`
       );
 
@@ -58,7 +58,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getFieldCountPerInterval function returned ${
-          response.aggregations['1'].buckets
+        response.aggregations['1'].buckets
         }.`
       );
 
@@ -111,7 +111,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getCountByStatus function returned ${
-          response.aggregations['1'].buckets
+        response.aggregations['1'].buckets
         }.`
       );
       return res.json(response.aggregations['1'].buckets);
@@ -228,10 +228,10 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getLeaderboard function returned ${
-          response.aggregations['1'].buckets
+        response.aggregations['1'].buckets
         }.`
       );
-
+      console.dir(response);
       return res.json(response.aggregations['1'].buckets);
     } catch (err) {
       errorLogger.error('%j', {

@@ -7,7 +7,7 @@ import { SignupComponent } from '../app/auth/signup/signup.component';
 import { LoginComponent } from '../app/auth/login/login.component';
 import { DashboardComponent } from '../app/dashboard/dashboard.component';
 import { HomeComponent } from '../app/home/home.component';
-
+import { SettingsComponent } from '../app/settings/settings.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,7 +17,7 @@ const routes: Routes = [
             { path: 'units', component: DashboardComponent, outlet: 'app' },
             { path: 'project', component: DashboardComponent, outlet: 'app' },
             { path: 'users', component: DashboardComponent, outlet: 'app' },
-            { path: 'settings', component: DashboardComponent, outlet: 'app' }
+            { path: 'settings', component: SettingsComponent, outlet: 'app' }
         ]
     },
     { path: 'signup', component: SignupComponent },
