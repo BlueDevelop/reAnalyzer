@@ -291,6 +291,9 @@ export default class TaskController {
       const ratios: number[] = doneTasks.map(task => {
         // Extract data from the task.
         const sourceTask: any = task._source;
+        if (!sourceTask.due || _.isNaN(sourceTask.due)) {
+          return 0;
+        }
 
         // Due date of the task.
         const due = new Date(sourceTask.due).getTime();
@@ -304,6 +307,7 @@ export default class TaskController {
         let maxStatusDate = new Date(
           sourceTask.statusUpdates[0].created
         ).getTime();
+
 
         // Go through all the assign updates and finding the first
         // (The first assign date is the start date of the task).
@@ -324,6 +328,11 @@ export default class TaskController {
         }
 
         // Calculate ratio - ((done-start) / (due-start))*100 - for precentage.
+
+        if (!minAssignDate || _.isNaN(minAssignDate) || !maxStatusDate || _.isNaN(maxStatusDate)) {
+          return 0;
+        }
+
         const ratio =
           (Math.abs(maxStatusDate - minAssignDate) /
             Math.abs(due - minAssignDate)) *
