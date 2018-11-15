@@ -10,7 +10,7 @@ export class SettingsService {
   constructor() { }
 
   getColorDomain(numColors: number): string[] {
-    return _chroma.scale(['#E9A951', '#2E1510']).colors(numColors);
+    return _chroma.scale(['#E9A951', '#237675', '#2E1510']).colors(numColors);
   }
 
 }

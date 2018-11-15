@@ -308,6 +308,10 @@ export default class TaskController {
           sourceTask.statusUpdates[0].created
         ).getTime();
 
+        if (!minAssignDate || _.isNaN(minAssignDate) || !maxStatusDate || _.isNaN(maxStatusDate)) {
+          return 0;
+        }
+
 
         // Go through all the assign updates and finding the first
         // (The first assign date is the start date of the task).
@@ -329,10 +333,6 @@ export default class TaskController {
 
         // Calculate ratio - ((done-start) / (due-start))*100 - for precentage.
 
-        if (!minAssignDate || _.isNaN(minAssignDate) || !maxStatusDate || _.isNaN(maxStatusDate)) {
-          return 0;
-        }
-
         const ratio =
           (Math.abs(maxStatusDate - minAssignDate) /
             Math.abs(due - minAssignDate)) *
@@ -341,47 +341,32 @@ export default class TaskController {
         return ratio;
       });
 
-      // Calculate avarage difference to use as interval.
-      const max = _.max(ratios) || 0;
-      const min = _.min(ratios) || 0;
 
-      const epsilon = 1;
-      const sortedRatios = ratios.sort();
-      let pivot = sortedRatios[0];
-      let count = 1;
-      for (const ratio of sortedRatios) {
-        if (ratio - pivot > epsilon) {
-          count++;
-          pivot = ratio;
+      const under100interval = 0.25;
+      const under100buckets = ["0%-25%", "25%-50%", "50%-75%", "75%-100%"];
+      const above100interval = 3;
+      const above100buckets = ["100%-400%", "400%-700%", "700%-1000%"];
+
+      let groupedRatios: { intervals: number[], ratios: any } = { intervals: [under100interval, above100interval], ratios: [] };
+      let ratiosCounts = _.groupBy(ratios, (ratio) => {
+        if (ratio == 0) {
+          return '-';
         }
-      }
-      let interval = (max - min) / count;
-      interval = Math.ceil(interval);
-
-      // Initializing return obj.
-      const groupedRatios: {
-        interval: number;
-        ratios: number[];
-      } = { interval, ratios: [] };
-
-      // Count the number of tasks in each group.
-      for (const ratio of ratios) {
-        const index =
-          ratio % interval === 0
-            ? Math.floor(ratio / interval) - 1
-            : Math.floor(ratio / interval);
-        if (groupedRatios.ratios[index]) {
-          groupedRatios.ratios[index]++;
-        } else {
-          groupedRatios.ratios[index] = 1;
+        else if (ratio > 0 && ratio < 1) {
+          return under100buckets[Math.floor(ratio / under100interval)];
         }
-      }
-
-      // If there are groups without values(tasks) init them to zero.
-      for (let i = 0; i < groupedRatios.ratios.length; ++i) {
-        if (!groupedRatios.ratios[i]) {
-          groupedRatios.ratios[i] = 0;
+        else if (ratio >= 1 && ratio < 10) {
+          return above100buckets[Math.floor((ratio - 1) / above100interval)];
         }
+        else {
+          return '+';
+        }
+      });
+      for (let key in ratiosCounts) {
+        groupedRatios.ratios.push({
+          name: key,
+          value: ratiosCounts[key].length
+        });
       }
 
       verboseLogger.verbose(

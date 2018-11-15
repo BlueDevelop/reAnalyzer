@@ -17,21 +17,12 @@ export class TimeRatesComponent implements OnInit {
   }
 
 
-  editData(data): object[] {
-    let interval: any = data.interval;
-    let ratios = data.ratios;
-    for (let i: number = 0; i < ratios.length; i++) {
-      ratios[i] = { name: `${(interval * i)}%-${(interval * (i + 1))}%`, value: ratios[i] }
-    }
-    return ratios;
-  }
-
   getTimeRates(): void {
     this.loading = true;
     this.taskService.getTimeRates()
       .subscribe(data => {
         this.loading = false;
-        this.data = this.editData(data);
+        this.data = data.ratios;
       });
   }
 
