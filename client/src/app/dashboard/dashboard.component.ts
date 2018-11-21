@@ -79,8 +79,14 @@ export class DashboardComponent implements OnInit {
   allProjects: string[] = ['פרויקט 3', 'פרויקט מתוך פרויקט', 'פרויקט מתוך משימה ', 'פרויקט x'];
 
   constructor(private taskService: TaskService) {
-    this.taskService.filterParams.date.firstDay = this.startDate.value.valueOf();
-    this.taskService.filterParams.date.lastDay = this.endDate.value.valueOf();
+    if (!this.taskService.filterParams.date.firstDay) {
+      this.taskService.filterParams.date.firstDay = this.startDate.value.valueOf();
+    }
+    if (!this.taskService.filterParams.date.lastDay) {
+      this.taskService.filterParams.date.lastDay = this.endDate.value.valueOf();
+
+    }
+
   }
 
   //Filter for date

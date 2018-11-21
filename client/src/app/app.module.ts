@@ -6,6 +6,7 @@ import { AppRoutingModule } from '../modules/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagCloudModule } from 'angular-tag-cloud-module';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -55,7 +56,8 @@ import { SettingsComponent } from './settings/settings.component';
     NgxChartsModule,
     FormsModule,
     ReactiveFormsModule,
-    TagCloudModule
+    TagCloudModule,
+    ColorPickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
