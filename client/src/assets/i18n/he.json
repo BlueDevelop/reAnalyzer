@@ -1,0 +1,16 @@
+{
+    "status":{
+        "new":"חדש",
+        "done":"בוצע",
+        "in-progress":"בתהליך",
+        "rejected":"נדחה",
+        "assigned":"נבחר אחראי",
+        "review":"בבדיקה"
+    },
+    "unit":"חברה",
+    "dashboard":"לוח ראשי",
+    "units":"חברות",
+    "projects":"פרויקטים",
+    "users":"משתמשים",
+    "settings":"הגדרות"
+}

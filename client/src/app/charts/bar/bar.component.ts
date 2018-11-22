@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { SettingsService } from '../../_services/settings.service'
 @Component({
   selector: 'app-bar',
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.css']
 })
-export class BarComponent implements OnInit {
+export class BarComponent implements OnInit, OnChanges {
   @Input() data: any[];
   @Input() legendTitle: any[];
   @Input() xAxisLabel: any[];
@@ -15,6 +15,10 @@ export class BarComponent implements OnInit {
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
+    //this.colorScheme = { domain: this.settingsService.getColorDomain(this.data.length) };
+  }
+
+  ngOnChanges() {
     this.colorScheme = { domain: this.settingsService.getColorDomain(this.data.length) };
   }
 

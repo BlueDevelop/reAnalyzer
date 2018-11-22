@@ -23,6 +23,8 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@ngx-translate/core": "^10.0.2",
+    "@ngx-translate/http-loader": "^3.0.1",
     "@swimlane/ngx-charts": "^9.0.0",
     "angular-tag-cloud-module": "^3.1.0",
     "chroma-js": "^1.4.0",

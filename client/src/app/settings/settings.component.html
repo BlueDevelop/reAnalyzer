@@ -3,19 +3,6 @@
     <div class="color-picker">
       <span [style.background]="colorsArray[selectedColor]" [cpToggle]="true" [cpDialogDisplay]="'inline'" [(colorPicker)]="colorsArray[selectedColor]"></span>
 
-      <!-- <button (click)="addColor()" mat-fab>
-    <mat-icon>add</mat-icon>
-  </button>
-
-  <button (click)="saveColors()" mat-fab>
-    <mat-icon>save</mat-icon>
-  </button> -->
-      <!-- <div>
-  <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-    <mat-button-toggle ><mat-icon>add</mat-icon></mat-button-toggle>
-    <mat-button-toggle >Italic</mat-button-toggle>
-  </mat-button-toggle-group>
-</div> -->
     </div>
     <div class="colors">
       <div *ngFor="let item of colorsArray; let i = index" (mouseenter)="showX[i]=true" (mouseleave)="showX[i]=false" class="colorCircles"
