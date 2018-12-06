@@ -44,7 +44,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getFieldCountPerInterval filter for user ${
-        req.user.uniqueId
+          req.user.uniqueId
         } is ${filter}.`
       );
 
@@ -58,7 +58,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getFieldCountPerInterval function returned ${
-        response.aggregations['1'].buckets
+          response.aggregations['1'].buckets
         }.`
       );
 
@@ -111,7 +111,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getCountByStatus function returned ${
-        response.aggregations['1'].buckets
+          response.aggregations['1'].buckets
         }.`
       );
       return res.json(response.aggregations['1'].buckets);
@@ -228,7 +228,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getLeaderboard function returned ${
-        response.aggregations['1'].buckets
+          response.aggregations['1'].buckets
         }.`
       );
       console.dir(response);
@@ -308,10 +308,14 @@ export default class TaskController {
           sourceTask.statusUpdates[0].created
         ).getTime();
 
-        if (!minAssignDate || _.isNaN(minAssignDate) || !maxStatusDate || _.isNaN(maxStatusDate)) {
+        if (
+          !minAssignDate ||
+          _.isNaN(minAssignDate) ||
+          !maxStatusDate ||
+          _.isNaN(maxStatusDate)
+        ) {
           return 0;
         }
-
 
         // Go through all the assign updates and finding the first
         // (The first assign date is the start date of the task).
@@ -341,31 +345,30 @@ export default class TaskController {
         return ratio;
       });
 
-
       const under100interval = 0.25;
-      const under100buckets = ["0%-25%", "25%-50%", "50%-75%", "75%-100%"];
+      const under100buckets = ['0%-25%', '25%-50%', '50%-75%', '75%-100%'];
       const above100interval = 3;
-      const above100buckets = ["100%-400%", "400%-700%", "700%-1000%"];
+      const above100buckets = ['100%-400%', '400%-700%', '700%-1000%'];
 
-      let groupedRatios: { intervals: number[], ratios: any } = { intervals: [under100interval, above100interval], ratios: [] };
-      let ratiosCounts = _.groupBy(ratios, (ratio) => {
+      let groupedRatios: { intervals: number[]; ratios: any } = {
+        intervals: [under100interval, above100interval],
+        ratios: [],
+      };
+      let ratiosCounts = _.groupBy(ratios, ratio => {
         if (ratio == 0) {
           return '-';
-        }
-        else if (ratio > 0 && ratio < 1) {
+        } else if (ratio > 0 && ratio < 1) {
           return under100buckets[Math.floor(ratio / under100interval)];
-        }
-        else if (ratio >= 1 && ratio < 10) {
+        } else if (ratio >= 1 && ratio < 10) {
           return above100buckets[Math.floor((ratio - 1) / above100interval)];
-        }
-        else {
+        } else {
           return '+';
         }
       });
       for (let key in ratiosCounts) {
         groupedRatios.ratios.push({
           name: key,
-          value: ratiosCounts[key].length
+          value: ratiosCounts[key].length,
         });
       }
 

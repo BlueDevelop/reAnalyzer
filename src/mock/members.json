@@ -6,7 +6,12 @@
       "username": "fuckerson@gmail.com",
       "password": "1234"
     },
-
+    {
+      "id": "email",
+      "email": "email@gmail.com",
+      "username": "fuckerson@gmail.com",
+      "password": "password"
+    },
     {
       "id": "omer",
       "email": "omer@omer.com",
@@ -39,6 +44,12 @@
       "id": "email3",
       "email": "email3@email.com",
       "username": "username3",
+      "password": "password"
+    },
+    {
+      "id": "email",
+      "email": "email@gmail.com",
+      "username": "fuckerson@gmail.com",
       "password": "password"
     }
   ]

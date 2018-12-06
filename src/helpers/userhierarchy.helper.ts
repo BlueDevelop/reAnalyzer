@@ -34,6 +34,35 @@ async function userIDToHierarchyID(userID: string) {
  *
  *
  * @param {string} userID
+ * @returns hierarchies\groups below the user`s hierarchy
+ */
+async function getDirectSubHierarchiesFromUser(userID: string) {
+  const userHierarchy = await getHierarchyOfUser(userID);
+  console.log(`userHierarchy:${userHierarchy}`);
+  let subHierarchies: string[] = [];
+  if (config.hierarchyFile) {
+    console.log(`hierarchyFile: ${config.hierarchyFile}`);
+    subHierarchies = memoizedReadAndParseJSON(config.hierarchyFile)[
+      userHierarchy
+    ];
+  }
+  return subHierarchies;
+}
+
+/**
+ *
+ *
+ * @param {string} id
+ * @returns the transformed id i.e. let id:=x@y then return x
+ */
+function defaultIDTransform(id: string) {
+  return id.split('@')[0];
+}
+
+/**
+ *
+ *
+ * @param {string} userID
  * @param {(id: string) => string} [transformID]
  * @returns members under the hierarchy of this user
  */
@@ -41,7 +70,7 @@ async function getMembersByUser(
   userID: string,
   transformID?: (id: string) => string
 ) {
-  transformID = transformID || _.identity; // dont transform by default
+  transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
   userID = transformID(userID);
   const userHierarchy = await userIDToHierarchyID(userID);
   if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
@@ -70,8 +99,9 @@ async function getHierarchyOfUser(
   userID: string,
   transformID?: (id: string) => string
 ) {
-  transformID = transformID || _.identity; // dont transform by default
+  transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
   userID = transformID(userID);
+
   if (config.hierarchyServiceUseMock && config.hierarchyUserIDToHierarchyFile) {
     const userToHierarchMaper = memoizedReadAndParseJSON(
       config.hierarchyUserIDToHierarchyFile
@@ -148,6 +178,7 @@ const hierarchyService = {
   getMembersByUser,
   getHierarchyOfUser,
   userIDToHierarchyID,
+  getDirectSubHierarchiesFromUser,
 };
 
 export default hierarchyService;

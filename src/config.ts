@@ -54,6 +54,7 @@ const dev: IConfig = {
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
+  hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
     '../src/mock/userIDToHierarchy.json'
