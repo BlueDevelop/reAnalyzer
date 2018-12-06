@@ -37,12 +37,15 @@ export default class DiscussionService {
   private static shouldQuery(users: object[]) {
     const should: any[] = [];
     users.map((user: any) => {
-      should.push({
-        multi_match: {
-          query: user.name,
-        },
-      });
+      if (user.name) {
+        should.push({
+          multi_match: {
+            query: user.name,
+          },
+        });
+      }
     });
+
     return should;
   }
 }

@@ -14,6 +14,7 @@ interface IConfig {
   hierarchyServiceGroupMembersFile?: string; // local file describing each groups members,
   hierarchyFile?: string; // local file describing indirect sub groups of a each group
   hierarchyUserIDToHierarchyFile?: string; // local file containing a mapping between userIDS and its hierarchy
+  hierarchyGroupIdToGroupName?: string; // maps group id to group name and vice versa
   hierarchyServiceAddrGetMembers?: (hierarchy: string) => string; // function that generates the route to get all members\users under a given hierarchy from the api
   hierarchyServiceAddrGetUser?: (userID: string) => string; // function that generates the route to get a single user\member info
   debug?: boolean;
@@ -58,6 +59,10 @@ const dev: IConfig = {
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
     '../src/mock/userIDToHierarchy.json'
+  ),
+  hierarchyGroupIdToGroupName: path.join(
+    __dirname,
+    '../src/mock/hierarchyGroupIdToGroupName.json'
   ),
   debug: process.env.DEBUG
     ? process.env.DEBUG === 'true'

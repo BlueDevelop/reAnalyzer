@@ -1,0 +1,10 @@
+{
+    "someGroupName":"someGroupID",
+    "someGroupID":"someGroupName",
+    "subGroupID1":"subGroupName1",
+    "subGroupName1":"subGroupID1",
+    "subGroupID2":"subGroupName2",
+    "subGroupName2":"subGroupID2",
+    "subGroupID3":"subGroupName3",
+    "subGroupName3":"subGroupID3"
+}

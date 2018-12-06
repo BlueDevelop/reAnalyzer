@@ -38,15 +38,30 @@ async function userIDToHierarchyID(userID: string) {
  */
 async function getDirectSubHierarchiesFromUser(userID: string) {
   const userHierarchy = await getHierarchyOfUser(userID);
-  console.log(`userHierarchy:${userHierarchy}`);
   let subHierarchies: string[] = [];
   if (config.hierarchyFile) {
-    console.log(`hierarchyFile: ${config.hierarchyFile}`);
     subHierarchies = memoizedReadAndParseJSON(config.hierarchyFile)[
       userHierarchy
     ];
   }
   return subHierarchies;
+}
+
+/**
+ *
+ *
+ * @param {string} groupID
+ * @returns the group`s name
+ */
+function getGroupNameByID(groupID: string) {
+  let groupName = '';
+  console.log(config.hierarchyGroupIdToGroupName);
+  if (config.hierarchyGroupIdToGroupName) {
+    groupName = memoizedReadAndParseJSON(config.hierarchyGroupIdToGroupName)[
+      groupID
+    ];
+  }
+  return groupName;
 }
 
 /**
@@ -179,6 +194,7 @@ const hierarchyService = {
   getHierarchyOfUser,
   userIDToHierarchyID,
   getDirectSubHierarchiesFromUser,
+  getGroupNameByID,
 };
 
 export default hierarchyService;
