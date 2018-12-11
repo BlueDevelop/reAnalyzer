@@ -31,6 +31,7 @@ import { LeaderBoardComponent } from './leader-board/leader-board.component';
 import { GroupedVerticalBarComponent } from './charts/grouped-vertical-bar/grouped-vertical-bar.component';
 import { TimeRatesComponent } from './time-rates/time-rates.component';
 import { SettingsComponent } from './settings/settings.component';
+import { FilterComponent } from './filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { SettingsComponent } from './settings/settings.component';
     LeaderBoardComponent,
     GroupedVerticalBarComponent,
     TimeRatesComponent,
-    SettingsComponent
+    SettingsComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,

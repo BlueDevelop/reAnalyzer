@@ -1,0 +1,99 @@
+<mat-expansion-panel #mep="matExpansionPanel">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <p>
+        <strong> משימות</strong>
+        סינון לפי:</p>
+    </mat-panel-title>
+    <mat-panel-description>
+      <p> חברות:</p>
+      <mat-chip-list #chipListUnit *ngIf="filterService.filterParams.units.length>0 else All">
+        <mat-chip *ngFor="let unit of filterService.filterParams.units" >
+          {{unit}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-panel-description>
+    <mat-panel-description>
+      <p> פרויקטים:</p>
+      <mat-chip-list #chipListProject *ngIf="filterService.filterParams.projects.length>0 else All">
+        <mat-chip *ngFor="let project of filterService.filterParams.projects">
+          {{project}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-panel-description>
+    <mat-panel-description>
+      <p> דיונים:</p>
+      <mat-chip-list #chipListDiscussion *ngIf="filterService.filterParams.discussions.length>0 else All">
+        <mat-chip *ngFor="let discussion of filterService.filterParams.discussions">
+          {{discussion}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-panel-description>
+    <mat-panel-description>
+      <p> מתאריך {{filterService.filterParams.date.firstDay | date: "dd/MM/yyyy"}} עד תאריך {{filterService.filterParams.date.lastDay | date : "dd/MM/yyyy"}}</p>
+    </mat-panel-description>
+    <ng-template #All><p>הכל</p></ng-template>
+  </mat-expansion-panel-header>
+  <mat-divider></mat-divider>
+  <div class="filter-inputs">
+    <mat-form-field class="unit-select">
+        <mat-chip-list #chipListUnit>
+            <mat-chip *ngFor="let unit of units" [selectable]="selectable" [removable]="removable" (removed)="remove(unit, 'units')">
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              {{unit}}
+            </mat-chip>
+      <input matInput placeholder="בחר חברה" #unitInput [formControl]="unitSelected" [matAutocomplete]="autoUnit" [matChipInputFor]="chipListUnit"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event, 'units')">
+      </mat-chip-list>
+        <mat-autocomplete #autoUnit="matAutocomplete" (optionSelected)="selected($event, 'units')">
+        <mat-option *ngFor="let unit of filteredUnits | async" [value]="unit.key">
+          {{unit.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field class="project-select">
+        <mat-chip-list #chipListProject>
+            <mat-chip *ngFor="let project of projects" [selectable]="selectable" [removable]="removable" (removed)="remove(project, 'projects')">
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              {{project}}
+            </mat-chip>
+      <input matInput placeholder="בחר פרויקט" #projectInput [formControl]="projectSelected" [matAutocomplete]="autoProject" [matChipInputFor]="chipListProject"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event, 'projects')">
+      </mat-chip-list>
+        <mat-autocomplete #autoProject="matAutocomplete" (optionSelected)="selected($event, 'projects')">
+        <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
+          {{project.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field class="discussion-select">
+      <mat-chip-list #chipListDiscussion>
+        <mat-chip *ngFor="let discussion of discussions" [selectable]="selectable" [removable]="removable" (removed)="remove(discussion, 'discussions')">
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          {{discussion}}
+        </mat-chip>
+        <input matInput placeholder="בחר דיון" #discussionInput [formControl]="discussionSelected" [matAutocomplete]="autoDiscussion"
+          [matChipInputFor]="chipListDiscussion" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event, 'discussions')">
+      </mat-chip-list>
+      <mat-autocomplete #autoDiscussion="matAutocomplete" (optionSelected)="selected($event, 'discussions')">
+        <mat-option *ngFor="let discussion of filteredDiscussions | async" [value]="discussion">
+          {{discussion.value}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field class="start-date">
+      <input matInput placeholder="תאריך התחלה" [matDatepicker]="picker" [formControl]="startDate" (dateChange)="addEvent('change', $event)">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="end-date">
+      <input matInput placeholder="תאריך סיום" [matDatepicker]="picker2" [matDatepickerFilter]="dateFilter" [formControl]="endDate" (dateChange)="addEvent('change', $event)">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+    <button mat-raised-button class="filter-button" (click)="dataFilering(); mep.expanded = false">
+      <mat-icon>filter_list</mat-icon>
+    </button>
+  </div>
+</mat-expansion-panel>

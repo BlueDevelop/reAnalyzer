@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { LogsService } from './logs.service';
 
 interface FilterParams {
   date: {
@@ -18,6 +19,7 @@ interface FilterParams {
   providedIn: 'root',
 })
 export class FilterService {
+  serviceName: string = 'filter';
   filterParams: FilterParams = {
     date: { firstDay: 0, lastDay: 0 },
     units: [],
@@ -25,52 +27,59 @@ export class FilterService {
     projects: [],
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private logsService: LogsService) {}
 
   getDiscussionNameList(): Observable<any> {
     return this.http
       .get(`${environment.apiUrl}/discussion/discussionsNamesList`)
       .pipe(
-        tap(data => this.log('fetched data from getDiscussionNameList')),
-        catchError(this.handleError('getDiscussionNameList', []))
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from getDiscussionNameList'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(
+            this.serviceName,
+            'getDiscussionNameList',
+            []
+          )
+        )
       );
   }
   getProjectNameList(): Observable<any> {
     return this.http
       .get(`${environment.apiUrl}/project/projectsNamesList`)
       .pipe(
-        tap(data => this.log('fetched data from getProjectNameList')),
-        catchError(this.handleError('getProjectNameList', []))
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from getProjectNameList'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(
+            this.serviceName,
+            'getProjectNameList',
+            []
+          )
+        )
       );
   }
   getUnitNameList(): Observable<any> {
     return this.http
       .get(`${environment.apiUrl}/hierarchy/hierarchiesNamesList`)
       .pipe(
-        tap(data => this.log('fetched data from getUnitNameList')),
-        catchError(this.handleError('getUnitNameList', []))
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from getUnitNameList'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(this.serviceName, 'getUnitNameList', [])
+        )
       );
-  }
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
-
-  private log(message: string) {
-    console.log(`TaskService: ${message}`);
   }
 }
