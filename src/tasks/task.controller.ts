@@ -37,11 +37,7 @@ export default class TaskController {
 
       verboseLogger.verbose(`getFieldCountPerInterval function was called.`);
 
-      const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId,
-        TaskController.cut
-      )) as object[];
-
+      const filter: object[] = req.query.usersUnderUsersHierarchy;
       verboseLogger.verbose(
         `getFieldCountPerInterval filter for user ${
           req.user.uniqueId
@@ -94,10 +90,7 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId,
-        TaskController.cut
-      )) as object[];
+      const filter: object[] = req.query.usersUnderUsersHierarchy;
 
       verboseLogger.verbose(
         `getCountByStatus filter for user ${req.user.uniqueId} is ${filter}.`
@@ -231,7 +224,6 @@ export default class TaskController {
           response.aggregations['1'].buckets
         }.`
       );
-      console.dir(response);
       return res.json(response.aggregations['1'].buckets);
     } catch (err) {
       errorLogger.error('%j', {

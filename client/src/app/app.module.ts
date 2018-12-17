@@ -32,6 +32,7 @@ import { GroupedVerticalBarComponent } from './charts/grouped-vertical-bar/group
 import { TimeRatesComponent } from './time-rates/time-rates.component';
 import { SettingsComponent } from './settings/settings.component';
 import { FilterComponent } from './filter/filter.component';
+import { Observable } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import { FilterComponent } from './filter/filter.component';
     GroupedVerticalBarComponent,
     TimeRatesComponent,
     SettingsComponent,
-    FilterComponent
+    FilterComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,14 +71,14 @@ import { FilterComponent } from './filter/filter.component';
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient) {

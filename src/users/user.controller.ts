@@ -9,4 +9,8 @@ export default class UserController {
   public static create(user: Iuser) {
     return userService.create(user);
   }
+
+  public static update(user: Iuser) {
+    return userService.update(user);
+  }
 }

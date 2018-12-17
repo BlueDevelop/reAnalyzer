@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { User } from '../_models/user';
-//import  { config } from '../../config';
+//import { config } from '../../config';
 import { environment } from '../../environments/environment';
-
 
 interface SignupObj {
   uniqueId: string;
@@ -12,16 +11,11 @@ interface SignupObj {
   password: string;
 }
 
-
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class UserService {
-
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // getAll() {
   //     return this.http.get<User[]>(`${config.apiUrl}/users`);
@@ -32,7 +26,7 @@ export class UserService {
   // }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'))
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   getNameInitials() {
@@ -42,14 +36,17 @@ export class UserService {
     return firstLetter + secLetter;
   }
   register(user: SignupObj) {
-    console.dir("SignUpObj:");
+    console.dir('SignUpObj:');
     console.dir(user);
     return this.http.post(`${environment.apiUrl}/user`, user);
   }
 
-  // update(user: User) {
-  //     return this.http.put(`${config.apiUrl}/users/` + user.id, user);
-  // }
+  update(user: User) {
+    return this.http.put(`${environment.apiUrl}/user`, user);
+  }
+  getUser() {
+    return this.http.get(`${environment.apiUrl}/user`);
+  }
 
   // delete(id: number) {
   //     return this.http.delete(`${config.apiUrl}/users/` + id);

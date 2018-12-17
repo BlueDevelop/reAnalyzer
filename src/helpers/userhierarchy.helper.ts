@@ -51,11 +51,10 @@ async function getDirectSubHierarchiesFromUser(userID: string) {
  *
  *
  * @param {string} groupID
- * @returns the group`s name
+ * @returns the group`s name if groupID is the group`s ID or the group`s name if groupID is the group`s name
  */
 function getGroupNameByID(groupID: string) {
   let groupName = '';
-  console.log(config.hierarchyGroupIdToGroupName);
   if (config.hierarchyGroupIdToGroupName) {
     groupName = memoizedReadAndParseJSON(config.hierarchyGroupIdToGroupName)[
       groupID

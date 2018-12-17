@@ -17,6 +17,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    settings: {
+      type: {},
+      default: { colors: ['#E9A951', '#237675', '#2E1510'] },
+    },
   },
   {
     timestamps: true,

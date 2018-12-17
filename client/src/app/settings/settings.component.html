@@ -1,5 +1,5 @@
-<mat-card>
-  <div class="container">
+<mat-card *ngIf="isLoaded">
+  <div *ngIf="isLoaded"class="container">
     <div class="color-picker">
       <span [style.background]="colorsArray[selectedColor]" [cpToggle]="true" [cpDialogDisplay]="'inline'" [(colorPicker)]="colorsArray[selectedColor]"></span>
 

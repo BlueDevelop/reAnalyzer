@@ -2,14 +2,20 @@ import * as express from 'express';
 
 import taskController from './task.controller';
 import authenticate from '../auth/auth.middleware';
-
+import filters from '../middlewares/filters.middleware';
 const router = express.Router();
 
 /**
  * GET /task/countByStatus?from=123&to=124.
  * returns count of tasks per status.
  */
-router.get('/countByStatus', authenticate, taskController.getCountByStatus);
+router.get(
+  '/countByStatus',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getCountByStatus
+);
 
 /**
  * GET /task/fieldCountPerInterval?field=due&from=123&to=124&interval=1d.
@@ -19,6 +25,8 @@ router.get('/countByStatus', authenticate, taskController.getCountByStatus);
 router.get(
   '/fieldCountPerInterval',
   authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
   taskController.getFieldCountPerInterval
 );
 
