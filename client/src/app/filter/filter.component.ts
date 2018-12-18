@@ -198,6 +198,7 @@ export class FilterComponent implements OnInit {
       'getDiscussionNameList',
       'filteredDiscussions'
     );
+    this.filterService.updateConfig();
   }
 
   add(event: MatChipInputEvent, model: string): void {
@@ -243,6 +244,7 @@ export class FilterComponent implements OnInit {
     this.filterService.filterParams.units = [...this.units];
     this.filterService.filterParams.date.firstDay = this.startDate.value.valueOf();
     this.filterService.filterParams.date.lastDay = this.endDate.value.valueOf();
+    this.filterService.updateConfig();
     console.log('child1');
     this.valueChange.emit();
   }

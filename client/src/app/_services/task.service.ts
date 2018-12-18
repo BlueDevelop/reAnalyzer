@@ -13,6 +13,7 @@ import { LogsService } from './logs.service';
 })
 export class TaskService {
   serviceName: string = 'task';
+
   constructor(
     private http: HttpClient,
     private filterService: FilterService,
@@ -20,14 +21,20 @@ export class TaskService {
   ) {}
 
   getTaskCountByStatus(): Observable<any> {
-    let config = {
-      params: {
-        from: this.filterService.filterParams.date.firstDay.toString(),
-        to: this.filterService.filterParams.date.lastDay.toString(),
-      },
-    };
+    // let config = {
+    //   params: {
+    //     from: this.filterService.filterParams.date.firstDay.toString(),
+    //     to: this.filterService.filterParams.date.lastDay.toString(),
+    //     projects: this.filterService.filterParams.projects.toString(),
+    //     units: this.filterService.filterParams.units.toString(),
+    //     discussions: this.filterService.filterParams.discussions.toString(),
+    //   },
+    // };
     return this.http
-      .get(`${environment.apiUrl}/task/countByStatus`, config)
+      .get(
+        `${environment.apiUrl}/task/countByStatus`,
+        this.filterService.config
+      )
       .pipe(
         tap(data =>
           this.logsService.log(
@@ -46,16 +53,11 @@ export class TaskService {
   }
 
   getFieldCountPerInterval(interval): Observable<any> {
-    let config = {
-      params: {
-        field: 'due',
-        interval: interval,
-        from: this.filterService.filterParams.date.firstDay.toString(),
-        to: this.filterService.filterParams.date.lastDay.toString(),
-      },
-    };
+    let newConfig = this.filterService.config;
+    newConfig.params['field'] = 'due';
+    newConfig.params['interval'] = interval;
     return this.http
-      .get(`${environment.apiUrl}/task/fieldCountPerInterval`, config)
+      .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
       .pipe(
         tap(data =>
           this.logsService.log(
@@ -74,14 +76,9 @@ export class TaskService {
   }
 
   getTagClouds(): Observable<any> {
-    let config = {
-      params: {
-        size: '40',
-        from: this.filterService.filterParams.date.firstDay.toString(),
-        to: this.filterService.filterParams.date.lastDay.toString(),
-      },
-    };
-    return this.http.get(`${environment.apiUrl}/task/tagCloud`, config).pipe(
+    let newConfig = this.filterService.config;
+    newConfig.params['size'] = '40';
+    return this.http.get(`${environment.apiUrl}/task/tagCloud`, newConfig).pipe(
       tap(data =>
         this.logsService.log(this.serviceName, 'fetched data from TagClouds')
       ),
@@ -92,31 +89,24 @@ export class TaskService {
   }
 
   getLeaderboard(): Observable<any> {
-    let config = {
-      params: {
-        from: this.filterService.filterParams.date.firstDay.toString(),
-        to: this.filterService.filterParams.date.lastDay.toString(),
-      },
-    };
-    return this.http.get(`${environment.apiUrl}/task/leaderboard`, config).pipe(
-      tap(data =>
-        this.logsService.log(this.serviceName, 'fetched data from Leaderboard')
-      ),
-      catchError(
-        this.logsService.handleError(this.serviceName, 'getLeaderboard', [])
-      )
-    );
+    return this.http
+      .get(`${environment.apiUrl}/task/leaderboard`, this.filterService.config)
+      .pipe(
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from Leaderboard'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(this.serviceName, 'getLeaderboard', [])
+        )
+      );
   }
 
   getTimeRates(): Observable<any> {
-    let config = {
-      params: {
-        from: this.filterService.filterParams.date.firstDay.toString(),
-        to: this.filterService.filterParams.date.lastDay.toString(),
-      },
-    };
     return this.http
-      .get(`${environment.apiUrl}/task/endTimeRatio`, config)
+      .get(`${environment.apiUrl}/task/endTimeRatio`, this.filterService.config)
       .pipe(
         tap(data =>
           this.logsService.log(this.serviceName, 'fetched data from TimeRates')

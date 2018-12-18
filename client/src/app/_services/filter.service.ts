@@ -20,6 +20,7 @@ interface FilterParams {
 })
 export class FilterService {
   serviceName: string = 'filter';
+  config: any;
   filterParams: FilterParams = {
     date: { firstDay: 0, lastDay: 0 },
     units: [],
@@ -28,6 +29,18 @@ export class FilterService {
   };
 
   constructor(private http: HttpClient, private logsService: LogsService) {}
+
+  updateConfig(): void {
+    this.config = {
+      params: {
+        from: this.filterParams.date.firstDay.toString(),
+        to: this.filterParams.date.lastDay.toString(),
+        projects: this.filterParams.projects.toString(),
+        units: this.filterParams.units.toString(),
+        discussions: this.filterParams.discussions.toString(),
+      },
+    };
+  }
 
   getDiscussionNameList(): Observable<any> {
     return this.http
