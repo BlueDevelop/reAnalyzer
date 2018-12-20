@@ -35,19 +35,37 @@ router.get(
  * the size field is optional and defaults to 40.
  * @returns count of each unique tag according to size given.
  */
-router.get('/tagCloud', authenticate, taskController.getTagCloud);
+router.get(
+  '/tagCloud',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getTagCloud
+);
 
 /**
  * GET /task/leaderboard?from=123&to=124&size=10.
  * the size field is optional and defaults to 10.
  * @returns users according to size given ordered by the number of completed tasks.
  */
-router.get('/leaderboard', authenticate, taskController.getLeaderboard);
+router.get(
+  '/leaderboard',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getLeaderboard
+);
 
 /**
  * GET /task/endTimeRatio?from=123&to=124.
  * @returns ratio of end task time.
  */
-router.get('/endTimeRatio', authenticate, taskController.getEndTimeRatio);
+router.get(
+  '/endTimeRatio',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getEndTimeRatio
+);
 
 export default router;

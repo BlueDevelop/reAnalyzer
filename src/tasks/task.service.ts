@@ -1,5 +1,6 @@
 import esClient from '../helpers/elasticsearch.helper';
 import Itask from './task.interface';
+import * as _ from 'lodash';
 
 export default class TaskService {
   public static index = 'tasks_test';
@@ -41,7 +42,7 @@ export default class TaskService {
           ],
           filter: [],
           should,
-          //minimum_should_match: 1,
+          minimum_should_match: 1,
           must_not: [],
         },
       },
@@ -120,7 +121,7 @@ export default class TaskService {
               },
             ],
             should,
-            //minimum_should_match: 1,
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -192,7 +193,7 @@ export default class TaskService {
               },
             ],
             should,
-            //minimum_should_match: 1,
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -265,7 +266,7 @@ export default class TaskService {
             ],
             filter: [],
             should,
-            //minimum_should_match: 1,
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -287,7 +288,8 @@ export default class TaskService {
     filter: object[] = [],
     size?: number
   ) {
-    const should = TaskService.prefixQuery(filter);
+    // dont filter by creator only look at assignees
+    const should = TaskService.prefixQuery(filter, false);
 
     return TaskService.client.search({
       index: TaskService.index,
@@ -312,7 +314,7 @@ export default class TaskService {
             ],
             filter: [],
             should,
-            //minimum_should_match: 1,
+            minimum_should_match: 1,
             must_not: [],
           },
         },
@@ -321,7 +323,8 @@ export default class TaskService {
             terms: {
               //field: 'assign.id.keyword',
               // the :? operator returns the right side expression if its not null otherwise it returns the left side expression
-              script: "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
+              script:
+                "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
               size: size || 10,
               order: {
                 _count: 'desc',
@@ -339,21 +342,31 @@ export default class TaskService {
    * returns the should query.
    *
    * @param filter gets an array of user objects.
+   * @param filterByCreator if set to true will filter by creator, default to true.
+   * @param filterByAssignee if set to true will filter by assignee, default to true.
    */
-  private static prefixQuery(filter: object[]) {
+  private static prefixQuery(
+    filter: object[],
+    filterByCreator?: boolean,
+    filterByAssignee?: boolean
+  ) {
+    filterByCreator = _.defaultTo(filterByCreator, true);
+    filterByAssignee = _.defaultTo(filterByAssignee, true);
     const should: any[] = [];
-    filter.map((user: any) => {
-      should.push({
-        prefix: {
-          'creator.id.keyword': user.id,
-        },
-      });
 
-      should.push({
-        prefix: {
-          'assign.id.keyword': user.id,
-        },
-      });
+    filter.map((user: any) => {
+      if (filterByCreator)
+        should.push({
+          prefix: {
+            'creator.id.keyword': user.id,
+          },
+        });
+      if (filterByAssignee)
+        should.push({
+          prefix: {
+            'assign.id.keyword': user.id,
+          },
+        });
     });
     return should;
   }

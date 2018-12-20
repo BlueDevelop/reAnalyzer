@@ -239,9 +239,45 @@ export class FilterComponent implements OnInit {
   dataFilering() {
     this.startDateTemp = this.startDate.value;
     this.endDateTemp = this.endDate.value;
-    this.filterService.filterParams.discussions = [...this.discussions];
-    this.filterService.filterParams.projects = [...this.projects];
-    this.filterService.filterParams.units = [...this.units];
+    //generalize the update, see 1 as example (1)
+    //TODO: can subscribe once because its observable i.e. doesnt need to happen every click
+    // const subscribeToUpdates = (observableArray, paramName) => {
+    //   observableArray.subscribe(data => {
+    //     this.filterService.filterParams[paramName] = _.map(data, 'key');
+    //   });
+    // };
+    // subscribeToUpdates(this.filteredUnits,'units');
+    // subscribeToUpdates(this.filteredProjects,'projects');
+    // subscribeToUpdates(this.filteredDiscussions,'units');
+    // (1) example of what subscribeToUpdates generilzes
+    // this.filteredUnits.subscribe(data => {
+    //   this.filterService.filterParams.units = _.map(data, 'key');
+    // });
+
+    const getAllItems = entity => this.model[entity]['allItems'];
+    const getSelectedItemsNames = entity => this.model[entity]['items'];
+    const getSelectedItemsIDs = _.flow([
+      (selectedItemsNames, allItems) =>
+        _.filter(allItems, item => _.includes(selectedItemsNames, item.value)),
+      selectedItems => _.map(selectedItems, item => item.key),
+    ]);
+
+    this.filterService.filterParams.discussions = getSelectedItemsIDs(
+      getSelectedItemsNames('discussions'),
+      getAllItems('discussions')
+    );
+    this.filterService.filterParams.projects = getSelectedItemsIDs(
+      getSelectedItemsNames('projects'),
+      getAllItems('projects')
+    );
+    this.filterService.filterParams.units = getSelectedItemsIDs(
+      getSelectedItemsNames('units'),
+      getAllItems('units')
+    );
+    //! sent values instead of keys
+    // this.filterService.filterParams.discussions = [...this.discussions];
+    // this.filterService.filterParams.projects = [...this.projects];
+    // this.filterService.filterParams.units = [...this.units];
     this.filterService.filterParams.date.firstDay = this.startDate.value.valueOf();
     this.filterService.filterParams.date.lastDay = this.endDate.value.valueOf();
     this.filterService.updateConfig();

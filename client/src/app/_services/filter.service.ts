@@ -31,6 +31,8 @@ export class FilterService {
   constructor(private http: HttpClient, private logsService: LogsService) {}
 
   updateConfig(): void {
+    console.log('filterParams');
+    console.log(this.filterParams);
     this.config = {
       params: {
         from: this.filterParams.date.firstDay.toString(),

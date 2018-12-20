@@ -23,8 +23,6 @@ function parseFiltersFromQueryString(
     (value, key) =>
       _.includes(paramsToParse, key) ? _.split(value, sep) : value
   );
-  console.log('parseFiltersFromQueryString');
-  console.log(req.query);
   next();
 }
 
@@ -51,12 +49,23 @@ async function getMembersOfHierarchy(
     units,
     async unit => await filterHelper.getIndirectMembersOfHierarchy(unit)
   );
-  const selectedUnits: object[] = await Promise.all(selectedUnitsPromises);
-
+  const selectedUnits: any = _.defaultTo(
+    _.flatMap(await Promise.all(selectedUnitsPromises), _.identity),
+    []
+  ); // returns the first/head element promise.all returns array of arrays
+  console.log('user');
+  console.log(req.user.uniqueId);
+  console.log('usersUnderUsersHierarchy');
+  console.log(usersUnderUsersHierarchy);
+  console.log('selectedUnits');
+  console.log(selectedUnits);
   const filter: object[] = units
     ? _.intersection(usersUnderUsersHierarchy, selectedUnits)
     : usersUnderUsersHierarchy;
-  req.query.usersUnderUsersHierarchy = filter;
+  console.log('filter');
+  console.log(filter);
+
+  req.query.users = filter;
   next();
 }
 

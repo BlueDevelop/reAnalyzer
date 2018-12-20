@@ -37,7 +37,7 @@ export default class TaskController {
 
       verboseLogger.verbose(`getFieldCountPerInterval function was called.`);
 
-      const filter: object[] = req.query.usersUnderUsersHierarchy;
+      const filter: object[] = req.query.users;
       verboseLogger.verbose(
         `getFieldCountPerInterval filter for user ${
           req.user.uniqueId
@@ -90,7 +90,11 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: object[] = req.query.usersUnderUsersHierarchy;
+      const filter: object[] = req.query.users;
+      console.log('query!');
+      console.log(req.query);
+      console.log('USERS!');
+      console.log(filter);
 
       verboseLogger.verbose(
         `getCountByStatus filter for user ${req.user.uniqueId} is ${filter}.`
@@ -145,10 +149,11 @@ export default class TaskController {
 
       const size = req.query.size ? +req.query.size : undefined;
 
-      const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId,
-        TaskController.cut
-      )) as object[];
+      // const filter: object[] = (await filterHelper.getMembersByUser(
+      //   req.user.uniqueId,
+      //   TaskController.cut
+      // )) as object[];
+      const filter: object[] = req.query.users;
 
       verboseLogger.verbose(
         `getTagCloud filter for user ${req.user.uniqueId} is ${filter}.`
@@ -203,10 +208,11 @@ export default class TaskController {
 
       const size = req.query.size ? +req.query.size : undefined;
 
-      const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId,
-        TaskController.cut
-      )) as object[];
+      // const filter: object[] = (await filterHelper.getMembersByUser(
+      //   req.user.uniqueId,
+      //   TaskController.cut
+      // )) as object[];
+      const filter: object[] = req.query.users;
 
       verboseLogger.verbose(
         `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
@@ -257,10 +263,11 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: object[] = (await filterHelper.getMembersByUser(
-        req.user.uniqueId,
-        TaskController.cut
-      )) as object[];
+      // const filter: object[] = (await filterHelper.getMembersByUser(
+      //   req.user.uniqueId,
+      //   TaskController.cut
+      // )) as object[];
+      const filter: object[] = req.query.users;
 
       verboseLogger.verbose(
         `getEndTimeRatio filter for user ${req.user.uniqueId} is ${filter}.`

@@ -87,18 +87,22 @@ async function getMembersByUser(
   transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
   userID = transformID(userID);
   const userHierarchy = await userIDToHierarchyID(userID);
-  if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
-    // use mock
-    return userHierarchy
-      ? memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[userHierarchy]
-      : [];
-  }
+  // if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
+  //   // use mock
+  //   return userHierarchy
+  //     ? memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[userHierarchy]
+  //     : [];
+  // }
   // use api
   const directMembers = await getDirectMembersOfHierarchy(userHierarchy);
-  let indirectMembers: string[] = [];
-  if (config.hierarchyServiceGroupMembersFile) {
-    indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
-  }
+  let indirectMembers: any[] = [];
+  // if (config.hierarchyServiceGroupMembersFile) {
+  //   indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
+  // }
+  indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
+
+  console.log('user hierarchy getMembersByUser');
+  console.log(indirectMembers);
   return _.union(directMembers, indirectMembers);
 }
 
@@ -164,11 +168,26 @@ async function getDirectMembersOfHierarchy(hierarchyID: string) {
  * @returns members indirectly under the given hierarchy by looking at the config file
  */
 async function getIndirectMembersOfHierarchy(hierarchyID: string) {
+  console.log('in getIndirectMembersOfHierarchy');
+  console.log(
+    `config.hierarchyServiceUseMock:${config.hierarchyServiceUseMock}`
+  );
+  console.log(
+    `config.hierarchyServiceMockFile:${config.hierarchyServiceMockFile}`
+  );
   if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
-    // mock
-    return memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[
+    const members = memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[
       hierarchyID
     ];
+    if (config.hierarchyFile) {
+      const subHierarchies = memoizedReadAndParseJSON(config.hierarchyFile)[
+        hierarchyID
+      ];
+      const aoaData: any = await Promise.all(
+        _.map(subHierarchies, getIndirectMembersOfHierarchy)
+      );
+      return _.union(...aoaData, members);
+    }
   } else if (config.hierarchyServiceAddrGetMembers) {
     // return from api by hierarchy file
     const genURL = config.hierarchyServiceAddrGetMembers;
