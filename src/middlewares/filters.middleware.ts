@@ -59,7 +59,13 @@ async function getMembersOfHierarchy(
   console.log(usersUnderUsersHierarchy);
   console.log('selectedUnits');
   console.log(selectedUnits);
-  const filter: object[] = units
+  const clientSendsEmptyStringAsTheUnitsParameter = _.size(_.head(units)) > 1;
+  const intersectIfUnitsExistsAndNotEmpty =
+    units && units.length > 0 && clientSendsEmptyStringAsTheUnitsParameter;
+  console.log(`intersect :${intersectIfUnitsExistsAndNotEmpty}`);
+  console.log(`units.length :${units.length}`);
+  console.log(units);
+  const filter: object[] = intersectIfUnitsExistsAndNotEmpty
     ? _.intersection(usersUnderUsersHierarchy, selectedUnits)
     : usersUnderUsersHierarchy;
   console.log('filter');

@@ -274,6 +274,7 @@ export class FilterComponent implements OnInit {
       getSelectedItemsNames('units'),
       getAllItems('units')
     );
+    this.filterService['selectedUnitNames'] = getSelectedItemsNames('units');
     //! sent values instead of keys
     // this.filterService.filterParams.discussions = [...this.discussions];
     // this.filterService.filterParams.projects = [...this.projects];
@@ -281,7 +282,6 @@ export class FilterComponent implements OnInit {
     this.filterService.filterParams.date.firstDay = this.startDate.value.valueOf();
     this.filterService.filterParams.date.lastDay = this.endDate.value.valueOf();
     this.filterService.updateConfig();
-    console.log('child1');
     this.valueChange.emit();
   }
 }

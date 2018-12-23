@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {}
 
   dataFilering() {
-    console.log('perent');
     this.barDate.getFieldCountPerInterval();
     this.pieStatus.getCountByStatus();
     this.leaderBoard.getLeaderboard();

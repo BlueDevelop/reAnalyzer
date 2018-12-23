@@ -8,7 +8,7 @@
     <mat-panel-description>
       <p> חברות:</p>
       <mat-chip-list #chipListUnit *ngIf="filterService.filterParams.units.length>0 else All">
-        <mat-chip *ngFor="let unit of filterService.filterParams.units" >
+        <mat-chip *ngFor="let unit of filterService['selectedUnitNames']" >
           {{unit}}
         </mat-chip>
       </mat-chip-list>
