@@ -1,17 +1,30 @@
-< <ngx-charts-bar-vertical-2d
+<!-- <ngx-charts-bar-vertical-2d
   [view]="view"
   [scheme]="colorScheme"
   [results]="data"
-  [gradient]="gradient"
   [xAxis]="showXAxis"
   [yAxis]="showYAxis"
-  [legend]="showLegend"
-  [legendTitle]="legendTitle"
-  [showXAxisLabel]="showXAxisLabel"
-  [showYAxisLabel]="showYAxisLabel"
-  [xAxisLabel]="xAxisLabel"
-  [yAxisLabel]="yAxisLabel"
-  [roundDomains]="roundDomains"
-  [showDataLabel]="showDataLabel"
   (select)="onSelect($event)">
-</ngx-charts-bar-vertical-2d> 
+</ngx-charts-bar-vertical-2d>  -->
+
+<ngx-charts-bar-vertical-2d
+  class="chart-container"
+  [view]="chart.view"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  xxxbarPadding="8"
+  xxxgroupPadding="16"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-vertical-2d>

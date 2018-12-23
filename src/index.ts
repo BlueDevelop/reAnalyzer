@@ -24,6 +24,9 @@ import { MogooseConnectionOptions, MongoStoreFactory } from 'connect-mongo';
 import * as passport from './auth/passport';
 import userRoutes from './users/user.router';
 import taskRouter from './tasks/task.router';
+import discussionRouter from './discussions/discussion.router';
+import projectRouter from './projects/project.router';
+import hierarchyRouter from './hierarchies/hierarchy.router';
 import morganLogger from './loggers/morgan.logger';
 import errorLogger from './loggers/error.logger';
 import verboseLogger from './loggers/verbose.logger';
@@ -115,6 +118,9 @@ function setMiddlewares() {
 function setRoutes() {
   app.use('/api/user', userRoutes);
   app.use('/api/task', taskRouter);
+  app.use('/api/discussion', discussionRouter);
+  app.use('/api/project', projectRouter);
+  app.use('/api/hierarchy', hierarchyRouter);
 
   app.get('/api/isAlive', (_, res) => {
     if (connection.readyState) {

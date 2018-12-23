@@ -1,4 +1,5 @@
 import { Component, OnInit, NgModule, Input } from '@angular/core';
+import { SettingsService } from '../../_services/settings.service';
 
 @Component({
   selector: 'app-pie',
@@ -13,25 +14,18 @@ export class PieComponent implements OnInit {
 
   // options
   showLegend = true;
-
-  colorScheme = {
-    //domain: ['#a8385d','#7aa3e5','#a27ea8','#aae3f5','#adcded','#a95963','#8796c0','#7ed3ed','#50abcc','#ad6886']
-    // domain: ['#5D8AA8', '#346382', '#17405C', '#062235', '#91B6CE', '#D1E6F4']
-    domain: ['#E9A951', '#609859', '#296C75', '#4D374B', '#2E1510']
-
-  };
-
+  colorScheme = {};
   showLabels = true;
   explodeSlices = false;
   doughnut = false;
 
-  constructor() { }
+  constructor(private settingsService: SettingsService) { }
+
+  ngOnInit() {
+    this.colorScheme = { domain: this.settingsService.getColorDomain(this.data.length) };
+  }
 
   onSelect(event) {
     console.log(event);
   }
-
-  ngOnInit() {
-  }
-
 }

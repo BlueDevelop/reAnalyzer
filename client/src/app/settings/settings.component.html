@@ -1,0 +1,21 @@
+<mat-card *ngIf="isLoaded">
+  <div *ngIf="isLoaded"class="container">
+    <div class="color-picker">
+      <span [style.background]="colorsArray[selectedColor]" [cpToggle]="true" [cpDialogDisplay]="'inline'" [(colorPicker)]="colorsArray[selectedColor]"></span>
+
+    </div>
+    <div class="colors">
+      <div *ngFor="let item of colorsArray; let i = index" (mouseenter)="showX[i]=true" (mouseleave)="showX[i]=false" class="colorCircles"
+        [style.background]="colorsArray[i]" (click)="selectedColor=i">
+        <button *ngIf="showX[i]" class="deleteColorButtons" (click)="deleteColor(i)" mat-fab>
+          <mat-icon class="deleteColorIcons">clean</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div>
+  <button mat-raised-button (click)="addColor()"><mat-icon>add</mat-icon></button>
+  <button mat-raised-button (click)="saveColors()"><mat-icon>save</mat-icon></button>
+  <button mat-raised-button (click)="resetColors()"><mat-icon>format_color_reset</mat-icon></button>
+</div>
+</mat-card>

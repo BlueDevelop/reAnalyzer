@@ -1,11 +1,21 @@
 {
 
-  "someGroupName": [{
-      "id": "fuckerson",
-      "email": "fuckerson@gmail.com",
-      "username": "fuckerson@gmail.com",
-      "password": "1234"
+  "someGroupName": [
+    {
+      "id": "omer",
+      "email": "omer@omer.com",
+      "username": "omer@omer.com",
+      "password": "omeromer"
     },
+
+    {
+      "id": "email3",
+      "email": "email3@email.com",
+      "username": "username3",
+      "password": "password"
+    }
+  ],
+  "someGroupID": [
 
     {
       "id": "omer",
@@ -21,26 +31,34 @@
       "password": "password"
     }
   ],
-  "someGroupID": [{
-      "id": "fuckerson",
-      "email": "fuckerson@gmail.com",
-      "username": "fuckerson@gmail.com",
+  "subGroupID1":[{
+    "id": "fuckerson",
+    "email": "fuckerson@gmail.com",
+    "username": "fuckerson@gmail.com",
+    "password": "1234"
+  }],
+  "subGroupName1":[{
+    "id": "fuckerson",
+    "email": "fuckerson@gmail.com",
+    "username": "fuckerson@gmail.com",
+    "password": "1234"
+  }],
+  "subGroupID2":[
+    {
+      "id": "Wilfred_Kautzer9",
+      "email": "Wilfred_Kautzer9@hotmail.com",
+      "username": "Wilfred_Kautzer9@hotmail.com",
       "password": "1234"
-    },
-
+    }
+  ],
+  "subGroupName2":[
     {
-      "id": "omer",
-      "email": "omer@omer.com",
-      "username": "omer@omer.com",
-      "password": "omeromer"
-    },
-
-    {
-      "id": "email3",
-      "email": "email3@email.com",
-      "username": "username3",
-      "password": "password"
+      "id": "Wilfred_Kautzer9",
+      "email": "Wilfred_Kautzer9@hotmail.com",
+      "username": "Wilfred_Kautzer9@hotmail.com",
+      "password": "1234"
     }
   ]
 
 }
+

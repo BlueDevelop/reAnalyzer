@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "build": "npm run build:tsc && cd client && npx ng build && cd ..",
+    "build": "npm run build:tsc",
     "build:tsc": "npx tsc",
     "test": "npm run build:tsc && npm run test:run",
     "test:run": "NODE_ENV=test npx mocha src/**/*.spec.ts --opts ./mocha.opts",

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
+import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 
 @Component({
@@ -11,16 +12,18 @@ export class PieStatusComponent implements OnInit {
   data: object[] = [];
   loading: boolean;
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService, private translate: TranslateService) { }
 
   ngOnInit() {
     this.getCountByStatus();
   }
 
   editData(data): void {
+    let translateStatus: object;
+    this.translate.get('status').subscribe((res: object) => translateStatus = res);
     this.data = _.map(data, (bucket) => {
       return {
-        name: bucket.key,
+        name: translateStatus[bucket.key],
         value: bucket.doc_count
       }
     })

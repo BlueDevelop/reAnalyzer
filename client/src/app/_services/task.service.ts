@@ -5,94 +5,115 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 //import { config } from '../../config';
 import { environment } from '../../environments/environment';
-
-interface FilterParams {
-  date: {
-    firstDay: number,
-    lastDay: number
-  },
-  units: string[],
-  discussions: string[],
-  projects: string[]
-}
-
+import { FilterService } from './filter.service';
+import { LogsService } from './logs.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class TaskService {
+  serviceName: string = 'task';
 
-  filterParams: FilterParams = {
-    date: { firstDay: 0, lastDay: 0 },
-    units: [],
-    discussions: [],
-    projects: []
-  };
-
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private filterService: FilterService,
+    private logsService: LogsService
+  ) {}
 
   getTaskCountByStatus(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/task/countByStatus?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
-      tap(data => this.log('fetched data from TaskCountByStatus')),
-      catchError(this.handleError('getTaskCountByStatus', []))
-    );
+    // let config = {
+    //   params: {
+    //     from: this.filterService.filterParams.date.firstDay.toString(),
+    //     to: this.filterService.filterParams.date.lastDay.toString(),
+    //     projects: this.filterService.filterParams.projects.toString(),
+    //     units: this.filterService.filterParams.units.toString(),
+    //     discussions: this.filterService.filterParams.discussions.toString(),
+    //   },
+    // };
+    return this.http
+      .get(
+        `${environment.apiUrl}/task/countByStatus`,
+        this.filterService.config
+      )
+      .pipe(
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from TaskCountByStatus'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(
+            this.serviceName,
+            'getTaskCountByStatus',
+            []
+          )
+        )
+      );
   }
 
   getFieldCountPerInterval(interval): Observable<any> {
-    let field = "due";
-    return this.http.get(`${environment.apiUrl}/task/fieldCountPerInterval?field=${field}&from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}&interval=${interval}`).pipe(
-      tap(data => this.log('fetched data from getFieldCountPerInterval')),
-      catchError(this.handleError('getFieldCountPerInterval', []))
-    );
+    let newConfig = this.filterService.config;
+    newConfig.params['field'] = 'due';
+    newConfig.params['interval'] = interval;
+    return this.http
+      .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
+      .pipe(
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from getFieldCountPerInterval'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(
+            this.serviceName,
+            'getFieldCountPerInterval',
+            []
+          )
+        )
+      );
   }
 
-
   getTagClouds(): Observable<any> {
-    let size = 40;
-    return this.http.get(`${environment.apiUrl}/task/tagCloud?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
-      tap(data => this.log('fetched data from TagClouds')),
-      catchError(this.handleError('getTagClouds', []))
+    let newConfig = this.filterService.config;
+    newConfig.params['size'] = '40';
+    return this.http.get(`${environment.apiUrl}/task/tagCloud`, newConfig).pipe(
+      tap(data =>
+        this.logsService.log(this.serviceName, 'fetched data from TagClouds')
+      ),
+      catchError(
+        this.logsService.handleError(this.serviceName, 'getTagClouds', [])
+      )
     );
   }
 
   getLeaderboard(): Observable<any> {
-    let size = 40;
-    return this.http.get(`${environment.apiUrl}/task/leaderboard?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
-      tap(data => this.log('fetched data from Leaderboard')),
-      catchError(this.handleError('getLeaderboard', []))
-    );
+    return this.http
+      .get(`${environment.apiUrl}/task/leaderboard`, this.filterService.config)
+      .pipe(
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from Leaderboard'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(this.serviceName, 'getLeaderboard', [])
+        )
+      );
   }
-
 
   getTimeRates(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/task/endTimeRatio?from=${this.filterParams.date.firstDay}&to=${this.filterParams.date.lastDay}`).pipe(
-      tap(data => this.log('fetched data from TimeRates')),
-      catchError(this.handleError('getTimeRates', []))
-    );
-  }
-
-  /**
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
- */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
-
-  private log(message: string) {
-    console.log(`TaskService: ${message}`);
+    return this.http
+      .get(`${environment.apiUrl}/task/endTimeRatio`, this.filterService.config)
+      .pipe(
+        tap(data =>
+          this.logsService.log(this.serviceName, 'fetched data from TimeRates')
+        ),
+        catchError(
+          this.logsService.handleError(this.serviceName, 'getTimeRates', [])
+        )
+      );
   }
 }

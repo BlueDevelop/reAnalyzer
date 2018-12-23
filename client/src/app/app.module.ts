@@ -6,6 +6,12 @@ import { AppRoutingModule } from '../modules/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagCloudModule } from 'angular-tag-cloud-module';
+import { ColorPickerModule } from 'ngx-color-picker';
+
+// import ngx-translate and the http loader
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -24,6 +30,9 @@ import { BarHorizontalComponent } from './charts/bar-horizontal/bar-horizontal.c
 import { LeaderBoardComponent } from './leader-board/leader-board.component';
 import { GroupedVerticalBarComponent } from './charts/grouped-vertical-bar/grouped-vertical-bar.component';
 import { TimeRatesComponent } from './time-rates/time-rates.component';
+import { SettingsComponent } from './settings/settings.component';
+import { FilterComponent } from './filter/filter.component';
+import { Observable } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -43,7 +52,9 @@ import { TimeRatesComponent } from './time-rates/time-rates.component';
     BarHorizontalComponent,
     LeaderBoardComponent,
     GroupedVerticalBarComponent,
-    TimeRatesComponent
+    TimeRatesComponent,
+    SettingsComponent,
+    FilterComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,9 +64,23 @@ import { TimeRatesComponent } from './time-rates/time-rates.component';
     NgxChartsModule,
     FormsModule,
     ReactiveFormsModule,
-    TagCloudModule
+    TagCloudModule,
+    ColorPickerModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
