@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { FilterService } from '../_services/filter.service';
+import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
 import { FormControl } from '@angular/forms';
 import {
@@ -38,16 +39,19 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private settingsService: SettingsService
   ) {}
 
   ngOnInit() {}
 
   dataFilering() {
-    this.barDate.getFieldCountPerInterval();
-    this.pieStatus.getCountByStatus();
-    this.leaderBoard.getLeaderboard();
-    this.tagCloud.getTagClouds();
-    this.timeRates.getTimeRates();
+    this.settingsService.initColorsArray().subscribe(() => {
+      this.barDate.getFieldCountPerInterval();
+      this.pieStatus.getCountByStatus();
+      this.leaderBoard.getLeaderboard();
+      this.tagCloud.getTagClouds();
+      this.timeRates.getTimeRates();
+    });
   }
 }
