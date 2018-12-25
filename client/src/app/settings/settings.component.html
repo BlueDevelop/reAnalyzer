@@ -7,9 +7,8 @@
     <div class="colors">
       <div *ngFor="let item of colorsArray; let i = index" (mouseenter)="showX[i]=true" (mouseleave)="showX[i]=false" class="colorCircles"
         [style.background]="colorsArray[i]" (click)="selectedColor=i">
-        <button *ngIf="showX[i]" class="deleteColorButtons" (click)="deleteColor(i)" mat-fab>
-          <mat-icon class="deleteColorIcons">clean</mat-icon>
-        </button>
+        <div  *ngIf="showX[i]" class="deleteColorButtons" (click)="deleteColor(i)" >
+        </div>
       </div>
     </div>
   </div>

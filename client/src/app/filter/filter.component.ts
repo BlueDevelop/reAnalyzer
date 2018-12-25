@@ -109,7 +109,7 @@ export class FilterComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private filterService: FilterService
+    public filterService: FilterService
   ) {
     if (!this.filterService.filterParams.date.firstDay) {
       this.filterService.filterParams.date.firstDay = this.startDate.value.valueOf();
