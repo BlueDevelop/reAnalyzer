@@ -1,20 +1,57 @@
-<mat-card *ngIf="isLoaded">
-  <div *ngIf="isLoaded"class="container">
-    <div class="color-picker">
-      <span [style.background]="colorsArray[selectedColor]" [cpToggle]="true" [cpDialogDisplay]="'inline'" [(colorPicker)]="colorsArray[selectedColor]"></span>
+<div class="tab-wrap">
 
-    </div>
-    <div class="colors">
-      <div *ngFor="let item of colorsArray; let i = index" (mouseenter)="showX[i]=true" (mouseleave)="showX[i]=false" class="colorCircles"
-        [style.background]="colorsArray[i]" (click)="selectedColor=i">
-        <div  *ngIf="showX[i]" class="deleteColorButtons" (click)="deleteColor(i)" >
+    <input type="radio" id="tab1" name="tabGroup1" class="tab" checked>
+    <label for="tab1">Colors</label>
+  
+    <input type="radio" id="tab2" name="tabGroup1" class="tab">
+    <label for="tab2">Section Two</label>
+  
+    <input type="radio" id="tab3" name="tabGroup1" class="tab">
+    <label for="tab3">Section Three</label>
+    
+      <input type="radio" id="tab4" name="tabGroup1" class="tab">
+    <label for="tab4">Section Three</label>
+  
+    <div class="tab__content">
+      <div class="color-template">
+        <div class="color-edit">
+          <div *ngIf="isLoaded" class="container">
+              <div class="color-picker">
+                <span [style.background]="colorsArray[selectedColor]" [cpToggle]="true" [cpDialogDisplay]="'inline'" [(colorPicker)]="colorsArray[selectedColor]"></span>
+              </div>
+              <div class="colors">
+                <div *ngFor="let item of colorsArray; let i = index" (mouseenter)="showX[i]=true" (mouseleave)="showX[i]=false" class="colorCircles"
+                  [style.background]="colorsArray[i]" (click)="selectedColor=i">
+                  <div  *ngIf="showX[i]" class="deleteColorButtons" (click)="deleteColor(i)" >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+            <button mat-raised-button (click)="addColor()"><mat-icon>add</mat-icon></button>
+            <button mat-raised-button (click)="saveColors()"><mat-icon>save</mat-icon></button>
+            <button mat-raised-button (click)="resetColors()"><mat-icon>format_color_reset</mat-icon></button>
+          </div>
         </div>
+          <div class="list-color">
+            <div (click)="changeColors(colorSet.colors)" class="con"  *ngFor="let colorSet of chartColorsOrdinal">
+              <div class="colorss">
+              <section class="color"  *ngFor="let color of colorSet.colors"  [ngStyle]="{'background-color':color}"></section>
+                </div>
+              <h1>{{colorSet.name}}</h1>
+            </div>
+            </div>
       </div>
     </div>
+  
+    <div class="tab__content">
+      <h3>Section Two</h3>
+    </div>
+  
+    <div class="tab__content">
+      <h3>Section Three</h3>
+    </div>
+    <div class="tab__content">
+      <h3>fgdfg</h3>
+    </div>
   </div>
-  <div>
-  <button mat-raised-button (click)="addColor()"><mat-icon>add</mat-icon></button>
-  <button mat-raised-button (click)="saveColors()"><mat-icon>save</mat-icon></button>
-  <button mat-raised-button (click)="resetColors()"><mat-icon>format_color_reset</mat-icon></button>
-</div>
-</mat-card>

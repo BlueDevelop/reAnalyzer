@@ -16,7 +16,7 @@
     <mat-panel-description>
       <p> פרויקטים:</p>
       <mat-chip-list #chipListProject *ngIf="filterService.filterParams.projects.length>0 else All">
-        <mat-chip *ngFor="let project of filterService.filterParams.projects">
+        <mat-chip *ngFor="let project of filterService['selectedProjectNames']">
           {{project}}
         </mat-chip>
       </mat-chip-list>
@@ -24,7 +24,7 @@
     <mat-panel-description>
       <p> דיונים:</p>
       <mat-chip-list #chipListDiscussion *ngIf="filterService.filterParams.discussions.length>0 else All">
-        <mat-chip *ngFor="let discussion of filterService.filterParams.discussions">
+        <mat-chip *ngFor="let discussion of filterService['selectedDiscussionNames']">
           {{discussion}}
         </mat-chip>
       </mat-chip-list>

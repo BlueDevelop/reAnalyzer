@@ -275,6 +275,12 @@ export class FilterComponent implements OnInit {
       getAllItems('units')
     );
     this.filterService['selectedUnitNames'] = getSelectedItemsNames('units');
+    this.filterService['selectedDiscussionNames'] = getSelectedItemsNames(
+      'discussions'
+    );
+    this.filterService['selectedProjectNames'] = getSelectedItemsNames(
+      'projects'
+    );
     //! sent values instead of keys
     // this.filterService.filterParams.discussions = [...this.discussions];
     // this.filterService.filterParams.projects = [...this.projects];
