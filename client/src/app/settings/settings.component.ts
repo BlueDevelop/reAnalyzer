@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../_services/settings.service';
 import { ColorPickerModule } from 'ngx-color-picker';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-settings',
@@ -335,7 +336,7 @@ export class SettingsComponent implements OnInit {
   }
 
   changeColors(colors: string[]): void {
-    this.colorsArray = [...colors];
+    this.colorsArray = _.uniqBy([...colors], e => e);
   }
 
   addColor(): void {

@@ -6,13 +6,16 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-pie-status',
   templateUrl: './pie-status.component.html',
-  styleUrls: ['./pie-status.component.css']
+  styleUrls: ['./pie-status.component.css'],
 })
 export class PieStatusComponent implements OnInit {
   data: object[] = [];
   loading: boolean;
 
-  constructor(private taskService: TaskService, private translate: TranslateService) { }
+  constructor(
+    private taskService: TaskService,
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.getCountByStatus();
@@ -20,21 +23,22 @@ export class PieStatusComponent implements OnInit {
 
   editData(data): void {
     let translateStatus: object;
-    this.translate.get('status').subscribe((res: object) => translateStatus = res);
-    this.data = _.map(data, (bucket) => {
+    this.translate
+      .get('status')
+      .subscribe((res: object) => (translateStatus = res));
+    this.data = _.map(data, bucket => {
       return {
         name: translateStatus[bucket.key],
-        value: bucket.doc_count
-      }
-    })
+        value: bucket.doc_count,
+      };
+    });
   }
 
   getCountByStatus(): void {
     this.loading = true;
-    this.taskService.getTaskCountByStatus()
-      .subscribe(data => {
-        this.loading = false;
-        this.editData(data);
-      });
+    this.taskService.getTaskCountByStatus().subscribe(data => {
+      this.loading = false;
+      this.editData(data);
+    });
   }
 }

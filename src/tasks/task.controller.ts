@@ -290,7 +290,14 @@ export default class TaskController {
       const ratios: number[] = doneTasks.map(task => {
         // Extract data from the task.
         const sourceTask: any = task._source;
-        if (!sourceTask.due || _.isNaN(sourceTask.due)) {
+        if (
+          !sourceTask.due ||
+          _.isNaN(sourceTask.due) ||
+          !sourceTask.assignUpdates ||
+          !sourceTask.statusUpdates ||
+          sourceTask.assignUpdates.length == 0 ||
+          sourceTask.statusUpdates.length == 0
+        ) {
           return 0;
         }
 

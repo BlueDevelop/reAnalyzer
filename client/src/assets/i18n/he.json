@@ -5,7 +5,8 @@
         "in-progress":"בתהליך",
         "rejected":"נדחה",
         "assigned":"נבחר אחראי",
-        "review":"בבדיקה"
+        "review":"בבדיקה",
+        "waiting-approval":"ממתין לאישור"
     },
     "unit":"חברה",
     "dashboard":"לוח ראשי",
