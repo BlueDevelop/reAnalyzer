@@ -106,6 +106,8 @@ export class FilterComponent implements OnInit {
 
   projects: string[] = [];
   allProjects: string[] = [];
+  officeCreated: boolean = false;
+  officeAssign: boolean = false;
 
   constructor(
     private taskService: TaskService,
@@ -287,6 +289,8 @@ export class FilterComponent implements OnInit {
     // this.filterService.filterParams.units = [...this.units];
     this.filterService.filterParams.date.firstDay = this.startDate.value.valueOf();
     this.filterService.filterParams.date.lastDay = this.endDate.value.valueOf();
+    this.filterService.filterParams.officeCreated = this.officeCreated;
+    this.filterService.filterParams.officeAssign = this.officeAssign;
     this.filterService.updateConfig();
     this.valueChange.emit();
   }

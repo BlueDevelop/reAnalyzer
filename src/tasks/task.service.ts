@@ -17,11 +17,16 @@ export default class TaskService {
     from: number,
     to: number,
     filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
     field?: string
   ) {
     const searchField = field || '_id';
 
-    const should = TaskService.prefixQuery(filter) || [];
+    const should =
+      officeCreated == false && officeAssign == false
+        ? TaskService.prefixQuery(filter)
+        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
 
     const body: any = {
       query: {
@@ -68,9 +73,14 @@ export default class TaskService {
     from: number,
     to: number,
     filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
     interval?: string
   ) {
-    const should = TaskService.prefixQuery(filter);
+    const should =
+      officeCreated == false && officeAssign == false
+        ? TaskService.prefixQuery(filter)
+        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
 
     return TaskService.client.search<Itask>({
       index: TaskService.index,
@@ -139,9 +149,14 @@ export default class TaskService {
   public static getCountByStatus(
     from: number,
     to: number,
-    filter: object[] = []
+    filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean
   ) {
-    const should = TaskService.prefixQuery(filter);
+    const should =
+      officeCreated == false && officeAssign == false
+        ? TaskService.prefixQuery(filter)
+        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
 
     return TaskService.client.search({
       index: TaskService.index,
@@ -213,9 +228,14 @@ export default class TaskService {
     from: number,
     to: number,
     filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
     size?: number
   ) {
-    const should = TaskService.prefixQuery(filter);
+    const should =
+      officeCreated == false && officeAssign == false
+        ? TaskService.prefixQuery(filter)
+        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
 
     return TaskService.client.search({
       index: TaskService.index,
@@ -286,10 +306,15 @@ export default class TaskService {
     from: number,
     to: number,
     filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
     size?: number
   ) {
     // dont filter by creator only look at assignees
-    const should = TaskService.prefixQuery(filter, false);
+    const should =
+      officeCreated == false && officeAssign == false
+        ? TaskService.prefixQuery(filter, false)
+        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
 
     return TaskService.client.search({
       index: TaskService.index,
@@ -323,6 +348,7 @@ export default class TaskService {
             terms: {
               //field: 'assign.id.keyword',
               // the :? operator returns the right side expression if its not null otherwise it returns the left side expression
+              // new: "doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ?:doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value",
               script:
                 "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
               size: size || 10,

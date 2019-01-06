@@ -72,6 +72,21 @@ async function getMembersOfHierarchy(
   console.log(filter);
 
   req.query.users = filter;
+
+  req.query.officeCreated = req.query.officeCreated == 'true';
+  req.query.officeAssign = req.query.officeAssign == 'true';
+  console.log('filters!');
+  console.log(req.query.officeCreated);
+  console.log(req.query.officeAssign);
+  console.log(typeof req.query.officeCreated);
+  if (req.query.officeCreated == true || req.query.officeAssign == true) {
+    req.query.officeMembers = await filterHelper.getOfficeMembersFromUser(
+      req.user.uniqueId
+    );
+    console.log('filters office members');
+    console.log(req.query.officeMembers);
+    //req.query.officeMembers = _.union([req.user], req.query.officeMembers);
+  }
   next();
 }
 

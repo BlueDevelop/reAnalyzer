@@ -13,6 +13,8 @@ interface FilterParams {
   units: object[];
   discussions: string[];
   projects: string[];
+  officeCreated: boolean;
+  officeAssign: boolean;
 }
 
 @Injectable({
@@ -26,6 +28,8 @@ export class FilterService {
     units: [],
     discussions: [],
     projects: [],
+    officeCreated: false,
+    officeAssign: false,
   };
 
   constructor(private http: HttpClient, private logsService: LogsService) {}
@@ -40,6 +44,8 @@ export class FilterService {
         projects: this.filterParams.projects.toString(),
         units: this.filterParams.units.toString(),
         discussions: this.filterParams.discussions.toString(),
+        officeCreated: this.filterParams.officeCreated,
+        officeAssign: this.filterParams.officeAssign,
       },
     };
   }

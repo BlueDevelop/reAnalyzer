@@ -1,4 +1,4 @@
-<mat-expansion-panel #mep="matExpansionPanel">
+<mat-expansion-panel id="step2" #mep="matExpansionPanel">
   <mat-expansion-panel-header>
     <mat-panel-title>
       <p>
@@ -6,7 +6,7 @@
         סינון לפי:</p>
     </mat-panel-title>
     <mat-panel-description>
-      <p> חברות:</p>
+      <p>{{'units'|translate}}:</p>  
       <mat-chip-list #chipListUnit *ngIf="filterService.filterParams.units.length>0 else All">
         <mat-chip *ngFor="let unit of filterService['selectedUnitNames']" >
           {{unit}}
@@ -42,7 +42,7 @@
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
               {{unit}}
             </mat-chip>
-      <input matInput placeholder="בחר חברה" #unitInput [formControl]="unitSelected" [matAutocomplete]="autoUnit" [matChipInputFor]="chipListUnit"
+      <input matInput placeholder="בחר {{'unit'| translate}}" #unitInput [formControl]="unitSelected" [matAutocomplete]="autoUnit" [matChipInputFor]="chipListUnit"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event, 'units')">
       </mat-chip-list>
         <mat-autocomplete #autoUnit="matAutocomplete" (optionSelected)="selected($event, 'units')">
@@ -92,6 +92,10 @@
       <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
       <mat-datepicker #picker2></mat-datepicker>
     </mat-form-field>
+    <section class="example-section">
+      <mat-checkbox class="example-margin" [(ngModel)]="officeCreated">היוצר מהלשכה שלי</mat-checkbox>
+      <mat-checkbox class="example-margin" [(ngModel)]="officeAssign">האחראי מהלשכה שלי</mat-checkbox>
+    </section>
     <button mat-raised-button class="filter-button" (click)="dataFilering(); mep.expanded = false">
       <mat-icon>filter_list</mat-icon>
     </button>

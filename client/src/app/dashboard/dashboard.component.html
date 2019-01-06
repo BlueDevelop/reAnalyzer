@@ -1,18 +1,35 @@
 <app-filter (valueChange)="dataFilering()"></app-filter>
-<mat-grid-list cols="6" rowHeight="6:4" gutterSize="20px">
-  <mat-grid-tile [colspan]="2" [rowspan]="2">
-    <app-time-rates #timeRates></app-time-rates>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="4" [rowspan]="2">
+   <mat-grid-list  id="dashboard" cols="6" rowHeight="6:4" gutterSize="20px">
+        <mat-grid-tile id="step3" [colspan]="2" [rowspan]="2">
+          <app-time-rates #timeRates ></app-time-rates>
+        </mat-grid-tile>
+        <mat-grid-tile id="step4" [colspan]="4" [rowspan]="2">
+        <app-chart-bar-date #barDate></app-chart-bar-date>
+        </mat-grid-tile>
+        <mat-grid-tile id="step5" [colspan]="2" [rowspan]="2">
+          <app-tag-cloud #tagCloud></app-tag-cloud>
+        </mat-grid-tile>
+        <mat-grid-tile id="step6" [colspan]="2" [rowspan]="2">
+          <app-leader-board #leaderBoard></app-leader-board>
+        </mat-grid-tile>
+        <mat-grid-tile id="step7" [colspan]="2" [rowspan]="2">
+          <app-pie-status #pieStatus></app-pie-status>
+        </mat-grid-tile>
+      </mat-grid-list> 
+<!--<div class="dashboard">
+   <mat-card  [ngStyle]="{'width':'25vw'}">1</mat-card>
+  <mat-card  [ngStyle]="{'width':'50vw'}">2</mat-card>
+  <mat-card  [ngStyle]="{'width':'60vw'}">3</mat-card>
+  <mat-card  [ngStyle]="{'width':'20vw'}">4</mat-card>
+  <mat-card  [ngStyle]="{'width':'15vw'}">5</mat-card> -->
+  <!--  <app-time-rates #timeRates ></app-time-rates>
     <app-chart-bar-date #barDate></app-chart-bar-date>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="2" [rowspan]="2">
     <app-tag-cloud #tagCloud></app-tag-cloud>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="2" [rowspan]="2">
     <app-leader-board #leaderBoard></app-leader-board>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="2" [rowspan]="2">
-    <app-pie-status #pieStatus></app-pie-status>
-  </mat-grid-tile>
-</mat-grid-list>
+    <app-pie-status #pieStatus></app-pie-status> 
+    <div class="item a"><app-chart-bar-date #barDate></app-chart-bar-date></div>
+    <div class="item b"> <app-time-rates #timeRates ></app-time-rates></div>
+    <div class="item c"> <app-pie-status #pieStatus></app-pie-status></div>
+    <div class="item d"> <app-leader-board #leaderBoard></app-leader-board></div>
+    <div class="item e"><app-tag-cloud #tagCloud></app-tag-cloud></div>
+</div>-->

@@ -22,46 +22,46 @@ before('Insert data into index: ' + index, async () => {
   });
 });
 
-describe('Task Service', () => {
-  describe('getByField', () => {
-    it('should find by _id field - there is no filter so the response will be empty', async () => {
-      const res = await taskService.getByField(
-        '5bbc5fd0981efd8c875828ae',
-        1538341200000,
-        1541023199999
-      );
-      expect(res.hits.hits).to.exist;
-      expect(res.hits.hits).to.be.empty;
-    });
-    it('should find by _id field', async () => {
-      const res = await taskService.getByField(
-        '5bbc5fd0981efd8c875828ae',
-        1538341200000,
-        1541023199999,
-        [{ id: 'Wilfred_Kautzer9' }, { id: 'fuckerson' }]
-      );
-      expect(res.hits.hits[0]).to.exist;
-      expect(res.hits.hits[0]).to.have.property(
-        '_id',
-        '5bbc5fd0981efd8c875828ae'
-      );
-    });
+// describe('Task Service', () => {
+//   describe('getByField', () => {
+//     it('should find by _id field - there is no filter so the response will be empty', async () => {
+//       const res = await taskService.getByField(
+//         '5bbc5fd0981efd8c875828ae',
+//         1538341200000,
+//         1541023199999
+//       );
+//       expect(res.hits.hits).to.exist;
+//       expect(res.hits.hits).to.be.empty;
+//     });
+//     it('should find by _id field', async () => {
+//       const res = await taskService.getByField(
+//         '5bbc5fd0981efd8c875828ae',
+//         1538341200000,
+//         1541023199999,
+//         [{ id: 'Wilfred_Kautzer9' }, { id: 'fuckerson' }]
+//       );
+//       expect(res.hits.hits[0]).to.exist;
+//       expect(res.hits.hits[0]).to.have.property(
+//         '_id',
+//         '5bbc5fd0981efd8c875828ae'
+//       );
+//     });
 
-    it('should find by _id field', async () => {
-      const res = await taskService.getByField(
-        '5bbc5fd0981efd8c875828ae',
-        1538341200000,
-        1541023199999,
-        [{ id: 'Wilfred_Kautzer9' }, { id: 'fuckerson' }]
-      );
-      expect(res.hits.hits[0]).to.exist;
-      expect(res.hits.hits[0]).to.have.property(
-        '_id',
-        '5bbc5fd0981efd8c875828ae'
-      );
-    });
-  });
-});
+//     it('should find by _id field', async () => {
+//       const res = await taskService.getByField(
+//         '5bbc5fd0981efd8c875828ae',
+//         1538341200000,
+//         1541023199999,
+//         [{ id: 'Wilfred_Kautzer9' }, { id: 'fuckerson' }]
+//       );
+//       expect(res.hits.hits[0]).to.exist;
+//       expect(res.hits.hits[0]).to.have.property(
+//         '_id',
+//         '5bbc5fd0981efd8c875828ae'
+//       );
+//     });
+//   });
+// });
 
 after('delete data from index: ' + index, async () => {
   await client.deleteByQuery({

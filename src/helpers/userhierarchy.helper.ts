@@ -34,6 +34,28 @@ async function userIDToHierarchyID(userID: string) {
  *
  *
  * @param {string} userID
+ * @returns The user's office members (if exists)
+ */
+async function getOfficeMembersFromUser(
+  userID: string,
+  transformID?: (id: string) => string
+) {
+  transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
+  userID = transformID(userID);
+  const userIDToOfficeMembersMaper = memoizedReadAndParseJSON(
+    config.userIDToOfficeMembersFile
+  );
+  const officeMembers: string[] = userIDToOfficeMembersMaper[userID]
+    ? userIDToOfficeMembersMaper[userID]
+    : [];
+
+  return officeMembers;
+}
+
+/**
+ *
+ *
+ * @param {string} userID
  * @returns hierarchies\groups below the user`s hierarchy
  */
 async function getDirectSubHierarchiesFromUser(userID: string) {
@@ -213,6 +235,7 @@ const hierarchyService = {
   userIDToHierarchyID,
   getDirectSubHierarchiesFromUser,
   getGroupNameByID,
+  getOfficeMembersFromUser,
 };
 
 export default hierarchyService;

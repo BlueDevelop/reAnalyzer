@@ -4,7 +4,10 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: [
+    './app.component.css',
+    '../../node_modules/driver.js/dist/driver.min.css',
+  ],
 })
 export class AppComponent {
   constructor(private translate: TranslateService) {
@@ -12,5 +15,4 @@ export class AppComponent {
   }
 
   title = 'Re Analyzer';
-
 }

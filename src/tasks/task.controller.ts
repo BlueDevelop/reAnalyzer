@@ -37,18 +37,21 @@ export default class TaskController {
 
       verboseLogger.verbose(`getFieldCountPerInterval function was called.`);
 
-      const filter: object[] = req.query.users;
+      const filter: object[] = req.query.officeMembers
+        ? req.query.officeMembers
+        : req.query.users;
       verboseLogger.verbose(
         `getFieldCountPerInterval filter for user ${
           req.user.uniqueId
         } is ${filter}.`
       );
-
       const response = await taskService.getFieldCountPerInterval(
         req.query.field,
         +req.query.from,
         +req.query.to,
         filter,
+        req.query.officeCreated,
+        req.query.officeAssign,
         req.query.interval
       );
 
@@ -90,7 +93,9 @@ export default class TaskController {
         return res.sendStatus(400);
       }
 
-      const filter: object[] = req.query.users;
+      const filter: object[] = req.query.officeMembers
+        ? req.query.officeMembers
+        : req.query.users;
       console.log('query!');
       console.log(req.query);
       console.log('USERS!');
@@ -103,7 +108,9 @@ export default class TaskController {
       const response = await taskService.getCountByStatus(
         +req.query.from,
         +req.query.to,
-        filter
+        filter,
+        req.query.officeCreated,
+        req.query.officeAssign
       );
 
       verboseLogger.verbose(
@@ -153,7 +160,9 @@ export default class TaskController {
       //   req.user.uniqueId,
       //   TaskController.cut
       // )) as object[];
-      const filter: object[] = req.query.users;
+      const filter: object[] = req.query.officeMembers
+        ? req.query.officeMembers
+        : req.query.users;
 
       verboseLogger.verbose(
         `getTagCloud filter for user ${req.user.uniqueId} is ${filter}.`
@@ -163,6 +172,8 @@ export default class TaskController {
         +req.query.from,
         +req.query.to,
         filter,
+        req.query.officeCreated,
+        req.query.officeAssign,
         size
       );
 
@@ -212,7 +223,9 @@ export default class TaskController {
       //   req.user.uniqueId,
       //   TaskController.cut
       // )) as object[];
-      const filter: object[] = req.query.users;
+      const filter: object[] = req.query.officeMembers
+        ? req.query.officeMembers
+        : req.query.users;
 
       verboseLogger.verbose(
         `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
@@ -222,6 +235,8 @@ export default class TaskController {
         +req.query.from,
         +req.query.to,
         filter,
+        req.query.officeCreated,
+        req.query.officeAssign,
         size
       );
 
@@ -230,6 +245,7 @@ export default class TaskController {
           response.aggregations['1'].buckets
         }.`
       );
+      console.log(response.aggregations);
       return res.json(response.aggregations['1'].buckets);
     } catch (err) {
       errorLogger.error('%j', {
@@ -267,7 +283,9 @@ export default class TaskController {
       //   req.user.uniqueId,
       //   TaskController.cut
       // )) as object[];
-      const filter: object[] = req.query.users;
+      const filter: object[] = req.query.officeMembers
+        ? req.query.officeMembers
+        : req.query.users;
 
       verboseLogger.verbose(
         `getEndTimeRatio filter for user ${req.user.uniqueId} is ${filter}.`
@@ -279,6 +297,8 @@ export default class TaskController {
         +req.query.from,
         +req.query.to,
         filter,
+        req.query.officeCreated,
+        req.query.officeAssign,
         'status'
       )).hits.hits;
 

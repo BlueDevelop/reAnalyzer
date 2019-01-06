@@ -8,6 +8,9 @@
 [labels]="showLabels"
 [doughnut]="doughnut"
 (select)="onSelect($event)">
+<ng-template #tooltipTemplate let-model="model">
+    <pre>{{getPrecentage(model.value)}}</pre>
+  </ng-template>
 </ngx-charts-pie-chart>
 <ng-template #noData>
 אין נתונים להצגה

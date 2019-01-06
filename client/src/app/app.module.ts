@@ -33,6 +33,9 @@ import { TimeRatesComponent } from './time-rates/time-rates.component';
 import { SettingsComponent } from './settings/settings.component';
 import { FilterComponent } from './filter/filter.component';
 import { Observable } from 'rxjs';
+import { ApexChartComponent } from './apex-charts/apex-chart/apex-chart.component';
+import { IntroButtonComponent } from './intro-button/intro-button.component';
+import { FullscreenButtonComponent } from './fullscreen-button/fullscreen-button.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +58,9 @@ import { Observable } from 'rxjs';
     TimeRatesComponent,
     SettingsComponent,
     FilterComponent,
+    ApexChartComponent,
+    IntroButtonComponent,
+    FullscreenButtonComponent,
   ],
   imports: [
     BrowserModule,

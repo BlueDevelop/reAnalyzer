@@ -2,3 +2,47 @@ mat-grid-tile {
     -webkit-box-shadow: 0px 0px 6px 1px #C9C9C9; 
     box-shadow: 0px 0px 6px 1px #C9C9C9;
   }
+  mat-card {
+    height: 100%;
+  }
+  /* mat-grid-list {
+    height:100%;
+    width:100%;
+    overflow:hidden;
+  } */
+
+  .dashboard{
+    margin-left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    width:100%;
+    justify-content: space-around;
+  }
+  .item{
+    margin-bottom: 10px;
+    -webkit-box-shadow: 0px 0px 6px 1px #C9C9C9; 
+    box-shadow: 0px 0px 6px 1px #C9C9C9;
+  }
+
+ .a{
+    min-width: 63vw;
+    min-height: 42vh;
+  }
+
+  .b{
+    min-width: 31vw;
+    min-height: 42vh;
+  }
+  .c{
+    min-width: 31vw;
+    height: 42vh;
+  }
+
+  .d{
+    min-width: 31vw;
+    min-height: 42vh;
+  }
+  .e{
+   min-width: 31vw;
+   min-height: 42vh;
+  }

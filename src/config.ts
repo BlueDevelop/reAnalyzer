@@ -13,6 +13,7 @@ interface IConfig {
   hierarchyServiceMockFile?: string; // local file describing return value for each hierarchy id
   hierarchyServiceGroupMembersFile?: string; // local file describing each groups members,
   hierarchyFile?: string; // local file describing indirect sub groups of a each group
+  userIDToOfficeMembersFile: string; // maps each user id to its office members
   hierarchyUserIDToHierarchyFile?: string; // local file containing a mapping between userIDS and its hierarchy
   hierarchyGroupIdToGroupName?: string; // maps group id to group name and vice versa
   hierarchyServiceAddrGetMembers?: (hierarchy: string) => string; // function that generates the route to get all members\users under a given hierarchy from the api
@@ -33,6 +34,7 @@ const prod: IConfig = {
   hierarchyServiceAddr:
     process.env.hierarchyAPI || 'http://hierarchyServiceAddress/api/',
   hierarchyFile: path.join(__dirname, '../src/someGroupIDmock/hierarchy.json'),
+  userIDToOfficeMembersFile: 'blabla',
   hierarchyServiceUseMock: false,
   hierarchyServiceAddrGetMembers: (hierarchyID: string) =>
     `${prod.hierarchyServiceAddr}hierarchy/${hierarchyID}/members`,
@@ -56,10 +58,15 @@ const dev: IConfig = {
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
   hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
+  userIDToOfficeMembersFile: path.join(
+    __dirname,
+    '../src/mock/userIDToOfficeMembers.json'
+  ),
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
     '../src/mock/userIDToHierarchy.json'
   ),
+
   hierarchyGroupIdToGroupName: path.join(
     __dirname,
     '../src/mock/hierarchyGroupIdToGroupName.json'
@@ -80,6 +87,10 @@ const local: IConfig = {
   apmServiceName: process.env.APM_NAME || 'reAnalyzer_dev',
   elasticsearch: process.env.ELASTIC || 'http://localhost:9200',
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
+  userIDToOfficeMembersFile: path.join(
+    __dirname,
+    '../src/mock/userIDToOfficeMembers.json'
+  ),
   hierarchyServiceUseMock: true,
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
@@ -101,6 +112,10 @@ const test: IConfig = {
   apmServiceName: 'reAnalyzer_test',
   elasticsearch: 'http://localhost:9200',
   hierarchyServiceUseMock: false,
+  userIDToOfficeMembersFile: path.join(
+    __dirname,
+    '../src/mock/userIDToOfficeMembers.json'
+  ),
 };
 
 export default () => {

@@ -6,7 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class SettingsService {
-  colorsArrayDefault: string[] = ['#E9A951', '#237675', '#2E1510'];
+  colorsArrayDefault: string[] = [
+    '#E0F7FA',
+    '#B1EBF2',
+    '#7EDEEA',
+    '#48D0E1',
+    '#1AC6DA',
+    '#00BBD4',
+    '#00ACC1',
+    '#0097A7',
+    '#00838F',
+    '#006064',
+  ];
   colorsArray: string[];
 
   constructor(private usersService: UserService) {}

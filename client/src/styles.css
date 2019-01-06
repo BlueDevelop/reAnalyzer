@@ -2,6 +2,11 @@
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+/*introjs*/
+@import '~intro.js/minified/introjs.min.css';
+@import '~intro.js/minified/introjs-rtl.min.css';
+/* @import '~intro.js/themes/introjs-flattener.css'; */
+
 /* hebrew */
 @font-face {
     font-family: 'Alef';
@@ -66,6 +71,7 @@ html, body{
     direction: rtl;
     font-family: 'Alef', sans-serif;
     height: 100%;
+    overflow: hidden; /*for introjs*/
 }
 
 body{
@@ -74,3 +80,8 @@ body{
 
 /* css for angular-tag-cloud component */
 angular-tag-cloud.custom-css > span:hover { cursor: pointer; }
+
+/*for introjs*/
+.introjs-tooltiptext{
+  /* font-family: 'Alef'; */
+}
