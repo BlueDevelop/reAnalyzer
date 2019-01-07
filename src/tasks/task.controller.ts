@@ -181,7 +181,11 @@ export default class TaskController {
         `getTagCloud function returned ${response.aggregations['1'].buckets}.`
       );
 
-      return res.json(response.aggregations['1'].buckets);
+      const resp: any = _.filter(
+        response.aggregations['1'].buckets,
+        obj => obj.key != 'Agenda'
+      );
+      return res.json(resp);
     } catch (err) {
       errorLogger.error('%j', {
         message: err.message,
@@ -218,6 +222,8 @@ export default class TaskController {
       }
 
       const size = req.query.size ? +req.query.size : undefined;
+      console.log('===SIZE===');
+      console.log(size);
 
       // const filter: object[] = (await filterHelper.getMembersByUser(
       //   req.user.uniqueId,
@@ -245,6 +251,7 @@ export default class TaskController {
           response.aggregations['1'].buckets
         }.`
       );
+      console.log('LeaderBoard');
       console.log(response.aggregations);
       return res.json(response.aggregations['1'].buckets);
     } catch (err) {

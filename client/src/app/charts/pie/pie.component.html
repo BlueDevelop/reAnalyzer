@@ -1,5 +1,5 @@
+<div class="chart">
 <ngx-charts-pie-chart *ngIf="data.length>0 else noData"
-[view]="view"
 [scheme]="colorScheme"
 [results]="data"
 [legend]="showLegend"
@@ -12,6 +12,7 @@
     <pre>{{getPrecentage(model.value)}}</pre>
   </ng-template>
 </ngx-charts-pie-chart>
+</div>
 <ng-template #noData>
 אין נתונים להצגה
 </ng-template>

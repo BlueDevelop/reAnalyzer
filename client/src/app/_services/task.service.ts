@@ -76,7 +76,7 @@ export class TaskService {
   }
 
   getTagClouds(): Observable<any> {
-    let newConfig = this.filterService.config;
+    let newConfig = { ...this.filterService.config };
     newConfig.params['size'] = '40';
     return this.http.get(`${environment.apiUrl}/task/tagCloud`, newConfig).pipe(
       tap(data =>
@@ -89,8 +89,10 @@ export class TaskService {
   }
 
   getLeaderboard(): Observable<any> {
+    let newConfig = { ...this.filterService.config };
+    newConfig.params['size'] = '10';
     return this.http
-      .get(`${environment.apiUrl}/task/leaderboard`, this.filterService.config)
+      .get(`${environment.apiUrl}/task/leaderboard`, newConfig)
       .pipe(
         tap(data =>
           this.logsService.log(

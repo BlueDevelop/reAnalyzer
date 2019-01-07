@@ -6,6 +6,9 @@
     display: flex;
     justify-content: space-around;
 }
+.chart{
+    width: 90%;
+}
 .slider{
     /* margin-top: 15px; */
 }

@@ -5,11 +5,6 @@ mat-grid-tile {
   mat-card {
     height: 100%;
   }
-  /* mat-grid-list {
-    height:100%;
-    width:100%;
-    overflow:hidden;
-  } */
 
   .dashboard{
     margin-left: 10px;
@@ -25,24 +20,24 @@ mat-grid-tile {
   }
 
  .a{
-    min-width: 63vw;
-    min-height: 42vh;
+    width: 63vw;
+    height: 42vh;
   }
 
   .b{
-    min-width: 31vw;
-    min-height: 42vh;
+    width: 31vw;
+    height: 42vh;
   }
   .c{
-    min-width: 31vw;
+    width: 31vw;
     height: 42vh;
   }
 
   .d{
-    min-width: 31vw;
-    min-height: 42vh;
+    width: 31vw;
+    height: 42vh;
   }
   .e{
-   min-width: 31vw;
-   min-height: 42vh;
+   width: 31vw;
+   height: 42vh;
   }
