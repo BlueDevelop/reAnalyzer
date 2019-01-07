@@ -165,7 +165,7 @@ export class SettingsComponent implements OnInit {
     },
     {
       name: 'Bold Berries',
-      colors: ['#50312F', '#cb00000', '#E4EA8C', '#3F6C45'],
+      colors: ['#50312F', '#cb0000', '#E4EA8C', '#3F6C45'],
     },
     {
       name: 'Timeless & Nautical',
