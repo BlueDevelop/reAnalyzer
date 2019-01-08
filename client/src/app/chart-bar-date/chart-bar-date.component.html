@@ -1,10 +1,12 @@
 <div class="container" *ngIf="data.length>0 else spinner">
     <div class="chart">
-<app-bar [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]"></app-bar>
+<app-bar  [interval]="interval" [xAxisTickFormatting]="formatting" [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]">
+</app-bar>
 </div>
 <div class="slider">
         <p class="example-h2">מרווח זמן</p>
 <mat-slider color="primary"
+
   class="example-margin"
   [disabled]="disabled"
   [invert]="invert"

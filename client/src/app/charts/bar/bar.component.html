@@ -13,7 +13,11 @@
   [yAxisLabel]="yAxisLabel"
   [roundDomains]="roundDomains"
   [showDataLabel]="showDataLabel"
+  [xAxisTickFormatting]="xAxisTickFormatting"
   (select)="onSelect($event)">
+  <ng-template #tooltipTemplate let-model="model">
+      <pre>{{generateTooltipString(model)}}</pre>
+    </ng-template>
 </ngx-charts-bar-vertical>
 </div>
 <ng-template #noData>אין נתונים להצגה</ng-template>

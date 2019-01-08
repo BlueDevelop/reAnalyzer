@@ -41,7 +41,9 @@ export class DashboardComponent implements OnInit {
     private taskService: TaskService,
     private filterService: FilterService,
     private settingsService: SettingsService
-  ) {}
+  ) {
+    this.dataFilering();
+  }
 
   ngOnInit() {}
 
