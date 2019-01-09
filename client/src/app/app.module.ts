@@ -36,6 +36,8 @@ import { Observable } from 'rxjs';
 import { ApexChartComponent } from './apex-charts/apex-chart/apex-chart.component';
 import { IntroButtonComponent } from './intro-button/intro-button.component';
 import { FullscreenButtonComponent } from './fullscreen-button/fullscreen-button.component';
+import { InfoButtonComponent } from './info-button/info-button.component';
+import { PdfButtonComponent } from './pdf-button/pdf-button.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { FullscreenButtonComponent } from './fullscreen-button/fullscreen-button
     ApexChartComponent,
     IntroButtonComponent,
     FullscreenButtonComponent,
+    InfoButtonComponent,
+    PdfButtonComponent,
   ],
   imports: [
     BrowserModule,

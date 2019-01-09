@@ -106,7 +106,7 @@ export class FilterComponent implements OnInit {
 
   projects: string[] = [];
   allProjects: string[] = [];
-  officeCreated: boolean = false;
+  officeCreated: boolean = true;
   officeAssign: boolean = false;
 
   constructor(

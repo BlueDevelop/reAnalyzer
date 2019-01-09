@@ -11,6 +11,8 @@ export class PieComponent implements OnInit {
   data: any[];
   @Input()
   legendTitle: any[];
+  @Input()
+  doughnut: boolean;
 
   view: any[] = [600, 400];
 
@@ -19,7 +21,6 @@ export class PieComponent implements OnInit {
   colorScheme = {};
   showLabels = true;
   explodeSlices = false;
-  doughnut = false;
 
   constructor(private settingsService: SettingsService) {}
 
@@ -29,6 +30,7 @@ export class PieComponent implements OnInit {
     };
     console.log('data:');
     console.log(this.data);
+    this.doughnut = this.doughnut || false;
   }
 
   onSelect(event) {

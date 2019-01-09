@@ -90,7 +90,7 @@ export class TaskService {
 
   getLeaderboard(): Observable<any> {
     let newConfig = { ...this.filterService.config };
-    newConfig.params['size'] = '10';
+    newConfig.params['size'] = '5';
     return this.http
       .get(`${environment.apiUrl}/task/leaderboard`, newConfig)
       .pipe(

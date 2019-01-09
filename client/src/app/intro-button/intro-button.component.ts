@@ -43,11 +43,11 @@ export class IntroButtonComponent implements OnInit {
             position: 'right',
           },
           {
-            element: '#step3',
-            intro:
-              'גרף המציג כמות משימות שנגמרו ביחס לתאריך היעד שלהם, משימות שסויימו זמן רב לאחר תאריך היעד שלהם יופיעו מעל +',
-            position: 'right',
+            element: '#step7',
+            intro: 'גרף המציג את כמות המשימות בכל סטטוס',
+            position: 'left',
           },
+
           {
             element: '#step4',
             intro:
@@ -65,9 +65,10 @@ export class IntroButtonComponent implements OnInit {
             position: 'right',
           },
           {
-            element: '#step7',
-            intro: 'גרף המציג את כמות המשימות בכל סטטוס',
-            position: 'left',
+            element: '#step3',
+            intro:
+              'גרף המציג כמות משימות שנגמרו ביחס לתאריך היעד שלהם, משימות שסויימו זמן רב לאחר תאריך היעד שלהם יופיעו מעל +',
+            position: 'right',
           },
         ],
       })

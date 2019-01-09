@@ -43,7 +43,7 @@ export class BarComponent implements OnInit, OnChanges {
   showXAxis = true;
   showYAxis = true;
   gradient = false;
-  showLegend = true;
+  showLegend = false;
   showDataLabel = true;
   showXAxisLabel = true;
   showYAxisLabel = true;
