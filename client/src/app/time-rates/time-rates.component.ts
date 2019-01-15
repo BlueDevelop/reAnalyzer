@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
+import { SettingsService } from '../_services/settings.service';
 @Component({
   selector: 'app-time-rates',
   templateUrl: './time-rates.component.html',
@@ -9,8 +10,10 @@ import * as _ from 'lodash';
 export class TimeRatesComponent implements OnInit {
   data: object[] = [];
   loading: boolean;
-
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit() {
     this.getTimeRates();

@@ -1,4 +1,11 @@
-import { Component, OnInit, NgModule, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  NgModule,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { SettingsService } from '../../_services/settings.service';
 import * as _ from 'lodash';
 @Component({
@@ -6,7 +13,7 @@ import * as _ from 'lodash';
   templateUrl: './pie.component.html',
   styleUrls: ['./pie.component.css'],
 })
-export class PieComponent implements OnInit {
+export class PieComponent implements OnInit, OnChanges {
   @Input()
   data: any[];
   @Input()
@@ -32,6 +39,12 @@ export class PieComponent implements OnInit {
     console.log(this.data);
     this.doughnut = this.doughnut || false;
   }
+  ngOnChanges(changes: SimpleChanges) {
+    // changes.prop contains the old and the new value...
+    this.colorScheme = {
+      domain: this.settingsService.getColorDomain(this.data.length),
+    };
+  }
 
   onSelect(event) {
     console.log(event);
@@ -41,6 +54,7 @@ export class PieComponent implements OnInit {
   }
   getPrecentage(value) {
     const precentage = _.round((value / this.getTotal()) * 100);
-    return `${precentage}%`;
+    return `אחוזים: ${precentage}%
+    כמות: ${value}`;
   }
 }

@@ -5,35 +5,41 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-leader-board',
   templateUrl: './leader-board.component.html',
-  styleUrls: ['./leader-board.component.css']
+  styleUrls: ['./leader-board.component.css'],
 })
 export class LeaderBoardComponent implements OnInit {
   data: object[] = [];
   loading: boolean;
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
     this.getLeaderboard();
   }
 
   editData(data): void {
-    this.data = _.map(data, (bucket) => {
+    this.data = _.map(data, bucket => {
       return {
         name: bucket.key,
-        value: bucket.doc_count
-      }
-    })
+        series: [
+          {
+            name: 'משימות שהושלמו',
+            value: bucket.done,
+          },
+          {
+            name: 'כל המשימות',
+            value: bucket.total,
+          },
+        ],
+      };
+    });
   }
 
   getLeaderboard(): void {
     this.loading = true;
-    this.taskService.getLeaderboard()
-      .subscribe(data => {
-        this.loading = false;
-        this.editData(data);
-      });
+    this.taskService.getLeaderboard().subscribe(data => {
+      this.loading = false;
+      this.editData(data);
+    });
   }
-
-
 }

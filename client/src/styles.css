@@ -72,6 +72,7 @@ html, body{
     font-family: 'Alef', sans-serif;
     height: 100%;
     overflow: hidden; /*for introjs*/
+    text-rendering: optimizeLegibility;
 }
 
 body{
@@ -84,4 +85,9 @@ angular-tag-cloud.custom-css > span:hover { cursor: pointer; }
 /*for introjs*/
 .introjs-tooltiptext{
   /* font-family: 'Alef'; */
+}
+
+/*remove highchart watermark*/
+.highcharts-credits{
+  display: none !important;
 }

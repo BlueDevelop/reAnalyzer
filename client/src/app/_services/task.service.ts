@@ -56,6 +56,8 @@ export class TaskService {
     let newConfig = this.filterService.config;
     newConfig.params['field'] = 'due';
     newConfig.params['interval'] = interval;
+    console.log('newConfig');
+    console.log(newConfig);
     return this.http
       .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
       .pipe(

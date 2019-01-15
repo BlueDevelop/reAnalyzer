@@ -29,6 +29,7 @@ export default class TaskService {
         : TaskService.prefixQuery(filter, officeCreated, officeAssign);
 
     const body: any = {
+      size: 10000,
       query: {
         bool: {
           must: [
@@ -302,6 +303,66 @@ export default class TaskService {
    * @param {object[]} filter filter by users.
    * @param {number?} size The number of tags, defaults to 10.
    */
+  public static getTotalTasksCount(
+    from: number,
+    to: number,
+    filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
+    size?: number
+  ) {
+    // dont filter by creator only look at assignees
+    const should = TaskService.prefixQuery(filter, false);
+
+    return TaskService.client.search({
+      index: TaskService.index,
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                range: {
+                  created: {
+                    gte: from,
+                    lte: to,
+                    format: 'epoch_millis',
+                  },
+                },
+              },
+            ],
+            filter: [],
+            should,
+            minimum_should_match: 1,
+            must_not: [],
+          },
+        },
+        aggregations: {
+          1: {
+            terms: {
+              //field: 'assign.id.keyword',
+              // the :? operator returns the right side expression if its not null otherwise it returns the left side expression
+              // new: "doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ?:doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value",
+              script:
+                "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
+              size: size || 10,
+              order: {
+                _count: 'desc',
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  /**
+   * Returns the first {size} users ordered by completed tasks in a given time range.
+   *
+   * @param {number} from Date to search from in epoch_millis.
+   * @param {number} to Date to search to in epoch_millis.
+   * @param {object[]} filter filter by users.
+   * @param {number?} size The number of tags, defaults to 10.
+   */
   public static getLeaderboard(
     from: number,
     to: number,
@@ -349,8 +410,7 @@ export default class TaskService {
               //field: 'assign.id.keyword',
               // the :? operator returns the right side expression if its not null otherwise it returns the left side expression
               // new: "doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ?:doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value",
-              script:
-                "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
+              script: "doc['assign.id.keyword'].value",
               size: size || 10,
               order: {
                 _count: 'desc',

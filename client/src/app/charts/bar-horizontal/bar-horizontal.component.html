@@ -1,5 +1,5 @@
 <div class="chart">
-<ngx-charts-bar-horizontal *ngIf="data.length>0 else noData"
+<ngx-charts-bar-horizontal-2d *ngIf="data.length>0 else noData"
   [scheme]="colorScheme"
   [results]="data"
   [gradient]="gradient"
@@ -14,6 +14,6 @@
   [roundDomains]="roundDomains"
   [showDataLabel]="showDataLabel"
   (select)="onSelect($event)">
-</ngx-charts-bar-horizontal>
+</ngx-charts-bar-horizontal-2d>
 </div>
 <ng-template #noData>אין נתונים להצגה</ng-template>

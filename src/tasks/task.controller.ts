@@ -233,11 +233,13 @@ export default class TaskController {
         ? req.query.officeMembers
         : req.query.users;
 
+      console.log('===FILTER===');
+      console.log(filter);
       verboseLogger.verbose(
         `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
       );
 
-      const response = await taskService.getLeaderboard(
+      const doneTasksCount = await taskService.getLeaderboard(
         +req.query.from,
         +req.query.to,
         filter,
@@ -245,15 +247,52 @@ export default class TaskController {
         req.query.officeAssign,
         size
       );
+      console.log('===DONE TASKS COUNT===');
+      console.log(doneTasksCount.aggregations['1'].buckets);
 
-      verboseLogger.verbose(
-        `getLeaderboard function returned ${
-          response.aggregations['1'].buckets
-        }.`
+      //get the top users with most done tasks
+      const topUsers = _.map(doneTasksCount.aggregations['1'].buckets, obj => {
+        return { id: obj.key };
+      });
+      console.log('===TOP USERS===');
+      console.log(topUsers);
+
+      // get total tasks count for the top users
+      const totalTasksCount = await taskService.getTotalTasksCount(
+        +req.query.from,
+        +req.query.to,
+        topUsers,
+        req.query.officeCreated,
+        req.query.officeAssign,
+        size
       );
-      console.log('LeaderBoard');
-      console.log(response.aggregations);
-      return res.json(response.aggregations['1'].buckets);
+
+      console.log('===Total TASKS COUNT===');
+      console.log(totalTasksCount.aggregations['1'].buckets);
+      const response = _.map(
+        doneTasksCount.aggregations['1'].buckets,
+        bucket => {
+          const index = _.findIndex(
+            totalTasksCount.aggregations['1'].buckets,
+            (o: any) => {
+              return o['key'].includes(bucket['key']);
+            }
+          );
+          return {
+            key: totalTasksCount.aggregations['1'].buckets[index]['key'],
+            done: bucket['doc_count'],
+            total:
+              totalTasksCount.aggregations['1'].buckets[index]['doc_count'],
+          };
+        }
+      );
+
+      console.log('===response===');
+      console.log(response);
+
+      verboseLogger.verbose(`getLeaderboard function returned ${response}.`);
+
+      return res.json(response);
     } catch (err) {
       errorLogger.error('%j', {
         message: err.message,
@@ -371,9 +410,8 @@ export default class TaskController {
         // Calculate ratio - ((done-start) / (due-start))*100 - for precentage.
 
         const ratio =
-          (Math.abs(maxStatusDate - minAssignDate) /
-            Math.abs(due - minAssignDate)) *
-          100;
+          Math.abs(maxStatusDate - minAssignDate) /
+          Math.abs(due - minAssignDate);
 
         return ratio;
       });
@@ -395,14 +433,16 @@ export default class TaskController {
         } else if (ratio >= 1 && ratio < 10) {
           return above100buckets[Math.floor((ratio - 1) / above100interval)];
         } else {
-          return '+';
+          return '<1000%';
         }
       });
       for (let key in ratiosCounts) {
-        groupedRatios.ratios.push({
-          name: key,
-          value: ratiosCounts[key].length,
-        });
+        if (key != '-') {
+          groupedRatios.ratios.push({
+            name: key,
+            value: ratiosCounts[key].length,
+          });
+        }
       }
 
       verboseLogger.verbose(

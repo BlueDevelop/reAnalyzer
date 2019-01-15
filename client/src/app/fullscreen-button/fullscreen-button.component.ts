@@ -7,9 +7,19 @@ import * as screenfull from 'screenfull';
 })
 export class FullscreenButtonComponent implements OnInit {
   constructor() {}
+
+  addCSSRule(sheet, selector, rules, index) {
+    if ('insertRule' in sheet) {
+      sheet.insertRule(selector + '{' + rules + '}', index);
+    } else if ('addRule' in sheet) {
+      sheet.addRule(selector, rules, index);
+    }
+  }
   fullscreen() {
-    console.log('something');
     const dashboard = document.getElementById('dashboard'); //documentElement;
+    // dashboard.style.backgroundColor = 'white';
+    // const dashboard = document.documentElement;
+
     // if (dashboard.requestFullscreen) {
     //   dashboard.requestFullscreen();
     // } else if (dashboard['mozRequestFullScreen']) {

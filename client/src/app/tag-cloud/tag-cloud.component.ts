@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
+import * as Highcharts from 'highcharts';
+// import HC_exporting from 'highcharts/modules/exporting';
+import wordcloud from 'highcharts/modules/wordcloud.src';
+
+wordcloud(Highcharts);
+// HC_exporting(Highcharts);
 import {
   CloudData,
   CloudOptions,
@@ -14,50 +20,108 @@ import {
   styleUrls: ['./tag-cloud.component.css'],
 })
 export class TagCloudComponent implements OnInit {
-  options: CloudOptions = {
-    // if width is between 0 and 1 it will be set to the size of the upper element multiplied by the value 
-    width: 1200,
-    height: 700,
-    overflow: false,
-  };
-
-  zoomOnHoverOptions: ZoomOnHoverOptions = {
-    scale: 1.3, // Elements will become 130 % of current zize on hover
-    transitionTime: 1.2, // it will take 1.2 seconds until the zoom level defined in scale property has been reached
-    delay: 0.4, // Zoom will take affect after 0.8 seconds
-  };
-
-  data: CloudData[] = [];
+  chart: Highcharts.Chart;
+  title = 'highchart-test';
+  Highcharts = Highcharts;
+  updateFlag = true;
+  data: any[] = [];
   loading: boolean;
-  constructor(private taskService: TaskService, private settingsService: SettingsService) { }
+  colors: any[] = [];
+
+  chartOptions = {
+    chart: {
+      backgroundColor: 'rgba(255,255,255,0.0)',
+      height: '70%',
+      animation: true,
+    },
+    series: [
+      {
+        style: { fontFamily: 'Alef', fontWeight: '900' },
+        name: 'תדירות',
+        type: 'wordcloud',
+        // spiral: 'archimedean',
+        placementStrategy: 'center',
+        data: this.data,
+        colors: this.colors,
+        rotation: {
+          from: 0,
+          to: 0,
+          orientations: 5,
+        },
+      },
+    ],
+    title: {
+      text: '',
+    },
+    tooltip: {
+      enabled: true,
+    },
+  };
+
+  constructor(
+    private taskService: TaskService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit() {
     this.getTagClouds();
   }
 
   editData(data: any): void {
-    const docCounts = _.map(data, (bucket => bucket.doc_count));
+    const docCounts = _.map(data, bucket => bucket.doc_count);
     let uniqueCounts = _.uniq(docCounts).sort();
-    let colors = this.settingsService.getColorDomain(uniqueCounts.length);
+    this.colors = this.settingsService.getColorDomain(uniqueCounts.length);
     this.data = _.map(data, (bucket, index) => {
       return {
-        text: bucket.key,
+        name: bucket.key,
         weight: bucket.doc_count,
-        color: colors[_.indexOf(uniqueCounts, bucket.doc_count)]
-      }
+        color: this.colors[_.indexOf(uniqueCounts, bucket.doc_count)],
+      };
     });
   }
 
   getTagClouds(): void {
     this.loading = true;
-    this.taskService.getTagClouds()
-      .subscribe(data => {
-        this.loading = false;
-        this.editData(data);
-      });
+    this.taskService.getTagClouds().subscribe(data => {
+      this.loading = false;
+      this.editData(data);
+      this.chartOptions = {
+        ...this.chartOptions,
+        series: [
+          {
+            style: { fontFamily: 'Alef', fontWeight: '900' },
+            name: 'תדירות',
+            type: 'wordcloud',
+            // spiral: 'archimedean',
+            placementStrategy: 'center',
+            data: this.data,
+            colors: this.colors,
+            rotation: {
+              from: 0,
+              to: 0,
+              orientations: 5,
+            },
+          },
+        ],
+      };
+    });
+  }
+  getChartInstance(chart: Highcharts.Chart) {
+    console.log('get chart instance');
+    this.chart = chart;
   }
 
   onClickTag(tagClicked: CloudData) {
     console.log(tagClicked);
+  }
+  onResize() {
+    // this.tagCloudComponent.reDraw();
+    this.chart.update({
+      chart: {
+        height: window.innerHeight * 0.42,
+      },
+    });
+    this.chart.reflow();
+    console.log(this.chart);
   }
 }

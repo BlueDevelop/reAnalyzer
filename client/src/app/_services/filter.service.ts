@@ -28,7 +28,7 @@ export class FilterService {
     units: [],
     discussions: [],
     projects: [],
-    officeCreated: false,
+    officeCreated: true,
     officeAssign: false,
   };
 

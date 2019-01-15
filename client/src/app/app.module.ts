@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagCloudModule } from 'angular-tag-cloud-module';
 import { ColorPickerModule } from 'ngx-color-picker';
 
+import { HighchartsChartModule } from "highcharts-angular";
+
 // import ngx-translate and the http loader
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -77,6 +79,7 @@ import { PdfButtonComponent } from './pdf-button/pdf-button.component';
     TagCloudModule,
     ColorPickerModule,
     HttpClientModule,
+    HighchartsChartModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

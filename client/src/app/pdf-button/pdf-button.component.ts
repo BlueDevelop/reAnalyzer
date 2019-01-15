@@ -15,6 +15,19 @@ export class PdfButtonComponent implements OnInit {
 
   savePDF() {
     var data = document.getElementById('dashboard');
+    var array = document.querySelectorAll('.ngx-charts .grid-panel rect');
+    if (array) {
+      array.forEach(function(elem) {
+        elem['style'].fill = 'rgba(0,0,0,0)';
+      });
+    }
+
+    //remove highcharts credit from pdf
+    var ignoreHCCElement = document.getElementsByClassName(
+      'highcharts-credits'
+    );
+    ignoreHCCElement[0].setAttribute('data-html2canvas-ignore', 'true');
+
     html2canvas(data).then(canvas => {
       // Few necessary setting options
       var imgWidth = canvas.width;

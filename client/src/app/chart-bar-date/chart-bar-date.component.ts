@@ -74,19 +74,11 @@ export class ChartBarDateComponent implements OnInit {
 
   editData(data): void {
     this.data = _.map(data, bucket => {
-      if (this.intervals[this.interval] == '1w') {
-        return {
-          name: bucket.key,
-          value: bucket.doc_count,
-          // tooltip: this.generateTooltip(bucket.key),
-        };
-      } else {
-        return {
-          name: bucket.key, //.format("DD/MM/YYYY"),
-          value: bucket.doc_count,
-          // tooltip: _moment(bucket.key).format('DD/MM/YYYY'),
-        };
-      }
+      return {
+        name: bucket.key, //.format("DD/MM/YYYY"),
+        value: bucket.doc_count,
+        // tooltip: _moment(bucket.key).format('DD/MM/YYYY'),
+      };
     });
   }
 
