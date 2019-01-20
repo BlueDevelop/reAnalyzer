@@ -24,6 +24,15 @@
   .tab-bar{
       display: flex;
       justify-content: space-between !important;
+      background-color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+  }
+  mat-divider{
+    position: sticky;
+    top: 70px;
+    z-index: 1000;
   }
 
   .avatar {

@@ -1,6 +1,7 @@
 import esClient from '../helpers/elasticsearch.helper';
 import Itask from './task.interface';
 import * as _ from 'lodash';
+import { stat } from 'fs';
 
 export default class TaskService {
   public static index = 'tasks_test';
@@ -19,33 +20,41 @@ export default class TaskService {
     filter: object[] = [],
     officeCreated: boolean,
     officeAssign: boolean,
-    field?: string
+    field?: string,
+    officeMembers: object[] = []
   ) {
     const searchField = field || '_id';
 
-    const should =
-      officeCreated == false && officeAssign == false
-        ? TaskService.prefixQuery(filter)
-        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-
+    // const should =
+    //   officeCreated == false && officeAssign == false
+    //     ? TaskService.prefixQuery(filter)
+    //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
+    const should = TaskService.prefixQuery(filter);
+    const staticMust = [
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+      {
+        match: {},
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
     const body: any = {
       size: 10000,
       query: {
         bool: {
-          must: [
-            {
-              range: {
-                created: {
-                  gte: from,
-                  lte: to,
-                  format: 'epoch_millis',
-                },
-              },
-            },
-            {
-              match: {},
-            },
-          ],
+          must,
           filter: [],
           should,
           minimum_should_match: 1,
@@ -76,13 +85,32 @@ export default class TaskService {
     filter: object[] = [],
     officeCreated: boolean,
     officeAssign: boolean,
-    interval?: string
+    interval?: string,
+    officeMembers: object[] = []
   ) {
-    const should =
-      officeCreated == false && officeAssign == false
-        ? TaskService.prefixQuery(filter)
-        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-
+  
+    // const should =
+    //   officeCreated == false && officeAssign == false
+    //     ? TaskService.prefixQuery(filter)
+    //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
+    const should = TaskService.prefixQuery(filter);
+    const staticMust = [
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
     return TaskService.client.search<Itask>({
       index: TaskService.index,
       body: {
@@ -115,17 +143,7 @@ export default class TaskService {
         ],
         query: {
           bool: {
-            must: [
-              {
-                range: {
-                  created: {
-                    gte: from,
-                    lte: to,
-                    format: 'epoch_millis',
-                  },
-                },
-              },
-            ],
+            must,
             filter: [
               {
                 match_all: {},
@@ -152,13 +170,31 @@ export default class TaskService {
     to: number,
     filter: object[] = [],
     officeCreated: boolean,
-    officeAssign: boolean
+    officeAssign: boolean,
+    officeMembers: object[] = []
   ) {
-    const should =
-      officeCreated == false && officeAssign == false
-        ? TaskService.prefixQuery(filter)
-        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-
+    // const should =
+    //   officeCreated == false && officeAssign == false
+    //     ? TaskService.prefixQuery(filter)
+    //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
+    const should = TaskService.prefixQuery(filter);
+    const staticMust = [
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -192,17 +228,7 @@ export default class TaskService {
         ],
         query: {
           bool: {
-            must: [
-              {
-                range: {
-                  created: {
-                    gte: from,
-                    lte: to,
-                    format: 'epoch_millis',
-                  },
-                },
-              },
-            ],
+            must,
             filter: [
               {
                 match_all: {},
@@ -231,13 +257,34 @@ export default class TaskService {
     filter: object[] = [],
     officeCreated: boolean,
     officeAssign: boolean,
-    size?: number
+    size?: number,
+    officeMembers: object[] = []
   ) {
-    const should =
-      officeCreated == false && officeAssign == false
-        ? TaskService.prefixQuery(filter)
-        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-
+    // const should =
+    //   officeCreated == false && officeAssign == false
+    //     ? TaskService.prefixQuery(filter)
+    //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
+    const should = TaskService.prefixQuery(filter);
+    const staticMust = [
+      {
+        match_all: {},
+      },
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
     return TaskService.client.search({
       index: TaskService.index,
       body: {
@@ -271,20 +318,7 @@ export default class TaskService {
         ],
         query: {
           bool: {
-            must: [
-              {
-                match_all: {},
-              },
-              {
-                range: {
-                  created: {
-                    gte: from,
-                    lte: to,
-                    format: 'epoch_millis',
-                  },
-                },
-              },
-            ],
+            must,
             filter: [],
             should,
             minimum_should_match: 1,
@@ -309,27 +343,34 @@ export default class TaskService {
     filter: object[] = [],
     officeCreated: boolean,
     officeAssign: boolean,
-    size?: number
+    size?: number,
+    officeMembers: object[] = []
   ) {
     // dont filter by creator only look at assignees
     const should = TaskService.prefixQuery(filter, false);
-
+    const staticMust = [
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
     return TaskService.client.search({
       index: TaskService.index,
       body: {
         query: {
           bool: {
-            must: [
-              {
-                range: {
-                  created: {
-                    gte: from,
-                    lte: to,
-                    format: 'epoch_millis',
-                  },
-                },
-              },
-            ],
+            must,
             filter: [],
             should,
             minimum_should_match: 1,
@@ -369,35 +410,38 @@ export default class TaskService {
     filter: object[] = [],
     officeCreated: boolean,
     officeAssign: boolean,
-    size?: number
+    size?: number,
+    officeMembers: object[] = []
   ) {
-    // dont filter by creator only look at assignees
-    const should =
-      officeCreated == false && officeAssign == false
-        ? TaskService.prefixQuery(filter, false)
-        : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-
-    return TaskService.client.search({
+    const should = TaskService.prefixQuery(filter, false);
+    const staticMust = [
+      {
+        terms: {
+          'status.keyword': ['done'],
+        },
+      },
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
+    let esQuery: any = {
       index: TaskService.index,
       body: {
         query: {
           bool: {
-            must: [
-              {
-                terms: {
-                  'status.keyword': ['done'],
-                },
-              },
-              {
-                range: {
-                  created: {
-                    gte: from,
-                    lte: to,
-                    format: 'epoch_millis',
-                  },
-                },
-              },
-            ],
+            must,
             filter: [],
             should,
             minimum_should_match: 1,
@@ -419,7 +463,8 @@ export default class TaskService {
           },
         },
       },
-    });
+    };
+    return TaskService.client.search(esQuery);
   }
 
   private static client = esClient.getClient();
@@ -456,4 +501,48 @@ export default class TaskService {
     });
     return should;
   }
+}
+
+function generateOfficeMembersMust(
+  officeMembers: object[],
+  officeCreated: boolean,
+  officeAssign: boolean
+) {
+  const officeMembersIDs = _.map(officeMembers, (om: any) => om.id);
+  console.log('officeMembersIDs:');
+  console.log(officeMembersIDs);
+  if (officeMembers.length <= 0) return {};
+  if (officeCreated)
+    return {
+      query_string: {
+        fields: ['creator.id.keyword'],
+        query: _.map(officeMembersIDs, id => `${id}*`).join(' OR '),
+        minimum_should_match: 1,
+      },
+    };
+  else if (officeAssign)
+    return {
+      query_string: {
+        fields: ['assign.id.keyword'],
+        query: _.map(officeMembersIDs, id => `${id}*`).join(' OR '),
+        minimum_should_match: 1,
+      },
+    };
+  return {};
+}
+
+function generateMust(
+  staticMust: any[],
+  officeMembers: object[],
+  officeCreated: boolean,
+  officeAssign: boolean
+) {
+  if (
+    generateOfficeMembersMust(officeMembers, officeCreated, officeAssign)
+      .query_string
+  )
+    staticMust.push(
+      generateOfficeMembersMust(officeMembers, officeCreated, officeAssign)
+    );
+  return staticMust;
 }

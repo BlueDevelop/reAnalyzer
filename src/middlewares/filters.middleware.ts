@@ -86,6 +86,8 @@ async function getMembersOfHierarchy(
     console.log('filters office members');
     console.log(req.query.officeMembers);
     //req.query.officeMembers = _.union([req.user], req.query.officeMembers);
+  } else {
+    req.query.officeMembers = [];
   }
   next();
 }

@@ -55,6 +55,9 @@ export class TagCloudComponent implements OnInit {
     },
     tooltip: {
       enabled: true,
+      useHTML: true,
+      headerFormat: '<small style="direction:rtl">{point.key}</small><br/>',
+      pointFormat: '{series.name}: <b>{point.weight}</b>',
     },
   };
 
