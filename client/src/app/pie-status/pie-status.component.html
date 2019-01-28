@@ -1,4 +1,5 @@
-<app-pie [data]="data" legendTitle="סטטוס" *ngIf="data.length>0 else spinner"></app-pie>
+<!-- <app-pie [data]="data" legendTitle="סטטוס" *ngIf="data.length>0 else spinner"></app-pie> -->
+<app-pie-chart name="משימות" [data]="data" legendTitle="סטטוס" *ngIf="data.length>0 else spinner"></app-pie-chart>
 <ng-template #spinner>
     <mat-spinner *ngIf="loading"></mat-spinner>
     <div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>

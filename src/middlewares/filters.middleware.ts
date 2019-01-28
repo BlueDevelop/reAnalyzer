@@ -16,7 +16,7 @@ function parseFiltersFromQueryString(
   next: NextFunction
 ) {
   const sep: string = ',';
-  const paramsToParse = ['units', 'discussions', 'projects'];
+  const paramsToParse = ['units', 'discussions', 'projects', 'persons'];
   // creates a new object based of req.query where the values of the keys in paramsToParse are parsed.
   req.query = _.mapValues(
     req.query,

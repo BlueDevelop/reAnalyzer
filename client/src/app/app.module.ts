@@ -40,6 +40,9 @@ import { IntroButtonComponent } from './intro-button/intro-button.component';
 import { FullscreenButtonComponent } from './fullscreen-button/fullscreen-button.component';
 import { InfoButtonComponent } from './info-button/info-button.component';
 import { PdfButtonComponent } from './pdf-button/pdf-button.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { TimelineChartComponent } from './timeline-chart/timeline-chart.component';
+import { LeaderboardChartComponent } from './leaderboard-chart/leaderboard-chart.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +70,9 @@ import { PdfButtonComponent } from './pdf-button/pdf-button.component';
     FullscreenButtonComponent,
     InfoButtonComponent,
     PdfButtonComponent,
+    PieChartComponent,
+    TimelineChartComponent,
+    LeaderboardChartComponent,
   ],
   imports: [
     BrowserModule,

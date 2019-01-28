@@ -29,7 +29,7 @@ export class PieStatusComponent implements OnInit {
     this.data = _.map(data, bucket => {
       return {
         name: translateStatus[bucket.key],
-        value: bucket.doc_count,
+        y: bucket.doc_count,
       };
     });
   }

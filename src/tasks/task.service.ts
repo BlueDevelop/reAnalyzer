@@ -88,7 +88,6 @@ export default class TaskService {
     interval?: string,
     officeMembers: object[] = []
   ) {
-  
     // const should =
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
@@ -118,7 +117,8 @@ export default class TaskService {
           1: {
             date_histogram: {
               field,
-              interval: interval || '1d',
+              // interval: interval || '1d',
+              interval: '1h',
               time_zone: 'Asia/Jerusalem',
               min_doc_count: 1,
             },

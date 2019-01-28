@@ -1,0 +1,18 @@
+<div (window:resize)="onResize($event)">
+<highcharts-chart
+  [Highcharts]="Highcharts"
+ 
+  [constructorType]="chartConstructor"
+  [options]="chartOptions"
+  [callbackFunction]="getChartInstance"
+ 
+  [(update)]="updateFlag"
+  [oneToOne]="oneToOneFlag"
+  [runOutsideAngular]="runOutsideAngularFlag"
+
+  (chartInstance)="getChartInstance($event)"
+ 
+  style="width: 100%; display: block;"
+>
+</highcharts-chart>
+</div>

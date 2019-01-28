@@ -23,7 +23,9 @@ export class TimeRatesComponent implements OnInit {
     this.loading = true;
     this.taskService.getTimeRates().subscribe(data => {
       this.loading = false;
-      this.data = data.ratios;
+      this.data = _.map(data.ratios, ratio => {
+        return { name: ratio.name, y: ratio.value };
+      });
     });
   }
 }

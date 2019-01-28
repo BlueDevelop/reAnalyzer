@@ -110,7 +110,6 @@ export class TagCloudComponent implements OnInit {
     });
   }
   getChartInstance(chart: Highcharts.Chart) {
-    console.log('get chart instance');
     this.chart = chart;
   }
 

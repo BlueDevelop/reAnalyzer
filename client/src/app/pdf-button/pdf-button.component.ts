@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-pdf-button',
@@ -23,10 +24,12 @@ export class PdfButtonComponent implements OnInit {
     }
 
     //remove highcharts credit from pdf
-    var ignoreHCCElement = document.getElementsByClassName(
+    var ignoreHCCElements = document.getElementsByClassName(
       'highcharts-credits'
     );
-    ignoreHCCElement[0].setAttribute('data-html2canvas-ignore', 'true');
+    _.map(ignoreHCCElements, element => {
+      element.setAttribute('data-html2canvas-ignore', 'true');
+    });
 
     html2canvas(data).then(canvas => {
       // Few necessary setting options

@@ -1,9 +1,13 @@
 <div class="container" *ngIf="data.length>0 else spinner">
     <div class="chart">
-<app-bar  [interval]="interval" [xAxisTickFormatting]="formatting" [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]">
-</app-bar>
+<!-- <app-bar  [interval]="interval" [xAxisTickFormatting]="formatting" [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]"></app-bar> -->
+<mat-radio-group (change)="changeInterval()" [(ngModel)]="interval">
+  <mat-radio-button *ngFor="let interval of intervals" [value]="interval" >{{ interval | translate}}</mat-radio-button>
+</mat-radio-group>
+<app-timeline-chart [data]="data" name="משימות"></app-timeline-chart>
 </div>
-<div class="slider">
+</div>
+<!-- <div class="slider">
         <p class="example-h2">מרווח זמן</p>
 <mat-slider color="primary"
 
@@ -21,7 +25,7 @@
   (change)="changeInterval()">
 </mat-slider>
 </div>
-</div>
+</div> -->
 <!-- <app-apex-chart></app-apex-chart> -->
 <ng-template #spinner>
   <mat-spinner *ngIf="loading"></mat-spinner>

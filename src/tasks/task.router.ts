@@ -30,6 +30,14 @@ router.get(
   taskController.getFieldCountPerInterval
 );
 
+router.get(
+  '/statusCountOfPersons',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.statusCountOfPersons
+);
+
 /**
  * GET /task/tagCloud?from=123&to=124&size=40.
  * the size field is optional and defaults to 40.

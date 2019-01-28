@@ -8,6 +8,12 @@
         "review":"בבדיקה",
         "waiting-approval":"ממתין לאישור"
     },
+    "day":"יום",
+    "month":"חודש",
+    "week":"שבוע",
+    "year":"שנה",
+    "without":"ללא",
+
     "unit":"חברה",
     "dashboard":"לוח ראשי",
     "units":"חברות",

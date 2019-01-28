@@ -459,6 +459,30 @@ export default class TaskController {
       return res.status(500);
     }
   }
+  /**
+   *
+   * @param req
+   * @param res
+   * @description gets the tasks statuses for each person
+   */
+  public static async statusCountOfPersons(req: Request, res: Response) {
+    const { persons } = req.query;
+    //TODO: add intersection of persons and people under my hierarchy
+    const responsesPromises: any = _.map(persons, async person => {
+      const response = await taskService.getCountByStatus(
+        +req.query.from,
+        +req.query.to,
+        [person],
+        req.query.officeCreated,
+        req.query.officeAssign
+      );
+      return response.aggregations['1'].buckets;
+    });
+    const responses: any = Promise.all(responsesPromises);
+
+    res.json(responses);
+    console.log(responses);
+  }
 
   /**
    * returns formatted email as userId.
