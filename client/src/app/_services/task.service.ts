@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 //import { config } from '../../config';
@@ -53,28 +53,34 @@ export class TaskService {
   }
 
   getFieldCountPerInterval(interval): Observable<any> {
-    let newConfig = this.filterService.config;
-    newConfig.params['field'] = 'due';
-    newConfig.params['interval'] = interval;
-    console.log('newConfig');
-    console.log(newConfig);
-    return this.http
-      .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
-      .pipe(
-        tap(data =>
-          this.logsService.log(
-            this.serviceName,
-            'fetched data from getFieldCountPerInterval'
+    const getObservableForInterval = field => {
+      let newConfig = this.filterService.config;
+      newConfig.params['field'] = field; //'due';
+      newConfig.params['interval'] = interval;
+      console.log('newConfig');
+      console.log(newConfig);
+      return this.http
+        .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
+        .pipe(
+          tap(data =>
+            this.logsService.log(
+              this.serviceName,
+              'fetched data from getFieldCountPerInterval'
+            )
+          ),
+          catchError(
+            this.logsService.handleError(
+              this.serviceName,
+              'getFieldCountPerInterval',
+              []
+            )
           )
-        ),
-        catchError(
-          this.logsService.handleError(
-            this.serviceName,
-            'getFieldCountPerInterval',
-            []
-          )
-        )
-      );
+        );
+    };
+    return forkJoin([
+      getObservableForInterval('due'),
+      getObservableForInterval('created'),
+    ]);
   }
 
   getTagClouds(): Observable<any> {

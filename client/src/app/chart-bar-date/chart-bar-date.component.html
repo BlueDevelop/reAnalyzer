@@ -1,10 +1,10 @@
-<div class="container" *ngIf="data.length>0 else spinner">
+<div class="container" *ngIf="data[0] && data[0].length>0 else spinner">
     <div class="chart">
 <!-- <app-bar  [interval]="interval" [xAxisTickFormatting]="formatting" [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]"></app-bar> -->
 <mat-radio-group (change)="changeInterval()" [(ngModel)]="interval">
-  <mat-radio-button *ngFor="let interval of intervals" [value]="interval" >{{ interval | translate}}</mat-radio-button>
+  <mat-radio-button *ngFor="let interval of intervals"  [value]="interval" >{{ interval | translate}}</mat-radio-button>
 </mat-radio-group>
-<app-timeline-chart [data]="data" name="משימות"></app-timeline-chart>
+<app-timeline-chart [interval]="interval" [data]="data" name="משימות"></app-timeline-chart>
 </div>
 </div>
 <!-- <div class="slider">
@@ -29,7 +29,7 @@
 <!-- <app-apex-chart></app-apex-chart> -->
 <ng-template #spinner>
   <mat-spinner *ngIf="loading"></mat-spinner>
-  <div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>
+  <div *ngIf="data[0] && data[0].length==0&&!loading">אין נתונים להצגה </div>
 </ng-template>
 <!-- <ng-template #noData>
   אין נתונים להצגה 

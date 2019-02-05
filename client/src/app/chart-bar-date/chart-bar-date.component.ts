@@ -79,24 +79,30 @@ export class ChartBarDateComponent implements OnInit {
   // }
 
   editData(data): void {
-    this.data = _.map(data, bucket => {
-      return {
-        x: bucket.key, //.format("DD/MM/YYYY"),
-        y: bucket.doc_count,
-        // tooltip: _moment(bucket.key).format('DD/MM/YYYY'),
-      };
-    });
+    this.data = _.map(data, series =>
+      _.map(series, bucket => {
+        return {
+          x: bucket.key, //.format("DD/MM/YYYY"),
+          y: bucket.doc_count,
+          // tooltip: _moment(bucket.key).format('DD/MM/YYYY'),
+        };
+      })
+    );
     this.aggData.without = this.data;
     _.forEach(this.intervals, interval => {
       if (interval != 'without') {
-        let currAgg: any = _.groupBy(this.data, bucket => {
-          console.log(bucket['x']);
-          return moment(bucket['x']).startOf(interval as any);
-        });
+        let currAgg: any = _.map(this.data, series =>
+          _.groupBy(series, bucket => {
+            console.log(bucket['x']);
+            return moment(bucket['x']).startOf(interval as any);
+          })
+        );
 
-        currAgg = _.map(currAgg, (bucket, key) => {
-          return { x: moment(key).valueOf(), y: bucket.length };
-        });
+        currAgg = _.map(currAgg, series =>
+          _.map(series, (bucket, key) => {
+            return { x: moment(key).valueOf(), y: bucket.length };
+          })
+        );
 
         this.aggData[interval] = currAgg;
       }
@@ -112,7 +118,7 @@ export class ChartBarDateComponent implements OnInit {
     this.taskService.getFieldCountPerInterval(interval).subscribe(data => {
       //Move slide to correct position
       // this.interval = this.intervals.indexOf(interval);
-
+      //data array of series [due,created]
       this.loading = false;
       this.editData(data);
     });

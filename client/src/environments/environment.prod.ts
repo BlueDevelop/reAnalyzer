@@ -1,4 +1,5 @@
 export const environment = {
-  production: true,
-  apiUrl: 'http://localhost:4000/api',
+  production: false,
+  apiUrl: '/api', //'http://localhost:4000/api',
+  // assets: '/home/sraya/Desktop/reanalyzer-docker/assets',
 };

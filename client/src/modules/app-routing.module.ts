@@ -10,26 +10,32 @@ import { HomeComponent } from '../app/home/home.component';
 import { SettingsComponent } from '../app/settings/settings.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    {
-        path: 'home', component: HomeComponent, canActivate: [AuthGuard], children: [
-            { path: 'dashboard', component: DashboardComponent, outlet: 'app' },
-            { path: 'units', component: DashboardComponent, outlet: 'app' },
-            { path: 'projects', component: DashboardComponent, outlet: 'app' },
-            { path: 'users', component: DashboardComponent, outlet: 'app' },
-            { path: 'settings', component: SettingsComponent, outlet: 'app' }
-        ]
-    },
-    { path: 'signup', component: SignupComponent },
-    { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent, outlet: 'app' },
+      { path: 'units', component: DashboardComponent, outlet: 'app' },
+      { path: 'projects', component: DashboardComponent, outlet: 'app' },
+      { path: 'users', component: DashboardComponent, outlet: 'app' },
+      {
+        path: 'settings',
+        component: SettingsComponent,
+        outlet: 'app',
+      },
+    ],
+  },
+  { path: 'signup', component: SignupComponent },
+  { path: 'login', component: LoginComponent },
 
-    // otherwise redirect to home
-    { path: '**', redirectTo: '' }
-]
+  // otherwise redirect to home
+  { path: '**', redirectTo: '' },
+];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), HttpClientModule],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes), HttpClientModule],
+  exports: [RouterModule],
 })
-
-export class AppRoutingModule { }
+export class AppRoutingModule {}

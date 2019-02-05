@@ -1,16 +1,13 @@
 <div class="tab-wrap">
 
-    <input type="radio" id="tab1" name="tabGroup1" class="tab" checked>
+    <input type="radio" id="tab1" name="tabGroup1" class="tab" [checked]="activeTab=='colors'">
     <label for="tab1">Colors</label>
   
-    <input type="radio" id="tab2" name="tabGroup1" class="tab">
-    <label for="tab2">Section Two</label>
+    <input type="radio" id="tab2" name="tabGroup1" class="tab" [checked]="activeTab=='profile'">
+    <label for="tab2">Profile</label>
   
     <input type="radio" id="tab3" name="tabGroup1" class="tab">
     <label for="tab3">Section Three</label>
-    
-      <input type="radio" id="tab4" name="tabGroup1" class="tab">
-    <label for="tab4">Section Three</label>
   
     <div class="tab__content">
       <div class="color-template">
@@ -45,13 +42,10 @@
     </div>
   
     <div class="tab__content">
-      <h3>Section Two</h3>
+      <app-user-profile></app-user-profile>
     </div>
   
     <div class="tab__content">
       <h3>Section Three</h3>
-    </div>
-    <div class="tab__content">
-      <h3>fgdfg</h3>
     </div>
   </div>

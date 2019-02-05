@@ -1,5 +1,5 @@
 <div class="avatar">
-  <a href="#">
+  <a [routerLink]="[{ outlets: { app: ['settings'] } }]" [queryParams]="{tabName: 'profile'}">
     <div class="avatar__icon ">
       <div class="avatar__initials">{{initials}}</div>
       <!-- <img class="avatar__image" src="https://s3.amazonaws.com/uifaces/faces/twitter/c_southam/128.jpg" alt="alt"> -->

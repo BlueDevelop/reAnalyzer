@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../_services/settings.service';
 import { ColorPickerModule } from 'ngx-color-picker';
 import * as _ from 'lodash';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -13,6 +14,8 @@ export class SettingsComponent implements OnInit {
   colorsArray: string[];
   showX: boolean[];
   isLoaded: boolean = false;
+  activeTab = this.route.snapshot.queryParams['tabName'] || '';
+
   chartColorsOrdinal = [
     {
       name: 'Vivid',
@@ -321,7 +324,10 @@ export class SettingsComponent implements OnInit {
     },
   ];
 
-  constructor(private settingsService: SettingsService) {
+  constructor(
+    private settingsService: SettingsService,
+    private route: ActivatedRoute
+  ) {
     settingsService.initColorsArray().subscribe(ret => {
       if (settingsService.colorsArray) {
         this.colorsArray = [...settingsService.colorsArray];
@@ -361,5 +367,9 @@ export class SettingsComponent implements OnInit {
     this.colorsArray = [...this.settingsService.colorsArrayDefault];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.activeTab = params['tabName'] || '';
+    });
+  }
 }

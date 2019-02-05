@@ -15,7 +15,11 @@ export class NavBarComponent implements OnInit {
     { path: [{ outlets: { app: ['units'] } }], label: 'units' },
     { path: [{ outlets: { app: ['projects'] } }], label: 'פרויקטים' },
     { path: [{ outlets: { app: ['users'] } }], label: 'משתמשים' },
-    { path: [{ outlets: { app: ['settings'] } }], label: 'הגדרות' },
+    {
+      path: [{ outlets: { app: ['settings'] } }],
+      queryParams: { tabName: 'colors' },
+      label: 'הגדרות',
+    },
   ];
 
   constructor(private userService: UserService) {

@@ -43,6 +43,7 @@ import { PdfButtonComponent } from './pdf-button/pdf-button.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { TimelineChartComponent } from './timeline-chart/timeline-chart.component';
 import { LeaderboardChartComponent } from './leaderboard-chart/leaderboard-chart.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { LeaderboardChartComponent } from './leaderboard-chart/leaderboard-chart
     PieChartComponent,
     TimelineChartComponent,
     LeaderboardChartComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

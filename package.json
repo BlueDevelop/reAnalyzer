@@ -8,13 +8,15 @@
   },
   "main": "index.js",
   "scripts": {
+    "inside":"npm run copy && npm run build",
     "start": "npm run build && node dist/index.js",
     "build": "npm run build:tsc",
     "build:tsc": "npx tsc",
     "test": "npm run build:tsc && npm run test:run",
     "test:run": "NODE_ENV=test npx mocha src/**/*.spec.ts --opts ./mocha.opts",
     "test:coverage": "npm run build:tsc && npx nyc npm run test:run",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'"
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "copy": "cp -r ../mock src/"
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",

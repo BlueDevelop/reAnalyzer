@@ -1,9 +1,12 @@
 <div class="tab-bar">
-  <div class="header-image1"></div>
+  <div class="header-image1">
+    <img src="../../assets/img/krypton.png"/>
+  </div>
   <div>
     <nav mat-tab-nav-bar>
       <a mat-tab-link *ngFor="let link of navLinks"
       [routerLink]="link.path" 
+      [queryParams]="link.queryParams"
       routerLinkActive #rla="routerLinkActive" 
       [active]="rla.isActive">
       {{link.label | translate}}
