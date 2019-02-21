@@ -98,20 +98,9 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     };
   }
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     this.ngOnInit();
-    console.log('onchange');
-    console.log(this.chart);
-    // if (this.chart) {
-    //   this.chart.update({
-    //     ...this.chartOptions,
-    //     series: this.generateSeries(),
-    //   });
-    // }
   }
   ngOnInit() {
-    console.log('timeline data:');
-    console.log(this.data);
     this.colors = this.settingsService.getColorDomain(this.data.length);
     this.chartOptions = {
       ...this.chartOptions,

@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
@@ -20,7 +26,7 @@ const formatXLabels = (str: string) => {
   templateUrl: './leaderboard-chart.component.html',
   styleUrls: ['./leaderboard-chart.component.css'],
 })
-export class LeaderboardChartComponent implements OnInit {
+export class LeaderboardChartComponent implements OnInit, OnChanges {
   @Input()
   data: any;
   @Input()
@@ -82,7 +88,9 @@ export class LeaderboardChartComponent implements OnInit {
     ],
   };
   constructor(private settingsService: SettingsService) {}
-
+  ngOnChanges(changes: SimpleChanges) {
+    this.ngOnInit();
+  }
   ngOnInit() {
     console.log('leaderboard-init');
     console.log(this.chart);

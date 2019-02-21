@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
@@ -11,7 +17,7 @@ const colors: string[] = ['#ff0000', '#00ff00', '#0000ff'];
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.css'],
 })
-export class PieChartComponent implements OnInit {
+export class PieChartComponent implements OnInit, OnChanges {
   @Input()
   data: any[];
   @Input()
@@ -74,6 +80,10 @@ export class PieChartComponent implements OnInit {
     ],
   };
   constructor(private settingsService: SettingsService) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.ngOnInit();
+  }
 
   ngOnInit() {
     console.log('pie-init');
