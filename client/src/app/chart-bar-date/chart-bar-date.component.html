@@ -1,4 +1,4 @@
-<div class="container" *ngIf="data[0] && data[0].length>0 else spinner">
+<div class="container" *ngIf="data[0] && data[0].series.length>0 else spinner">
     <div class="chart">
 <!-- <app-bar  [interval]="interval" [xAxisTickFormatting]="formatting" [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]"></app-bar> -->
 <mat-radio-group (change)="changeInterval()" [(ngModel)]="interval">
@@ -29,7 +29,7 @@
 <!-- <app-apex-chart></app-apex-chart> -->
 <ng-template #spinner>
   <mat-spinner *ngIf="loading"></mat-spinner>
-  <div *ngIf="data[0] && data[0].length==0&&!loading">אין נתונים להצגה </div>
+  <div *ngIf="data[0] && data[0].series.length==0&&!loading">אין נתונים להצגה </div>
 </ng-template>
 <!-- <ng-template #noData>
   אין נתונים להצגה 

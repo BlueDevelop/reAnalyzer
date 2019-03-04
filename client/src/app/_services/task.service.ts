@@ -62,12 +62,12 @@ export class TaskService {
       return this.http
         .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
         .pipe(
-          tap(data =>
+          tap(data => {
             this.logsService.log(
               this.serviceName,
               'fetched data from getFieldCountPerInterval'
-            )
-          ),
+            );
+          }),
           catchError(
             this.logsService.handleError(
               this.serviceName,

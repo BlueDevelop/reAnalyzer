@@ -61,7 +61,10 @@ export default class TaskController {
         }.`
       );
 
-      return res.json(response.aggregations['1'].buckets);
+      return res.json({
+        field: req.query.field,
+        data: response.aggregations['1'].buckets,
+      });
     } catch (err) {
       errorLogger.error('%j', {
         message: err.message,

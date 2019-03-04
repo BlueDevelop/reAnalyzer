@@ -115,8 +115,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   generateSeries() {
     return _.map(this.data, series => {
       return {
-        name: this.name,
-        data: series,
+        name: series.name,
+        data: series.series,
         type: 'area',
         showInLegend: true,
         colors: this.colors,

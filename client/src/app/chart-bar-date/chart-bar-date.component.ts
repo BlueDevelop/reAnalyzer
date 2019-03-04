@@ -79,38 +79,42 @@ export class ChartBarDateComponent implements OnInit {
   // }
 
   editData(data): void {
-    this.data = _.map(data, series =>
-      _.map(series, bucket => {
-        return {
-          x: bucket.key, //.format("DD/MM/YYYY"),
-          y: bucket.doc_count,
-          // tooltip: _moment(bucket.key).format('DD/MM/YYYY'),
-        };
-      })
-    );
+    this.data = _.map(data, series => {
+      return {
+        name: series.field,
+        series: _.map(series.data, bucket => {
+          return {
+            x: bucket.key,
+            y: bucket.doc_count,
+          };
+        }),
+      };
+    });
     this.aggData.without = this.data;
     _.forEach(this.intervals, interval => {
       if (interval != 'without') {
-        let currAgg: any = _.map(this.data, series =>
-          _.groupBy(series, bucket => {
-            console.log(bucket['x']);
-            return moment(bucket['x']).startOf(interval as any);
-          })
-        );
+        let currAgg: any = _.map(this.data, series => {
+          return {
+            name: series['name'],
+            series: _.groupBy(series['series'], bucket => {
+              return moment(bucket['x']).startOf(interval as any);
+            }),
+          };
+        });
 
-        currAgg = _.map(currAgg, series =>
-          _.map(series, (bucket, key) => {
-            return { x: moment(key).valueOf(), y: bucket.length };
-          })
-        );
+        currAgg = _.map(currAgg, series => {
+          return {
+            name: series.name,
+            series: _.map(series['series'], (bucket, key) => {
+              return { x: moment(key).valueOf(), y: bucket.length };
+            }),
+          };
+        });
 
         this.aggData[interval] = currAgg;
       }
     });
     this.data = this.aggData.without; //default
-
-    console.log('aggData');
-    console.log(this.aggData);
   }
 
   getFieldCountPerInterval(interval: string = '1d'): void {
