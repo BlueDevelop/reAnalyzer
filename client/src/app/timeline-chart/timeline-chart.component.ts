@@ -22,14 +22,13 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   @Input()
   innerSize: string;
   @Input()
-  name: string;
-  @Input()
   interval: string = 'without';
   chart: Highcharts.Chart;
   updateFlag = true;
   Highcharts = Highcharts;
   colors: string[] = [];
   intervals: string[] = ['without', 'day', 'week', 'month', 'year'];
+  names: object = { due: 'תאריך יעד', created: 'תאריך יצירה' };
   chartOptions: any = {
     chart: {
       height: window.innerHeight * 0.38,
@@ -72,7 +71,6 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     series: [
       {
         type: 'area',
-        name: this.name,
         data: [],
         size: '80%',
         showInLegend: true,
@@ -115,7 +113,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   generateSeries() {
     return _.map(this.data, series => {
       return {
-        name: series.name,
+        name: this.names[series.name],
         data: series.series,
         type: 'area',
         showInLegend: true,
