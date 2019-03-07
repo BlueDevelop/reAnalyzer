@@ -4,6 +4,8 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
@@ -33,6 +35,8 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
   innerSize: string;
   @Input()
   name: string;
+  @Output()
+  getTasks: EventEmitter<object> = new EventEmitter<object>();
   chart: Highcharts.Chart;
   updateFlag = true;
   Highcharts = Highcharts;
@@ -62,8 +66,6 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       useHTML: true,
       format:
         '<small style="direction:rtl">{point.name}:{point.y}</small><br/>',
-      // headerFormat: '<small style="direction:rtl">{point.name}</small><br/>',
-      // pointFormat: '{point.percentage:.1f} %',
     },
     series: [
       {
@@ -73,10 +75,6 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
           outside: true,
           useHTML: Highcharts['hasBidiBug'],
           enabled: true,
-          // headerFormat:
-          //   '<small style="direction:rtl">{point.name}</small><br/>',
-          // pointFormat: '{point.percentage:.1f} %',
-          // color: 'red',
           format: '{point.percentage:.1f} %',
         },
         data: [],
@@ -92,10 +90,6 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
   ngOnInit() {
-    console.log('leaderboard-init');
-    console.log(this.chart);
-    console.log('leaderboard data');
-    console.log(this.data);
     this.colors = this.settingsService.getColorDomain(2);
     this.chartOptions = {
       ...this.chartOptions,
@@ -115,23 +109,20 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
           name: 'שאר המשימות',
           data: this.data.total,
           color: this.colors[0],
+          events: {
+            click: e => this.getTasks.emit(e.point),
+          },
         },
         {
           name: 'משימות שהושלמו',
           data: this.data.done,
           color: this.colors[1],
+          events: {
+            click: e => this.getTasks.emit(e.point),
+          },
         },
       ],
-      // series: [
-      //   {
-      //     ...this.chartOptions.series[0],
-      //     name: this.name,
-      //     // data: this.data,
-      //     colors: this.colors,
-      //   },
-      // ],
     };
-    // this.chart.update(this.chartOptions);
   }
 
   getChartInstance(chart: Highcharts.Chart) {

@@ -4,6 +4,8 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
@@ -24,6 +26,8 @@ export class PieChartComponent implements OnInit, OnChanges {
   innerSize: string;
   @Input()
   name: string;
+  @Output()
+  getTasks: EventEmitter<object> = new EventEmitter<object>();
   chart: Highcharts.Chart;
   updateFlag = true;
   Highcharts = Highcharts;
@@ -54,8 +58,6 @@ export class PieChartComponent implements OnInit, OnChanges {
       useHTML: true,
       format:
         '<small style="direction:rtl">{point.name}:{point.y}</small><br/>',
-      // headerFormat: '<small style="direction:rtl">{point.name}</small><br/>',
-      // pointFormat: '{point.percentage:.1f} %',
     },
     series: [
       {
@@ -65,10 +67,6 @@ export class PieChartComponent implements OnInit, OnChanges {
           outside: true,
           useHTML: Highcharts['hasBidiBug'],
           enabled: true,
-          // headerFormat:
-          //   '<small style="direction:rtl">{point.name}</small><br/>',
-          // pointFormat: '{point.percentage:.1f} %',
-          // color: 'red',
           format: '{point.percentage:.1f} %',
         },
         data: [],
@@ -86,8 +84,6 @@ export class PieChartComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    console.log('pie-init');
-    console.log(this.chart);
     this.colors = this.settingsService.getColorDomain(this.data.length);
     this.chartOptions = {
       ...this.chartOptions,
@@ -98,10 +94,12 @@ export class PieChartComponent implements OnInit, OnChanges {
           data: this.data,
           colors: this.colors,
           innerSize: this.innerSize,
+          events: {
+            click: e => this.getTasks.emit(e.point),
+          },
         },
       ],
     };
-    // this.chart.update(this.chartOptions);
   }
 
   getChartInstance(chart: Highcharts.Chart) {

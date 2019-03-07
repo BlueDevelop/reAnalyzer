@@ -15,7 +15,6 @@ export class LeaderBoardComponent implements OnInit {
 
   ngOnInit() {
     this.getLeaderboard();
-    console.log(this.data);
   }
 
   editData(data): void {
@@ -34,21 +33,6 @@ export class LeaderBoardComponent implements OnInit {
     // const names = _.map(data, bucket => bucket.key);
 
     this.data = { done, total, keys };
-    // _.map(data, bucket => {
-    //   return {
-    //     name: bucket.key,
-    //     series: [
-    //       {
-    //         name: 'משימות שהושלמו',
-    //         value: bucket.done,
-    //       },
-    //       {
-    //         name: 'כל המשימות',
-    //         value: bucket.total,
-    //       },
-    //     ],
-    //   };
-    // });
   }
 
   getLeaderboard(): void {
@@ -57,5 +41,13 @@ export class LeaderBoardComponent implements OnInit {
       this.loading = false;
       this.editData(data);
     });
+  }
+
+  getTask(event) {
+    const userId = event.category.substring(
+      event.category.lastIndexOf('\t') + 1,
+      event.category.length
+    );
+    this.taskService.getTasksByFilter({ assign: userId });
   }
 }

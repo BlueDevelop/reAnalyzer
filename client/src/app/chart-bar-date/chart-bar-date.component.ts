@@ -127,4 +127,12 @@ export class ChartBarDateComponent implements OnInit {
       this.editData(data);
     });
   }
+
+  getTask(event) {
+    this.taskService.getTasksByFilter({
+      date: event.category,
+      name: event.series.name,
+      interval: this.interval,
+    });
+  }
 }

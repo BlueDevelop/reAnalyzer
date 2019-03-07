@@ -1,5 +1,5 @@
 <!-- <app-bar-horizontal [data]="data" legendTitle="משתמשים" xAxisLabel="משימות שהסתיימו" yAxisLabel="משתמשים" *ngIf="data.length>0 else spinner"></app-bar-horizontal> -->
-<app-leaderboard-chart name="משימות" [data]="data"  *ngIf="data.done.length>0 else spinner"></app-leaderboard-chart>
+<app-leaderboard-chart name="משימות" [data]="data" (getTasks)="getTask($event)" *ngIf="data.done.length>0 else spinner"></app-leaderboard-chart>
 <ng-template #spinner>
     <mat-spinner *ngIf="loading"></mat-spinner>
     <div *ngIf="data.done.length==0&&!loading">אין נתונים להצגה </div>

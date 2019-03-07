@@ -21,15 +21,6 @@ export class TaskService {
   ) {}
 
   getTaskCountByStatus(): Observable<any> {
-    // let config = {
-    //   params: {
-    //     from: this.filterService.filterParams.date.firstDay.toString(),
-    //     to: this.filterService.filterParams.date.lastDay.toString(),
-    //     projects: this.filterService.filterParams.projects.toString(),
-    //     units: this.filterService.filterParams.units.toString(),
-    //     discussions: this.filterService.filterParams.discussions.toString(),
-    //   },
-    // };
     return this.http
       .get(
         `${environment.apiUrl}/task/countByStatus`,
@@ -57,8 +48,6 @@ export class TaskService {
       let newConfig = this.filterService.config;
       newConfig.params['field'] = field; //'due';
       newConfig.params['interval'] = interval;
-      console.log('newConfig');
-      console.log(newConfig);
       return this.http
         .get(`${environment.apiUrl}/task/fieldCountPerInterval`, newConfig)
         .pipe(
@@ -125,5 +114,10 @@ export class TaskService {
           this.logsService.handleError(this.serviceName, 'getTimeRates', [])
         )
       );
+  }
+
+  getTasksByFilter(filter: object) {
+    let newFilter = { ...this.filterService.config, ...filter };
+    console.log(newFilter);
   }
 }

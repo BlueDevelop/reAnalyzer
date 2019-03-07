@@ -4,7 +4,7 @@
 <mat-radio-group (change)="changeInterval()" [(ngModel)]="interval">
   <mat-radio-button *ngFor="let interval of intervals"  [value]="interval" >{{ interval | translate}}</mat-radio-button>
 </mat-radio-group>
-<app-timeline-chart [interval]="interval" [data]="data"></app-timeline-chart>
+<app-timeline-chart [interval]="interval" [data]="data" (getTasks)="getTask($event)"></app-timeline-chart>
 </div>
 </div>
 <!-- <div class="slider">

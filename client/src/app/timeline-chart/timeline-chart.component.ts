@@ -4,6 +4,8 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
@@ -23,6 +25,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   innerSize: string;
   @Input()
   interval: string = 'without';
+  @Output()
+  getTasks: EventEmitter<object> = new EventEmitter<object>();
   chart: Highcharts.Chart;
   updateFlag = true;
   Highcharts = Highcharts;
@@ -118,6 +122,9 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         type: 'area',
         showInLegend: true,
         colors: this.colors,
+        events: {
+          click: e => this.getTasks.emit(e.point),
+        },
       };
     });
   }

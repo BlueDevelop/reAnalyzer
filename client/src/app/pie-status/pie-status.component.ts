@@ -41,4 +41,8 @@ export class PieStatusComponent implements OnInit {
       this.editData(data);
     });
   }
+
+  getTask(event) {
+    this.taskService.getTasksByFilter({ status: event.name });
+  }
 }
