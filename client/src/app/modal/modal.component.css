@@ -1,0 +1,13 @@
+.container {
+    max-height: 700px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+
+  td{
+      max-width: 300px;
+      min-width: 220px;
+  }

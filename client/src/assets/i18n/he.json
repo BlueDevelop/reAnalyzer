@@ -19,5 +19,16 @@
     "units":"חברות",
     "projects":"פרויקטים",
     "users":"משתמשים",
-    "settings":"הגדרות"
+    "settings":"הגדרות",
+    "created":"תאריך יצירה",
+    "תאריך יצירה":"created",
+    "due":"תאריך יעד",
+    "תאריך יעד":"due",
+    "חדש":"new",
+    "בוצע":"done",
+    "בתהליך":"in-progress",
+    "נדחה":"rejected",
+    "נבחר אחראי":"assigned",
+    "בבדיקה":"review",
+    "ממתין לאישור":"waiting-approval"
 }

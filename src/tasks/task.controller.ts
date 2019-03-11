@@ -462,6 +462,73 @@ export default class TaskController {
       return res.status(500);
     }
   }
+
+  public static buildTasksList(tasks: any[]) {
+    const tasksList = tasks.map(task => {
+      return {
+        title: task.title ? task.title : '',
+        creator: task.creator ? (task.creator.id ? task.creator.id : '') : '',
+        assign: {
+          id: task.assign ? task.assign.id : '',
+          name: task.assign ? task.assign.name : '',
+        },
+        due: task.due ? task.due : '',
+        status: task.status ? task.status : '',
+        watchers: task.watchers
+          ? task.watchers.map((watcher: any) => {
+              return {
+                name: watcher.name ? watcher.name : '',
+                id: watcher.id ? watcher.id : '',
+              };
+            })
+          : [],
+      };
+    });
+    return tasksList;
+  }
+
+  public static async getTasksByFilter(req: Request, res: Response) {
+    const users: object[] = req.query.users;
+    const officeMembers: object[] = req.query.officeMembers;
+    const filters = ['assign.id', 'status', 'name'];
+    let filter: any = {};
+    for (let key in req.query) {
+      if (filters.indexOf(key) > -1) {
+        filter[key] = req.query[key];
+      }
+    }
+
+    console.log('===getTasksByFilter===');
+    console.log('===THE REQ===');
+    console.log(req.query);
+    console.log('===THE FILTER===');
+    console.dir(filter);
+    console.log('===USERS===');
+    console.log(users);
+
+    verboseLogger.verbose(
+      `getTasksByFilter filter for user ${req.user.uniqueId} is ${filter}.`
+    );
+
+    let tasks: any = (await taskService.getTasksByFilter(
+      +req.query.from,
+      +req.query.to,
+      users,
+      req.query.officeCreated,
+      req.query.officeAssign,
+      filter,
+      officeMembers
+    )).hits.hits;
+    tasks = _.map(tasks, (task: any) => {
+      return task['_source'];
+    });
+    tasks = TaskController.buildTasksList(tasks);
+
+    console.log(`the length= ${tasks.length}`);
+    console.dir(tasks);
+    res.json(tasks);
+  }
+
   /**
    *
    * @param req

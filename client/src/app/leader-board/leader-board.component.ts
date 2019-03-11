@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
+import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-leader-board',
@@ -11,7 +13,7 @@ export class LeaderBoardComponent implements OnInit {
   data: any = { done: [], total: [], keys: [] };
   loading: boolean;
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.getLeaderboard();
@@ -48,6 +50,14 @@ export class LeaderBoardComponent implements OnInit {
       event.category.lastIndexOf('\t') + 1,
       event.category.length
     );
-    this.taskService.getTasksByFilter({ assign: userId });
+    this.taskService
+      .getTasksByFilter({ 'assign.id': userId })
+      .subscribe(data => {
+        this.dialog.open(ModalComponent, { data: data });
+      });
   }
+
+  // openDialog(data): void {
+  //   this.dialog.open(ModalComponent, { data: data });
+  // }
 }

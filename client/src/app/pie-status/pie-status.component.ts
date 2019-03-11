@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-pie-status',
@@ -14,7 +16,8 @@ export class PieStatusComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -43,6 +46,10 @@ export class PieStatusComponent implements OnInit {
   }
 
   getTask(event) {
-    this.taskService.getTasksByFilter({ status: event.name });
+    this.taskService
+      .getTasksByFilter({ status: event.name })
+      .subscribe(data => {
+        this.dialog.open(ModalComponent, { data: data });
+      });
   }
 }

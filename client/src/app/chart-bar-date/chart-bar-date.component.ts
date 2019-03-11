@@ -50,7 +50,7 @@ export class ChartBarDateComponent implements OnInit {
   // }
 
   ngOnInit() {
-    this.getFieldCountPerInterval(this.intervals[this.interval]);
+    this.getFieldCountPerInterval();
   }
 
   changeInterval() {
@@ -117,9 +117,9 @@ export class ChartBarDateComponent implements OnInit {
     this.data = this.aggData.without; //default
   }
 
-  getFieldCountPerInterval(interval: string = '1d'): void {
+  getFieldCountPerInterval(): void {
     this.loading = true;
-    this.taskService.getFieldCountPerInterval(interval).subscribe(data => {
+    this.taskService.getFieldCountPerInterval().subscribe(data => {
       //Move slide to correct position
       // this.interval = this.intervals.indexOf(interval);
       //data array of series [due,created]

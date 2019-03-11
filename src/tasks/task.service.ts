@@ -5,6 +5,74 @@ import { stat } from 'fs';
 
 export default class TaskService {
   public static index = 'tasks_test';
+
+  /**
+   * Returns the requested result from elasticsearch.
+   * @param {string} value The value to search.
+   * @param {number} from Date to search from in epoch_millis.
+   * @param {number} to Date to search to in epoch_millis.
+   * @param {object[]} filter filter by users.
+   * @param {string?} field The field to search by, defaults to '_id'.
+   */
+  public static getTasksByFilter(
+    from: number,
+    to: number,
+    users: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
+    filter: any,
+    officeMembers: object[] = []
+  ) {
+    const name = filter['name'] ? filter['name'] : 'created';
+    //const searchField = field || '_id';
+
+    // const should =
+    //   officeCreated == false && officeAssign == false
+    //     ? TaskService.prefixQuery(filter)
+    //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
+    const should = TaskService.prefixQuery(users);
+    const staticMust = [
+      {
+        range: {
+          [name]: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+      {
+        match: {},
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
+    const body: any = {
+      size: 10000,
+      query: {
+        bool: {
+          must,
+          filter: [],
+          should,
+          minimum_should_match: 1,
+          must_not: [],
+        },
+      },
+    };
+    for (let key in filter) {
+      body.query.bool.must[1].match[key] = filter[key];
+    }
+
+    return TaskService.client.search<Itask>({
+      index: TaskService.index,
+      body,
+    });
+  }
+
   /**
    * Returns the requested result from elasticsearch.
    * @param {string} value The value to search.

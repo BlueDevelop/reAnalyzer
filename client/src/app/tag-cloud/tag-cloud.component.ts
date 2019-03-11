@@ -124,6 +124,5 @@ export class TagCloudComponent implements OnInit {
       },
     });
     this.chart.reflow();
-    console.log(this.chart);
   }
 }

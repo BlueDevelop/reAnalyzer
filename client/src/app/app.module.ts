@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagCloudModule } from 'angular-tag-cloud-module';
 import { ColorPickerModule } from 'ngx-color-picker';
 
-import { HighchartsChartModule } from "highcharts-angular";
+import { HighchartsChartModule } from 'highcharts-angular';
 
 // import ngx-translate and the http loader
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -44,6 +44,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { TimelineChartComponent } from './timeline-chart/timeline-chart.component';
 import { LeaderboardChartComponent } from './leaderboard-chart/leaderboard-chart.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     TimelineChartComponent,
     LeaderboardChartComponent,
     UserProfileComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,6 +100,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
+  entryComponents: [ModalComponent],
 })
 export class AppModule {}
 

@@ -76,4 +76,12 @@ router.get(
   taskController.getEndTimeRatio
 );
 
+router.get(
+  '/tasksByFilter',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getTasksByFilter
+);
+
 export default router;
