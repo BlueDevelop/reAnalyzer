@@ -7,7 +7,17 @@
     width: 100%;
   }
 
-  td{
+  .mat-cell{
       max-width: 300px;
       min-width: 220px;
+      /* text-align: center; */
+  }
+  .mat-row:hover{
+      background-color: lavender;
+  }
+  .mat-sort-header-container{
+    /* text-align: center; */
+  }
+  .watchers-td{
+    display: flex;
   }

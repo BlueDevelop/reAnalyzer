@@ -1,5 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-modal',
@@ -15,14 +16,17 @@ export class ModalComponent implements OnInit {
     'watchers',
     'due',
   ];
-  dataSource = this.data;
-
+  //dataArray = [this.data];
+  dataSource = new MatTableDataSource(this.data as object[]);
+  @ViewChild(MatSort)
+  sort: MatSort;
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: object
   ) {}
 
   ngOnInit() {
+    this.dataSource.sort = this.sort;
     console.log(this.data);
   }
 }

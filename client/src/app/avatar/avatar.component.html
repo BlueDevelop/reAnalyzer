@@ -1,8 +1,8 @@
 <div class="avatar">
   <a [routerLink]="[{ outlets: { app: ['settings'] } }]" [queryParams]="{tabName: 'profile'}">
-    <div class="avatar__icon ">
+    <div class="avatar__icon" [style.background]="color"  matTooltip="{{name}}">
       <div class="avatar__initials">{{initials}}</div>
-      <!-- <img class="avatar__image" src="https://s3.amazonaws.com/uifaces/faces/twitter/c_southam/128.jpg" alt="alt"> -->
+      <img *ngIf="avatar" class="avatar__image" src="{{avatar}}" alt="alt">
       <!-- <div class="avatar__notifications">01</div> -->
     </div>
     <!-- <div class="avatar__name">John Doe</div> -->

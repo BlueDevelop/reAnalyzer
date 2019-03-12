@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import * as _chroma from 'chroma-js';
 
 @Component({
   selector: 'app-avatar',
@@ -12,10 +13,11 @@ export class AvatarComponent implements OnInit {
   avatar: string;
   @Input()
   name: string;
-
+  color: string;
   constructor() {}
 
   ngOnInit() {
+    this.color = this.name ? _chroma.random().name() : 'rgb(114, 64, 129)';
     this.initials = this.getNameInitials(this.name);
     console.log(this.avatar);
   }

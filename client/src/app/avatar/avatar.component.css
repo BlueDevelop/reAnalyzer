@@ -10,13 +10,14 @@
     color: #222;
     display: flex;
     align-items: center;
+    outline: 0;
   }
   .avatar__icon {
     position: relative;
     display: table;
     height: 2.2em;
     width: 2.2em;
-    background: rgb(114, 64, 129);
+    /* background: rgb(114, 64, 129); */
     border-radius: 50%;
     text-align: center;
     text-decoration: none;
@@ -56,14 +57,18 @@
   }
   .avatar__image {
     position: absolute;
-    left: 0;
-    top: 0;
+    /* left: 0;
+    top: 0; */
     border-radius: 50%;
     border: 2px solid IndianRed;
     margin-bottom: 1rem;
     max-width: 100%;
-    height: auto;
+    /* height: auto; */
+    left: -2px;
+    top: -2px;
+    height: 100%;
   }
+
   .avatar__initials {
     color: white;
     display: table-cell;
