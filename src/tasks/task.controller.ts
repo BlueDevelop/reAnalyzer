@@ -463,16 +463,37 @@ export default class TaskController {
     }
   }
 
+  public static clearTitle(title: string) {
+    let firstIndex: number = title.indexOf('>');
+    while (firstIndex != title.length - 1) {
+      title = title.substring(firstIndex + 1, title.length);
+      firstIndex = title.indexOf('>');
+    }
+
+    let lastIndex: number = title.lastIndexOf('<');
+    while (lastIndex != -1) {
+      title = title.substring(0, lastIndex);
+      lastIndex = title.lastIndexOf('<');
+    }
+    return title;
+  }
+
   public static buildTasksList(tasks: any[]) {
     const tasksList = tasks.map(task => {
+      let due: any = undefined;
+      if (task.due) {
+        due = new Date(task.due);
+        due =
+          due.getDate() + '/' + (due.getMonth() + 1) + '/' + due.getFullYear();
+      }
       return {
-        title: task.title ? task.title : '',
+        title: task.title ? TaskController.clearTitle(task.title) : '',
         creator: task.creator ? (task.creator.id ? task.creator.id : '') : '',
         assign: {
           id: task.assign ? task.assign.id : '',
           name: task.assign ? task.assign.name : '',
         },
-        due: task.due ? task.due : '',
+        due: due ? due : '',
         status: task.status ? task.status : '',
         watchers: task.watchers
           ? task.watchers.map((watcher: any) => {

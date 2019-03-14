@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { MatDialog } from '@angular/material';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-chart-bar-date',
@@ -28,7 +30,7 @@ export class ChartBarDateComponent implements OnInit {
   // interval = 0;
   // vertical = true;
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService, public dialog: MatDialog) {
     // this.formatting = this.format.bind(this);
   }
   // format(x) {
@@ -129,10 +131,14 @@ export class ChartBarDateComponent implements OnInit {
   }
 
   getTask(event) {
-    this.taskService.getTasksByFilter({
-      date: event.category,
-      name: event.series.name,
-      interval: this.interval,
-    });
+    this.taskService
+      .getTasksByFilter({
+        date: event.category,
+        name: event.series.name,
+        interval: this.interval,
+      })
+      .subscribe(data => {
+        this.dialog.open(ModalComponent, { data: data });
+      });
   }
 }

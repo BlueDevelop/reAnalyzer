@@ -13,6 +13,7 @@ services:
       - 3000:3000
     volumes:
       - logs:/home/omer/Desktop/logs
+      - ./:/usr/src/app
     depends_on: 
       - mongodb
   elasticsearch:
@@ -48,6 +49,12 @@ services:
       - dbvolume:/var/lib/mongodb
     ports:
       - 27017:27017
+  nginx: 
+    image: nginx:latest
+    container_name: nginx
+    network_mode: host
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
 volumes:
   esdata1:
     driver: local

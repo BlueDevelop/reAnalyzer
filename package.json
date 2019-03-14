@@ -12,6 +12,7 @@
     "start": "npm run build && node dist/index.js",
     "build": "npm run build:tsc",
     "build:tsc": "npx tsc",
+    "build:docker":"npm run build && docker-compose restart reanalyzer",
     "test": "npm run build:tsc && npm run test:run",
     "test:run": "NODE_ENV=test npx mocha src/**/*.spec.ts --opts ./mocha.opts",
     "test:coverage": "npm run build:tsc && npx nyc npm run test:run",

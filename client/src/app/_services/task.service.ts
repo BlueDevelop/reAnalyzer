@@ -122,66 +122,38 @@ export class TaskService {
   getTasksByFilter(filter: object): Observable<any> {
     if ('status' in filter) {
       filter['status'] = this.translate.instant(filter['status']);
-    }
-
-    if ('name' in filter) {
+    } else if ('name' in filter) {
       filter['name'] = this.translate.instant(filter['name']);
+      let interval =
+        filter['interval'] == 'without' ? 'day' : filter['interval'];
+      delete filter['interval'];
+      //delete filter['date'];
+      if (interval) {
+        filter['from'] = moment(filter['date'])
+          .startOf(interval)
+          .valueOf();
+        filter['to'] = moment(filter['date'])
+          .endOf(interval)
+          .valueOf();
+      }
     }
-
     let newFilter = { ...this.filterService.config.params, ...filter };
     newFilter = {
       params: newFilter,
     };
-
-    if ('assign.id' in newFilter.params) {
-      newFilter.params['officeCreated'] = false;
-      newFilter.params['officeAssign'] = false;
-    }
-    // if (
-    //   newFilter.params['interval'] == 'without' ||
-    //   newFilter.params['interval'] == 'day'
-    // ) {
-    //   newFilter.params['from'] = newFilter.params['date'];
-    //   newFilter.params['to'] = newFilter.params['date'];
-    // } else if (newFilter.params['interval'] == 'week') {
-    //   newFilter.params['from'] = moment(newFilter.params['date'])
-    //     .subtract(1, 'weeks')
-    //     .startOf('week')
-    //     .milliseconds();
-
-    //   newFilter.params['to'] = moment(newFilter.params['date'])
-    //     .subtract(1, 'weeks')
-    //     .endOf('week')
-    //     .milliseconds();
-    // } else if (newFilter.params['interval'] == 'month') {
-    //   newFilter.params['from'] = moment(newFilter.params['date'])
-    //     .subtract(1, 'months')
-    //     .startOf('month')
-    //     .milliseconds();
-
-    //   newFilter.params['to'] = moment(newFilter.params['date'])
-    //     .subtract(1, 'months')
-    //     .endOf('month')
-    //     .milliseconds();
-    // } else {
-    //   newFilter.params['from'] = moment(newFilter.params['date'])
-    //     .startOf('year')
-    //     .milliseconds();
-
-    //   newFilter.params['to'] = moment(newFilter.params['date'])
-    //     .endOf('year')
-    //     .milliseconds();
-    // }
 
     console.log(newFilter);
     return this.http
       .get(`${environment.apiUrl}/task/tasksByFilter`, newFilter)
       .pipe(
         tap(data =>
-          this.logsService.log(this.serviceName, 'fetched data from TimeRates')
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from TasksByFilter'
+          )
         ),
         catchError(
-          this.logsService.handleError(this.serviceName, 'getTimeRates', [])
+          this.logsService.handleError(this.serviceName, 'getTasksByFilter', [])
         )
       );
   }
