@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material';
 import { ModalComponent } from '../modal/modal.component';
+import { SettingsService } from '../_services/settings.service';
 
 @Component({
   selector: 'app-chart-bar-date',
@@ -18,7 +19,7 @@ export class ChartBarDateComponent implements OnInit {
 
   //intervals: string[] = ['1d', '1w', '1m', '1y'];
   intervals: string[] = ['without', 'day', 'week', 'month', 'year'];
-  interval: string = 'without';
+  interval: string = this.settings.interval || 'without';
   // autoTicks = true;
   // disabled = false;
   // invert = false;
@@ -30,7 +31,11 @@ export class ChartBarDateComponent implements OnInit {
   // interval = 0;
   // vertical = true;
 
-  constructor(private taskService: TaskService, public dialog: MatDialog) {
+  constructor(
+    private taskService: TaskService,
+    public dialog: MatDialog,
+    private settings: SettingsService
+  ) {
     // this.formatting = this.format.bind(this);
   }
   // format(x) {
@@ -52,14 +57,16 @@ export class ChartBarDateComponent implements OnInit {
   // }
 
   ngOnInit() {
+    this.interval = this.settings.interval;
     this.getFieldCountPerInterval();
   }
 
   changeInterval() {
     //this.getFieldCountPerInterval(this.intervals[this.interval]);
 
-    console.log(this.interval);
-    this.data = this.aggData[this.interval];
+    this.settings.interval = this.interval;
+    console.log(this.settings.interval);
+    this.data = this.aggData[this.settings.interval];
   }
 
   // formatLabel(ind: number | null) {
@@ -116,7 +123,7 @@ export class ChartBarDateComponent implements OnInit {
         this.aggData[interval] = currAgg;
       }
     });
-    this.data = this.aggData.without; //default
+    this.data = this.aggData[this.settings.interval]; //default
   }
 
   getFieldCountPerInterval(): void {
@@ -135,7 +142,7 @@ export class ChartBarDateComponent implements OnInit {
       .getTasksByFilter({
         date: event.category,
         name: event.series.name,
-        interval: this.interval,
+        interval: this.settings.interval,
       })
       .subscribe(data => {
         this.dialog.open(ModalComponent, { data: data });

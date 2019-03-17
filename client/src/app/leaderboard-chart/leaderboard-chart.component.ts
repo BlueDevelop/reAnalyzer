@@ -85,7 +85,14 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       },
     ],
   };
-  constructor(private settingsService: SettingsService) {}
+  constructor(private settingsService: SettingsService) {
+    this.settingsService.colorsArrayBS.subscribe(() => {
+      this.colors = this.settingsService.getColorDomain(2);
+      console.log('something');
+      console.log(this.colors);
+      this.chart.redraw();
+    });
+  }
   ngOnChanges(changes: SimpleChanges) {
     this.ngOnInit();
   }

@@ -18,7 +18,7 @@ export class AvatarComponent implements OnInit {
 
   ngOnInit() {
     this.color = this.name ? _chroma.random().name() : 'rgb(114, 64, 129)';
-    this.initials = this.getNameInitials(this.name);
+    this.initials = this.name ? this.getNameInitials(this.name) : this.initials;
     console.log(this.avatar);
   }
   getNameInitials(name?: string) {

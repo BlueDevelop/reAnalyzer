@@ -19,6 +19,7 @@ import {
   MatAutocomplete,
 } from '@angular/material';
 import * as _moment from 'moment';
+import { RefreshService } from '../_services/refresh.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,20 +41,29 @@ export class DashboardComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private filterService: FilterService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private refresh: RefreshService
   ) {
-    this.dataFilering();
+    //initial data load
+    this.refresh.source.subscribe(() => this.dataFilering()); //refresh;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.dataFilering();
+    // this.settingsService.initColorsArray().subscribe(() => {
+    console.log(this.settingsService.colorsArray);
+    this.dataFilering();
+    // });
+  }
 
   dataFilering() {
-    this.settingsService.initColorsArray().subscribe(() => {
-      this.barDate.getFieldCountPerInterval();
-      this.pieStatus.getCountByStatus();
-      this.leaderBoard.getLeaderboard();
-      this.tagCloud.getTagClouds();
-      this.timeRates.getTimeRates();
-    });
+    // this.settingsService.initColorsArray();
+    // this.settingsService.initColorsArray().subscribe(() => {
+    this.barDate.getFieldCountPerInterval();
+    this.pieStatus.getCountByStatus();
+    this.leaderBoard.getLeaderboard();
+    this.tagCloud.getTagClouds();
+    this.timeRates.getTimeRates();
+    // });
   }
 }

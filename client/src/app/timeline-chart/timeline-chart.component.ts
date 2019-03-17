@@ -106,6 +106,10 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     this.colors = this.settingsService.getColorDomain(this.data.length);
     this.chartOptions = {
       ...this.chartOptions,
+      chart: {
+        height: window.innerHeight * 0.38,
+        zoomType: 'x',
+      },
       xAxis: {
         ...this.staticXAxis(),
         ...this.xAxisFormat(),

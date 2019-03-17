@@ -45,6 +45,7 @@ import { TimelineChartComponent } from './timeline-chart/timeline-chart.componen
 import { LeaderboardChartComponent } from './leaderboard-chart/leaderboard-chart.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ModalComponent } from './modal/modal.component';
+import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { ModalComponent } from './modal/modal.component';
     LeaderboardChartComponent,
     UserProfileComponent,
     ModalComponent,
+    RefreshButtonComponent,
   ],
   imports: [
     BrowserModule,
