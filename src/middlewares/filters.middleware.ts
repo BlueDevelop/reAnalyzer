@@ -53,38 +53,38 @@ async function getMembersOfHierarchy(
     _.flatMap(await Promise.all(selectedUnitsPromises), _.identity),
     []
   ); // returns the first/head element promise.all returns array of arrays
-  console.log('user');
-  console.log(req.user.uniqueId);
-  console.log('usersUnderUsersHierarchy');
-  console.log(usersUnderUsersHierarchy);
-  console.log('selectedUnits');
-  console.log(selectedUnits);
+  // console.log('user');
+  // console.log(req.user.uniqueId);
+  // console.log('usersUnderUsersHierarchy');
+  // console.log(usersUnderUsersHierarchy);
+  // console.log('selectedUnits');
+  // console.log(selectedUnits);
   const clientSendsEmptyStringAsTheUnitsParameter = _.size(_.head(units)) > 1;
   const intersectIfUnitsExistsAndNotEmpty =
     units && units.length > 0 && clientSendsEmptyStringAsTheUnitsParameter;
-  console.log(`intersect :${intersectIfUnitsExistsAndNotEmpty}`);
-  console.log(`units.length :${units.length}`);
-  console.log(units);
+  // console.log(`intersect :${intersectIfUnitsExistsAndNotEmpty}`);
+  // console.log(`units.length :${units.length}`);
+  // console.log(units);
   const filter: object[] = intersectIfUnitsExistsAndNotEmpty
     ? _.intersection(usersUnderUsersHierarchy, selectedUnits)
     : usersUnderUsersHierarchy;
-  console.log('filter');
-  console.log(filter);
+  // console.log('filter');
+  // console.log(filter);
 
   req.query.users = filter;
 
   req.query.officeCreated = req.query.officeCreated == 'true';
   req.query.officeAssign = req.query.officeAssign == 'true';
-  console.log('filters!');
-  console.log(req.query.officeCreated);
-  console.log(req.query.officeAssign);
-  console.log(typeof req.query.officeCreated);
+  // console.log('filters!');
+  // console.log(req.query.officeCreated);
+  // console.log(req.query.officeAssign);
+  // console.log(typeof req.query.officeCreated);
   if (req.query.officeCreated == true || req.query.officeAssign == true) {
     req.query.officeMembers = await filterHelper.getOfficeMembersFromUser(
       req.user.uniqueId
     );
-    console.log('filters office members');
-    console.log(req.query.officeMembers);
+    // console.log('filters office members');
+    // console.log(req.query.officeMembers);
     //req.query.officeMembers = _.union([req.user], req.query.officeMembers);
   } else {
     req.query.officeMembers = [];

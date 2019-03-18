@@ -25,8 +25,8 @@ export default class TaskService {
     officeMembers: object[] = []
   ) {
     const name = filter['name'] ? filter['name'] : 'created';
-    console.log('===NAME===');
-    console.log(name);
+    // console.log('===NAME===');
+    // console.log(filter);
     //const searchField = field || '_id';
 
     // const should =
@@ -54,7 +54,7 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
-    const body: any = {
+    let body: any = {
       size: 10000,
       query: {
         bool: {
@@ -68,7 +68,9 @@ export default class TaskService {
     };
     const assign_id = filter['assign.id'];
     const status = filter['status'];
-    if (assign_id || status) {
+    const tag = filter['tag'];
+
+    if (assign_id || status || tag) {
       body.query.bool.must.push({ match: {} });
       const must_last_index = body.query.bool.must.length - 1;
       if (assign_id) {
@@ -77,19 +79,15 @@ export default class TaskService {
       if (status) {
         body.query.bool.must[must_last_index].match['status'] = status;
       }
-      console.log('cancer');
-      console.log(body.query.bool.must[must_last_index].match);
+      if (tag) {
+        body.query.bool.must[must_last_index] = {
+          query_string: {
+            default_field: 'tags',
+            query: tag,
+          },
+        };
+      }
     }
-    // for (let key in filter) {
-    //   if (key == 'assign.id' || key == 'status') {
-    //     if (body.query.bool.must.length === 1) {
-    //       body.query.bool.must.push({ match: {} });
-    //     }
-    //     body.query.bool.must[1].match[key] = filter[key];
-    //   }
-    // }
-    console.log('body');
-    console.log(body);
     return TaskService.client.search<Itask>({
       index: TaskService.index,
       body,

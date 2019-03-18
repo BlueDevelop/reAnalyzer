@@ -3,9 +3,10 @@ import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
 import * as Highcharts from 'highcharts';
+import { ModalComponent } from '../modal/modal.component';
 // import HC_exporting from 'highcharts/modules/exporting';
 import wordcloud from 'highcharts/modules/wordcloud.src';
-
+import { MatDialog } from '@angular/material';
 wordcloud(Highcharts);
 // HC_exporting(Highcharts);
 import {
@@ -27,7 +28,6 @@ export class TagCloudComponent implements OnInit {
   data: any[] = [];
   loading: boolean;
   colors: any[] = [];
-
   chartOptions = {
     chart: {
       backgroundColor: 'rgba(255,255,255,0.0)',
@@ -43,6 +43,9 @@ export class TagCloudComponent implements OnInit {
         placementStrategy: 'center',
         data: this.data,
         colors: this.colors,
+        events: {
+          click: e => console.log(e.point),
+        },
         rotation: {
           from: 0,
           to: 0,
@@ -63,7 +66,8 @@ export class TagCloudComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -99,6 +103,9 @@ export class TagCloudComponent implements OnInit {
             placementStrategy: 'center',
             data: this.data,
             colors: this.colors,
+            events: {
+              click: e => this.getTasks(e.point.name),
+            },
             rotation: {
               from: 0,
               to: 0,
@@ -115,6 +122,11 @@ export class TagCloudComponent implements OnInit {
 
   onClickTag(tagClicked: CloudData) {
     console.log(tagClicked);
+  }
+  getTasks(name: string) {
+    this.taskService.getTasksByFilter({ tag: name }).subscribe(data => {
+      this.dialog.open(ModalComponent, { data: data });
+    });
   }
   onResize() {
     // this.tagCloudComponent.reDraw();

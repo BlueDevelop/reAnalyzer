@@ -9,6 +9,7 @@ import { UserService } from '../_services/user.service';
 export class NavBarComponent implements OnInit {
   currentUser;
   nameInitials: string;
+  avatarImg: string;
 
   navLinks = [
     { path: [{ outlets: { app: ['dashboard'] } }], label: 'לוח ראשי' },
@@ -24,6 +25,18 @@ export class NavBarComponent implements OnInit {
 
   constructor(private userService: UserService) {
     this.nameInitials = userService.getNameInitials();
+    //this.avatarImg = userService.getAvatarImg();
   }
-  ngOnInit() {}
+  ngOnInit() {
+    this.userService.getUser().subscribe(
+      res => {
+        this.avatarImg = res.avatarImg;
+        console.log('subject');
+        console.log(res);
+      },
+      err => {
+        console.error(`An error occurred: ${err.message}`);
+      }
+    );
+  }
 }

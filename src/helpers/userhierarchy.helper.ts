@@ -123,8 +123,8 @@ async function getMembersByUser(
   // }
   indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
 
-  console.log('user hierarchy getMembersByUser');
-  console.log(indirectMembers);
+  //console.log('user hierarchy getMembersByUser');
+  //console.log(indirectMembers);
   return _.union(directMembers, indirectMembers);
 }
 
@@ -190,13 +190,13 @@ async function getDirectMembersOfHierarchy(hierarchyID: string) {
  * @returns members indirectly under the given hierarchy by looking at the config file
  */
 async function getIndirectMembersOfHierarchy(hierarchyID: string) {
-  console.log('in getIndirectMembersOfHierarchy');
-  console.log(
-    `config.hierarchyServiceUseMock:${config.hierarchyServiceUseMock}`
-  );
-  console.log(
-    `config.hierarchyServiceMockFile:${config.hierarchyServiceMockFile}`
-  );
+  //console.log('in getIndirectMembersOfHierarchy');
+  //console.log(
+  //  `config.hierarchyServiceUseMock:${config.hierarchyServiceUseMock}`
+  //);
+  //console.log(
+  //  `config.hierarchyServiceMockFile:${config.hierarchyServiceMockFile}`
+  //);
   if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
     const members = memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[
       hierarchyID

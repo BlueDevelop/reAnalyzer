@@ -98,10 +98,10 @@ export default class TaskController {
 
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
-      console.log('query!');
-      console.log(req.query);
-      console.log('USERS!');
-      console.log(filter);
+      // console.log('query!');
+      // console.log(req.query);
+      // console.log('USERS!');
+      // console.log(filter);
 
       verboseLogger.verbose(
         `getCountByStatus filter for user ${req.user.uniqueId} is ${filter}.`
@@ -225,8 +225,8 @@ export default class TaskController {
       }
 
       const size = req.query.size ? +req.query.size : undefined;
-      console.log('===SIZE===');
-      console.log(size);
+      // console.log('===SIZE===');
+      // console.log(size);
 
       // const filter: object[] = (await filterHelper.getMembersByUser(
       //   req.user.uniqueId,
@@ -235,8 +235,8 @@ export default class TaskController {
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
 
-      console.log('===FILTER===');
-      console.log(filter);
+      // console.log('===FILTER===');
+      // console.log(filter);
       verboseLogger.verbose(
         `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
       );
@@ -250,15 +250,15 @@ export default class TaskController {
         size,
         officeMembers
       );
-      console.log('===DONE TASKS COUNT===');
-      console.log(doneTasksCount.aggregations['1'].buckets);
+      // console.log('===DONE TASKS COUNT===');
+      // console.log(doneTasksCount.aggregations['1'].buckets);
 
       //get the top users with most done tasks
       const topUsers = _.map(doneTasksCount.aggregations['1'].buckets, obj => {
         return { id: obj.key };
       });
-      console.log('===TOP USERS===');
-      console.log(topUsers);
+      // console.log('===TOP USERS===');
+      // console.log(topUsers);
 
       // get total tasks count for the top users
       const totalTasksCount = await taskService.getTotalTasksCount(
@@ -270,8 +270,8 @@ export default class TaskController {
         size
       );
 
-      console.log('===Total TASKS COUNT===');
-      console.log(totalTasksCount.aggregations['1'].buckets);
+      // console.log('===Total TASKS COUNT===');
+      // console.log(totalTasksCount.aggregations['1'].buckets);
       const response = _.map(
         doneTasksCount.aggregations['1'].buckets,
         bucket => {
@@ -290,8 +290,8 @@ export default class TaskController {
         }
       );
 
-      console.log('===response===');
-      console.log(response);
+      // console.log('===response===');
+      // console.log(response);
 
       verboseLogger.verbose(`getLeaderboard function returned ${response}.`);
 
@@ -511,7 +511,7 @@ export default class TaskController {
   public static async getTasksByFilter(req: Request, res: Response) {
     const users: object[] = req.query.users;
     const officeMembers: object[] = req.query.officeMembers;
-    const filters = ['assign.id', 'status', 'name'];
+    const filters = ['assign.id', 'status', 'name', 'tag'];
     let filter: any = {};
     for (let key in req.query) {
       if (filters.indexOf(key) > -1) {
@@ -519,13 +519,13 @@ export default class TaskController {
       }
     }
 
-    console.log('===getTasksByFilter===');
-    console.log('===THE REQ===');
-    console.log(req.query);
-    console.log('===THE FILTER===');
-    console.dir(filter);
-    console.log('===USERS===');
-    console.log(users);
+    // console.log('===getTasksByFilter===');
+    // console.log('===THE REQ===');
+    // console.log(req.query);
+    // console.log('===THE FILTER===');
+    // console.dir(filter);
+    // console.log('===USERS===');
+    // console.log(users);
 
     verboseLogger.verbose(
       `getTasksByFilter filter for user ${req.user.uniqueId} is ${filter}.`
@@ -545,8 +545,8 @@ export default class TaskController {
     });
     tasks = TaskController.buildTasksList(tasks);
 
-    console.log(`the length= ${tasks.length}`);
-    console.dir(tasks);
+    // console.log(`the length= ${tasks.length}`);
+    // console.dir(tasks);
     res.json(tasks);
   }
 
@@ -572,7 +572,7 @@ export default class TaskController {
     const responses: any = Promise.all(responsesPromises);
 
     res.json(responses);
-    console.log(responses);
+    // console.log(responses);
   }
 
   /**
