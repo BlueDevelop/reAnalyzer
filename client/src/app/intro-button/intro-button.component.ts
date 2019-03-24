@@ -12,7 +12,7 @@ export class IntroButtonComponent implements OnInit {
   ngOnInit() {}
 
   startTour() {
-    console.log('Starting tour');
+    //console.log('Starting tour');
 
     // const intro = IntroJs.introJs();
     // // Start tutorial
@@ -37,6 +37,21 @@ export class IntroButtonComponent implements OnInit {
             position: 'left',
           },
           {
+            element: '#step8',
+            intro: 'מסך מלא',
+            position: 'left',
+          },
+          {
+            element: '#step9',
+            intro: 'שמירת PDF',
+            position: 'left',
+          },
+          {
+            element: '#step10',
+            intro: 'עדכון מידע אוטומטי בכל 5/15/30 שניות',
+            position: 'left',
+          },
+          {
             element: '#step2',
             intro:
               'זהו פאנל הסינונים, לאחר לחיצה תוכלו לסננן את המידע שיוצג בגרפים',
@@ -44,25 +59,27 @@ export class IntroButtonComponent implements OnInit {
           },
           {
             element: '#step7',
-            intro: 'גרף המציג את כמות המשימות בכל סטטוס',
+            intro:
+              'גרף המציג את כמות המשימות בכל סטטוס, לחיצה על חלק בגרף תפתח את המשימות המוצגות בו בטבלה',
             position: 'left',
           },
 
           {
             element: '#step4',
             intro:
-              'גרף המציג את כמות המשימות שתאריך היעד שלהם הוא בטווח התאריכים שנבחרו',
+              'גרף המציג את מספר המשימות שנוצרו ואת מספר המשימות שתאריך היעד שלהן בטווח הסינון הנוכחי, בנוסף ניתן לקבץ את המשימות בגרף לפי יום/שבוע/חודש/שנה. לחיצה על נקודה בגרף תראה את המשימות שמוצגות בגרף בטבלה. סימון קטע בגרף יגדיל את אותו הקטע ',
             position: 'left',
           },
           {
             element: '#step5',
-            intro: 'ענן תגיות, גודל התגית הוא ביחס לשכיחות שלה',
+            intro:
+              'ענן תגיות, גודל התגית הוא ביחס לשכיחות שלה, לחיצה על תגית תראה בטבלה את המשימות שהתגית מופיע בהן',
             position: 'right',
           },
           {
             element: '#step6',
             intro:
-              'גרף המציג את כמות המשימות שהושלמו ואת כמות כל המשימות עבור כל אחראי תחתיי',
+              'גרף המציג את כמות המשימות שהושלמו ואת כמות שאר המשימות לפי הסינון הנוכחי עבור כל אחראי תחתיי, לחיצה על הגרף תראה את המשימות של אותו אחראי בטבלה',
             position: 'right',
           },
           {

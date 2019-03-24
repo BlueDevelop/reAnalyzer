@@ -5,12 +5,17 @@
   
   table {
     width: 100%;
+    direction: rtl;
   }
 
   .mat-cell{
       max-width: 300px;
       min-width: 220px;
+      padding-right: 1%;
       /* text-align: center; */
+  }
+  .mat-header-cell{
+    padding-right: 1%;
   }
   .mat-row:hover{
       background-color: lavender;
@@ -20,4 +25,5 @@
   }
   .watchers-td{
     display: flex;
+    flex-wrap: wrap;
   }

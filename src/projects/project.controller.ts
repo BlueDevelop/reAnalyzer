@@ -24,7 +24,7 @@ export default class ProjectController {
       );
       return res.sendStatus(400);
     }
-    let titleAndIndexFromRet = _.map(ret.hits.hits, doc => {
+    let titleAndIndexFromRet = _.map(ret.body.hits.hits, doc => {
       return { key: doc._id, value: doc._source.title };
     });
     return res.json(titleAndIndexFromRet);

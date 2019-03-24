@@ -35,8 +35,8 @@ export class PieComponent implements OnInit, OnChanges {
     this.colorScheme = {
       domain: this.settingsService.getColorDomain(this.data.length),
     };
-    console.log('data:');
-    console.log(this.data);
+    //console.log('data:');
+    //console.log(this.data);
     this.doughnut = this.doughnut || false;
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -47,7 +47,7 @@ export class PieComponent implements OnInit, OnChanges {
   }
 
   onSelect(event) {
-    console.log(event);
+    //console.log(event);
   }
   getTotal() {
     return _.sumBy(this.data, 'value');

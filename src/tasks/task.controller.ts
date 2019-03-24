@@ -7,6 +7,11 @@ import errorLogger from '../loggers/error.logger';
 import filterHelper from '../helpers/userhierarchy.helper';
 import _ from 'lodash';
 
+const striptags = require('striptags');
+const Entities = require('html-entities').AllHtmlEntities; // remove html entities like &nbsp
+const entities = new Entities();
+const decodeEntities = entities.decode;
+
 export default class TaskController {
   /**
    * validates queries and fetch the count of tasks per interval as given by a given field in given time range.
@@ -57,13 +62,13 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getFieldCountPerInterval function returned ${
-          response.aggregations['1'].buckets
+          response.body.aggregations['1'].buckets
         }.`
       );
 
       return res.json({
         field: req.query.field,
-        data: response.aggregations['1'].buckets,
+        data: response.body.aggregations['1'].buckets,
       });
     } catch (err) {
       errorLogger.error('%j', {
@@ -118,10 +123,10 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getCountByStatus function returned ${
-          response.aggregations['1'].buckets
+          response.body.aggregations['1'].buckets
         }.`
       );
-      return res.json(response.aggregations['1'].buckets);
+      return res.json(response.body.aggregations['1'].buckets);
     } catch (err) {
       errorLogger.error('%j', {
         message: err.message,
@@ -181,11 +186,13 @@ export default class TaskController {
       );
 
       verboseLogger.verbose(
-        `getTagCloud function returned ${response.aggregations['1'].buckets}.`
+        `getTagCloud function returned ${
+          response.body.aggregations['1'].buckets
+        }.`
       );
 
       const resp: any = _.filter(
-        response.aggregations['1'].buckets,
+        response.body.aggregations['1'].buckets,
         obj => obj.key != 'Agenda'
       );
       return res.json(resp);
@@ -250,13 +257,16 @@ export default class TaskController {
         size,
         officeMembers
       );
-      // console.log('===DONE TASKS COUNT===');
-      // console.log(doneTasksCount.aggregations['1'].buckets);
+      // console.log('===DONE TASKS ===');
+      // console.log(doneTasksCount.body.aggregations['1']);
 
       //get the top users with most done tasks
-      const topUsers = _.map(doneTasksCount.aggregations['1'].buckets, obj => {
-        return { id: obj.key };
-      });
+      const topUsers = _.map(
+        doneTasksCount.body.aggregations['1'].buckets,
+        obj => {
+          return { id: obj.key };
+        }
+      );
       // console.log('===TOP USERS===');
       // console.log(topUsers);
 
@@ -267,25 +277,28 @@ export default class TaskController {
         topUsers,
         req.query.officeCreated,
         req.query.officeAssign,
-        size
+        size,
+        officeMembers
       );
 
       // console.log('===Total TASKS COUNT===');
       // console.log(totalTasksCount.aggregations['1'].buckets);
       const response = _.map(
-        doneTasksCount.aggregations['1'].buckets,
+        doneTasksCount.body.aggregations['1'].buckets,
         bucket => {
           const index = _.findIndex(
-            totalTasksCount.aggregations['1'].buckets,
+            totalTasksCount.body.aggregations['1'].buckets,
             (o: any) => {
               return o['key'].includes(bucket['key']);
             }
           );
           return {
-            key: totalTasksCount.aggregations['1'].buckets[index]['key'],
+            key: totalTasksCount.body.aggregations['1'].buckets[index]['key'],
             done: bucket['doc_count'],
             total:
-              totalTasksCount.aggregations['1'].buckets[index]['doc_count'],
+              totalTasksCount.body.aggregations['1'].buckets[index][
+                'doc_count'
+              ],
           };
         }
       );
@@ -304,6 +317,69 @@ export default class TaskController {
       });
       return res.sendStatus(500);
     }
+  }
+
+  public static getRatiosByTasks(doneTasks: any[]) {
+    const ratios: number[] = doneTasks.map((task: any) => {
+      // Extract data from the task.
+      const sourceTask: any = task._source;
+      if (
+        !sourceTask.due ||
+        _.isNaN(sourceTask.due) ||
+        !sourceTask.assignUpdates ||
+        !sourceTask.statusUpdates ||
+        sourceTask.assignUpdates.length == 0 ||
+        sourceTask.statusUpdates.length == 0
+      ) {
+        return 0;
+      }
+
+      // Due date of the task.
+      const due = new Date(sourceTask.due).getTime();
+
+      // Initiating value for the first assign date.
+      let minAssignDate = new Date(
+        sourceTask.assignUpdates[0].created
+      ).getTime();
+
+      // Initiating value for the last "done" status date.
+      let maxStatusDate = new Date(
+        sourceTask.statusUpdates[0].created
+      ).getTime();
+
+      if (
+        !minAssignDate ||
+        _.isNaN(minAssignDate) ||
+        !maxStatusDate ||
+        _.isNaN(maxStatusDate)
+      ) {
+        return 0;
+      }
+      // Go through all the assign updates and finding the first
+      // (The first assign date is the start date of the task).
+      for (const update of sourceTask.assignUpdates) {
+        const currDate = new Date(update.created).getTime();
+        if (minAssignDate > currDate) {
+          minAssignDate = currDate;
+        }
+      }
+
+      // Go through all the status updates and finding the last(The date when the task really ended,
+      // will always be a done status, otherwise it wont get it from elasticsearch).
+      for (const update of sourceTask.statusUpdates) {
+        const currDate = new Date(update.created).getTime();
+        if (maxStatusDate < currDate) {
+          maxStatusDate = currDate;
+        }
+      }
+
+      // Calculate ratio - ((done-start) / (due-start))*100 - for precentage.
+      const ratio =
+        Math.abs(maxStatusDate - minAssignDate) / Math.abs(due - minAssignDate);
+      task._source.ratio = ratio;
+      return ratio;
+    });
+    return ratios;
   }
 
   /**
@@ -340,7 +416,7 @@ export default class TaskController {
       );
 
       // Get all the tasks with status done from elasticsearch.
-      const doneTasks = (await taskService.getByField(
+      let doneTasks = await taskService.getByField(
         'done',
         +req.query.from,
         +req.query.to,
@@ -349,83 +425,27 @@ export default class TaskController {
         req.query.officeAssign,
         'status',
         officeMembers
-      )).hits.hits;
+      );
+      doneTasks = doneTasks.body.hits.hits;
 
       verboseLogger.verbose(
         `getByField service function returned ${doneTasks}.`
       );
 
-      // Calculate ratio for each task.
-      const ratios: number[] = doneTasks.map(task => {
-        // Extract data from the task.
-        const sourceTask: any = task._source;
-        if (
-          !sourceTask.due ||
-          _.isNaN(sourceTask.due) ||
-          !sourceTask.assignUpdates ||
-          !sourceTask.statusUpdates ||
-          sourceTask.assignUpdates.length == 0 ||
-          sourceTask.statusUpdates.length == 0
-        ) {
-          return 0;
-        }
-
-        // Due date of the task.
-        const due = new Date(sourceTask.due).getTime();
-
-        // Initiating value for the first assign date.
-        let minAssignDate = new Date(
-          sourceTask.assignUpdates[0].created
-        ).getTime();
-
-        // Initiating value for the last "done" status date.
-        let maxStatusDate = new Date(
-          sourceTask.statusUpdates[0].created
-        ).getTime();
-
-        if (
-          !minAssignDate ||
-          _.isNaN(minAssignDate) ||
-          !maxStatusDate ||
-          _.isNaN(maxStatusDate)
-        ) {
-          return 0;
-        }
-
-        // Go through all the assign updates and finding the first
-        // (The first assign date is the start date of the task).
-        for (const update of sourceTask.assignUpdates) {
-          const currDate = new Date(update.created).getTime();
-          if (minAssignDate > currDate) {
-            minAssignDate = currDate;
-          }
-        }
-
-        // Go through all the status updates and finding the last(The date when the task really ended,
-        // will always be a done status, otherwise it wont get it from elasticsearch).
-        for (const update of sourceTask.statusUpdates) {
-          const currDate = new Date(update.created).getTime();
-          if (maxStatusDate < currDate) {
-            maxStatusDate = currDate;
-          }
-        }
-
-        // Calculate ratio - ((done-start) / (due-start))*100 - for precentage.
-
-        const ratio =
-          Math.abs(maxStatusDate - minAssignDate) /
-          Math.abs(due - minAssignDate);
-
-        return ratio;
-      });
-
+      const ratios: number[] = TaskController.getRatiosByTasks(doneTasks);
+      console.log('getEndTimeRatio');
+      console.log(doneTasks.length);
+      console.dir(doneTasks);
       const under100interval = 0.25;
       const under100buckets = ['0%-25%', '25%-50%', '50%-75%', '75%-100%'];
       const above100interval = 3;
       const above100buckets = ['100%-400%', '400%-700%', '700%-1000%'];
 
-      let groupedRatios: { intervals: number[]; ratios: any } = {
-        intervals: [under100interval, above100interval],
+      let groupedRatios: {
+        // intervals: number[];
+        ratios: any;
+      } = {
+        // intervals: [under100interval, above100interval],
         ratios: [],
       };
       let ratiosCounts = _.groupBy(ratios, ratio => {
@@ -436,7 +456,7 @@ export default class TaskController {
         } else if (ratio >= 1 && ratio < 10) {
           return above100buckets[Math.floor((ratio - 1) / above100interval)];
         } else {
-          return '<1000%';
+          return '>1000%';
         }
       });
       for (let key in ratiosCounts) {
@@ -464,46 +484,52 @@ export default class TaskController {
   }
 
   public static clearTitle(title: string) {
-    let firstIndex: number = title.indexOf('>');
-    while (firstIndex != title.length - 1) {
-      title = title.substring(firstIndex + 1, title.length);
-      firstIndex = title.indexOf('>');
-    }
+    // let firstIndex: number = title.indexOf('>');
+    // while (firstIndex != title.length - 1) {
+    //   title = title.substring(firstIndex + 1, title.length);
+    //   firstIndex = title.indexOf('>');
+    // }
 
-    let lastIndex: number = title.lastIndexOf('<');
-    while (lastIndex != -1) {
-      title = title.substring(0, lastIndex);
-      lastIndex = title.lastIndexOf('<');
-    }
-    return title;
+    // let lastIndex: number = title.lastIndexOf('<');
+    // while (lastIndex != -1) {
+    //   title = title.substring(0, lastIndex);
+    //   lastIndex = title.lastIndexOf('<');
+    // }
+    return decodeEntities(striptags(title));
   }
 
   public static buildTasksList(tasks: any[]) {
+    const fullNameGenerator = (name?: string, lastname?: string) =>
+      `${name ? name : ''} ${lastname ? lastname : ''}`;
     const tasksList = tasks.map(task => {
       let due: any = undefined;
       if (task.due) {
         due = new Date(task.due);
-        due =
-          due.getDate() + '/' + (due.getMonth() + 1) + '/' + due.getFullYear();
       }
-      return {
+
+      const ret = {
         title: task.title ? TaskController.clearTitle(task.title) : '',
-        creator: task.creator ? (task.creator.id ? task.creator.id : '') : '',
+        creator: task.creator
+          ? fullNameGenerator(task.creator.name, task.creator.lastname)
+          : '',
         assign: {
           id: task.assign ? task.assign.id : '',
-          name: task.assign ? task.assign.name : '',
+          name: task.assign
+            ? fullNameGenerator(task.assign.name, task.assign.lastname)
+            : '',
         },
         due: due ? due : '',
         status: task.status ? task.status : '',
         watchers: task.watchers
           ? task.watchers.map((watcher: any) => {
               return {
-                name: watcher.name ? watcher.name : '',
+                name: fullNameGenerator(watcher.name, watcher.lastname),
                 id: watcher.id ? watcher.id : '',
               };
             })
           : [],
       };
+      return ret;
     });
     return tasksList;
   }
@@ -511,7 +537,14 @@ export default class TaskController {
   public static async getTasksByFilter(req: Request, res: Response) {
     const users: object[] = req.query.users;
     const officeMembers: object[] = req.query.officeMembers;
-    const filters = ['assign.id', 'status', 'name', 'tag'];
+    const filters = [
+      'assign.id',
+      'status',
+      'name',
+      'tag',
+      'ratioMin',
+      'ratioMax',
+    ];
     let filter: any = {};
     for (let key in req.query) {
       if (filters.indexOf(key) > -1) {
@@ -519,34 +552,54 @@ export default class TaskController {
       }
     }
 
-    // console.log('===getTasksByFilter===');
-    // console.log('===THE REQ===');
-    // console.log(req.query);
-    // console.log('===THE FILTER===');
-    // console.dir(filter);
-    // console.log('===USERS===');
-    // console.log(users);
-
     verboseLogger.verbose(
       `getTasksByFilter filter for user ${req.user.uniqueId} is ${filter}.`
     );
+    let tasks: any;
+    if ('ratioMin' in filter) {
+      tasks = await taskService.getByField(
+        'done',
+        +req.query.from,
+        +req.query.to,
+        users,
+        req.query.officeCreated,
+        req.query.officeAssign,
+        'status',
+        officeMembers
+      );
+    } else {
+      tasks = await taskService.getTasksByFilter(
+        +req.query.from,
+        +req.query.to,
+        users,
+        req.query.officeCreated,
+        req.query.officeAssign,
+        filter,
+        officeMembers
+      );
+    }
 
-    let tasks: any = (await taskService.getTasksByFilter(
-      +req.query.from,
-      +req.query.to,
-      users,
-      req.query.officeCreated,
-      req.query.officeAssign,
-      filter,
-      officeMembers
-    )).hits.hits;
+    tasks = tasks.body.hits.hits;
+    if ('ratioMin' in filter && 'ratioMax' in filter) {
+      const ratioMin = +filter['ratioMin'];
+      const ratioMax = +filter['ratioMax'];
+      TaskController.getRatiosByTasks(tasks);
+      tasks = _.filter(tasks, task => {
+        if (ratioMax == -1) {
+          return task._source.ratio >= ratioMin;
+        } else {
+          return (
+            task._source.ratio >= ratioMin && task._source.ratio < ratioMax
+          );
+        }
+      });
+    }
     tasks = _.map(tasks, (task: any) => {
       return task['_source'];
     });
     tasks = TaskController.buildTasksList(tasks);
 
     // console.log(`the length= ${tasks.length}`);
-    // console.dir(tasks);
     res.json(tasks);
   }
 
@@ -567,7 +620,7 @@ export default class TaskController {
         req.query.officeCreated,
         req.query.officeAssign
       );
-      return response.aggregations['1'].buckets;
+      return response.body.aggregations['1'].buckets;
     });
     const responses: any = Promise.all(responsesPromises);
 

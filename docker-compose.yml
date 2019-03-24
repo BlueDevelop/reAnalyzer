@@ -7,10 +7,10 @@ services:
     environment:
       NODE_ENV: dev
       MONGO: mongodb://mongodb:27017/reAnalyzer_dev
-      PORT: 3000
+      PORT: 4000
       DEBUG: 'false'
     ports:
-      - 3000:3000
+      - 4000:4000
     volumes:
       - logs:/home/omer/Desktop/logs
       - ./:/usr/src/app
@@ -49,16 +49,78 @@ services:
     environment:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
+      - MONGODB_REPLICA_SET_MODE=primary
     volumes:
       - dbvolume:/var/lib/mongodb
     ports:
       - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null --replSet=mongo-azure
   nginx: 
     image: nginx:latest
     container_name: nginx
     network_mode: host
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+  # ----------python consumer------------------
+  # python-consumer:
+  #   image: rabiran/python-consumer
+  #   ports:
+  #     - 8080:8080
+  #   depends_on: 
+  #     - kafka
+  #     - root
+  #     - mongodb
+  # nightwatch:
+  #   image: rabiran/nightwatch
+  #   depends_on:
+  #     - root
+  #     - python-consumer
+  # root:
+  #   image: rabiran/root
+  #   # image: python-consumer_root
+  #   # build:
+  #   #   context: ../root/
+  #   #   dockerfile: Dockerfile
+  #   environment: 
+  #     PORT: 3000
+  #     MONGODB_URI: mongodb://mongodb/icu-dev
+  #     ELASTICSEARCH_IP: elasticsearch
+  #     GET_HOSTS_FROM: dns
+  #   ports: ['3000:3000']
+  #   command: node server
+  #   depends_on: 
+  #     - mongodb
+  #     - elasticsearch
+  # zookeeper:
+  #   image: debezium/zookeeper
+  #   container_name: zookeeper
+  #   ports: ['2181:2181','2888:2888','3888:3888']
+  # kafka:
+  #   image: debezium/kafka
+  #   container_name: kafka
+  #   ports: ['9092:9092']
+  #   depends_on: 
+  #     - zookeeper
+  #   environment: 
+  #     - ZOOKEEPER_CONNECT=zookeeper
+  #     - KAFKA_PORT=9092
+  #   links:
+  #     - zookeeper
+  # connect:
+  #   image: debezium/connect
+  #   container_name: connect
+  #   ports: ['8083:8083']
+  #   environment: 
+  #     - CONFIG_STORAGE_TOPIC=my-connect-configs
+  #     - OFFSET_STORAGE_TOPIC=my-connect-offsets
+  #     - BOOTSTRAP_SERVERS=kafka:9092
+  #   depends_on: 
+  #     - kafka
+  #     - zookeeper
+  #     - mongodb
+  #   links:
+  #     - kafka
+  #     - mongodb
 volumes:
   esdata1:
     driver: local

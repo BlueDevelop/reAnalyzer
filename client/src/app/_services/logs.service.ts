@@ -26,6 +26,6 @@ export class LogsService {
   }
 
   log(service: string, message: string) {
-    console.log(`${service}Service: ${message}`);
+    //console.log(`${service}Service: ${message}`);
   }
 }

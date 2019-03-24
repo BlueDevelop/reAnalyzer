@@ -53,7 +53,7 @@ const dev: IConfig = {
   sessionSecret: 'OmerIsTheBestProgrammer',
   logLevel: process.env.LOGLEVEL || 'verbose',
   apmAdress: process.env.APM_ADDR || 'http://apm:8200',
-  apmServiceName: process.env.APM_NAME || 'reAnalyzer_dev',
+  apmServiceName: process.env.APM_NAME || 'momentum_dev',
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,

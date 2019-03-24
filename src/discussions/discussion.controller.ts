@@ -24,7 +24,8 @@ export default class DiscussionController {
       );
       return res.sendStatus(400);
     }
-    let titleAndIndexFromRet = _.map(ret.hits.hits, doc => {
+    // console.log(ret.body.hits.hits);
+    let titleAndIndexFromRet = _.map(ret.body.hits.hits, doc => {
       return { key: doc._id, value: doc._source.title };
     });
     return res.json(titleAndIndexFromRet);

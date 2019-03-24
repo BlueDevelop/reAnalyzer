@@ -1,37 +1,63 @@
-<div class="container mat-elevation-z8">
-<table mat-table [dataSource]="dataSource" matSort>
+<mat-spinner *ngIf="loading"></mat-spinner>
+<button *ngIf="!loading" (click)="save()" mat-icon-button>
+    <mat-icon >save</mat-icon>
+  </button>
+<div *ngIf="!loading" class="container mat-elevation-z8">
+    <ag-grid-angular
+    style="width: 100%; height: 98%;"
+
+    class="ag-theme-material"
+    [rowData]="tableData" 
+    [columnDefs]="displayedColumns"
+    [enableRtl]="true"
+    [suppressChangeDetection]=true
+    [pivotPanelShow]="true"
+    [paginationPageSize]="10"
+    [pagination]="true"
+    [localeText]="localeText"
+    [frameworkComponents]="frameworkComponents"
+    
+    rowSelection = "single"
+    animateRows
+    
+    (selectionChanged)="onSelectionChanged($event)"
+    (gridReady)="onGridReady($event)"
+    >
+</ag-grid-angular>
+    
+<!-- <table #table mat-table [dataSource]="dataSource" matSort>
 
   <ng-container matColumnDef="title">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>  {{'title' | translate}}</th>
     <td mat-cell *matCellDef="let element"> {{element.title}} </td>
   </ng-container>
 
   <ng-container matColumnDef="creator">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Creator </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'creator' | translate}} </th>
     <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-    <td mat-cell *matCellDef="let element">  <mat-chip>{{element.status}}</mat-chip></td>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'statusTask' | translate}} </th>
+    <td mat-cell *matCellDef="let element">  <mat-chip>{{'status.' + element.status | translate}}</mat-chip></td>
   </ng-container>
 
   <ng-container matColumnDef="assign">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Assign </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'assign' | translate}} </th>
     <td mat-cell *matCellDef="let element"> {{element.assign.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="watchers">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Watchers </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'watchers' | translate}} </th>
     <td mat-cell *matCellDef="let element" class="watchers-td"><app-avatar *ngFor="let item of element.watchers" name="{{item.name}}"></app-avatar> </td>
   </ng-container>
 
   <ng-container matColumnDef="due">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Due </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'due' | translate}} </th>
     <td mat-cell *matCellDef="let element"> {{element.due}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+</table> -->
 </div>

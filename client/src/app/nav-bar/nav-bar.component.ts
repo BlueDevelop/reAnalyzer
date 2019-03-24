@@ -31,7 +31,7 @@ export class NavBarComponent implements OnInit {
     this.userService.getUser().subscribe(
       res => {
         this.avatarImg = res.avatarImg;
-        console.log('subject');
+        //console.log('subject');
         console.log(res);
       },
       err => {

@@ -50,11 +50,10 @@ export class LeaderBoardComponent implements OnInit {
       event.category.lastIndexOf('\t') + 1,
       event.category.length
     );
-    this.taskService
-      .getTasksByFilter({ 'assign.id': userId })
-      .subscribe(data => {
-        this.dialog.open(ModalComponent, { data: data });
-      });
+
+    this.dialog.open(ModalComponent, {
+      data: this.taskService.getTasksByFilter({ 'assign.id': userId }),
+    });
   }
 
   // openDialog(data): void {

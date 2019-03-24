@@ -30,5 +30,12 @@
     "נדחה":"rejected",
     "נבחר אחראי":"assigned",
     "בבדיקה":"review",
-    "ממתין לאישור":"waiting-approval"
+    "ממתין לאישור":"waiting-approval",
+
+    "title":"שם",
+    "creator":"יוצר",
+    "statusTask":"סטטוס",
+    "assign":"אחראי",
+    "watchers":"משתתפים"
+
 }

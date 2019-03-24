@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import * as _ from 'lodash';
 import * as _chroma from 'chroma-js';
 
 @Component({
@@ -19,11 +20,15 @@ export class AvatarComponent implements OnInit {
   ngOnInit() {
     this.color = this.name ? _chroma.random().name() : 'rgb(114, 64, 129)';
     this.initials = this.name ? this.getNameInitials(this.name) : this.initials;
-    console.log(this.avatar);
+    //console.log(this.avatar);
   }
   getNameInitials(name?: string) {
-    let firstLetter = name[0];
-    let secLetter = name.indexOf(' ') == -1 ? '' : name[name.indexOf(' ') + 1];
-    return firstLetter + secLetter;
+    // let firstLetter = name[0];
+    // let secLetter = name.indexOf(' ') == -1 ? '' : name[name.indexOf(' ') + 1];
+    // return firstLetter + secLetter;
+    let nameTokenized = name.split(' ');
+    return _.map(nameTokenized, token => _.first(token))
+      .join('')
+      .substring(0, 2);
   }
 }

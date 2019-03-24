@@ -92,7 +92,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         return moment(timestamp).date(); //day of month 1-31
       },
       M: function(timestamp) {
-        return moment(timestamp).month(); //month
+        return moment(timestamp).month() + 1; //month
       },
       H: function(timestamp) {
         return moment(timestamp).hour(); //hour

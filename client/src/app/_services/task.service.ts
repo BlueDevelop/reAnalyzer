@@ -136,13 +136,15 @@ export class TaskService {
           .endOf(interval)
           .valueOf();
       }
+    } else if ('minRatio' in filter) {
+      filter['status'] = 'done';
     }
     let newFilter = { ...this.filterService.config.params, ...filter };
     newFilter = {
       params: newFilter,
     };
 
-    console.log(newFilter);
+    //console.log(newFilter);
     return this.http
       .get(`${environment.apiUrl}/task/tasksByFilter`, newFilter)
       .pipe(

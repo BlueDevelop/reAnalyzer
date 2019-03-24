@@ -51,7 +51,7 @@ export class BarComponent implements OnInit, OnChanges {
   colorScheme = {};
 
   onSelect(event) {
-    console.log(event);
+    //console.log(event);
   }
   generateTooltipString(model: any): string {
     const date = moment(model.name);

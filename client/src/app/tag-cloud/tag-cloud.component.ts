@@ -124,8 +124,8 @@ export class TagCloudComponent implements OnInit {
     console.log(tagClicked);
   }
   getTasks(name: string) {
-    this.taskService.getTasksByFilter({ tag: name }).subscribe(data => {
-      this.dialog.open(ModalComponent, { data: data });
+    this.dialog.open(ModalComponent, {
+      data: this.taskService.getTasksByFilter({ tag: name }),
     });
   }
   onResize() {

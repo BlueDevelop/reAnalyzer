@@ -74,21 +74,26 @@ export default class TaskService {
       body.query.bool.must.push({ match: {} });
       const must_last_index = body.query.bool.must.length - 1;
       if (assign_id) {
-        body.query.bool.must[must_last_index].match['assign.id'] = assign_id;
+        body.query.bool.must[must_last_index].match[
+          'assign.id.keyword'
+        ] = assign_id;
       }
       if (status) {
-        body.query.bool.must[must_last_index].match['status'] = status;
+        body.query.bool.must[must_last_index].match['status.keyword'] = status;
       }
       if (tag) {
         body.query.bool.must[must_last_index] = {
-          query_string: {
-            default_field: 'tags',
-            query: tag,
+          // query_string: {
+          //   default_field: 'tags',
+          //   query: tag,
+          // },
+          match: {
+            'tags.keyword': tag,
           },
         };
       }
     }
-    return TaskService.client.search<Itask>({
+    return TaskService.client.search({
       index: TaskService.index,
       body,
     });
@@ -153,7 +158,7 @@ export default class TaskService {
     };
 
     body.query.bool.must[1].match[searchField] = value;
-    return TaskService.client.search<Itask>({
+    return TaskService.client.search({
       index: TaskService.index,
       body,
     });
@@ -199,7 +204,7 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
-    return TaskService.client.search<Itask>({
+    return TaskService.client.search({
       index: TaskService.index,
       body: {
         aggs: {
@@ -598,8 +603,8 @@ function generateOfficeMembersMust(
   officeAssign: boolean
 ) {
   const officeMembersIDs = _.map(officeMembers, (om: any) => om.id);
-  console.log('officeMembersIDs:');
-  console.log(officeMembersIDs);
+  //console.log('officeMembersIDs:');
+  //console.log(officeMembersIDs);
   if (officeMembers.length <= 0) return {};
   if (officeCreated)
     return {

@@ -1,4 +1,4 @@
-import { Client } from 'elasticsearch';
+import { Client } from '@elastic/elasticsearch';
 import getConfig from '../config';
 const config = getConfig();
 
@@ -16,6 +16,7 @@ export default class Elasticsearch {
   }
 
   private static client: Client = new Client({
-    hosts: config.elasticsearch,
+    node: config.elasticsearch,
+    // requestTimeout: Infinity,
   });
 }

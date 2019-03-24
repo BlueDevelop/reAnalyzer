@@ -32,10 +32,12 @@ export class FilterService {
     officeAssign: false,
   };
 
-  constructor(private http: HttpClient, private logsService: LogsService) {}
+  constructor(private http: HttpClient, private logsService: LogsService) {
+    this.updateConfig(); //initialize
+  }
 
   updateConfig(): void {
-    console.log('filterParams');
+    ////console.log('filterParams');
     console.log(this.filterParams);
     this.config = {
       params: {

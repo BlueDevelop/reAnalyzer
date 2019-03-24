@@ -21,7 +21,7 @@ export default class DiscussionService {
       },
     };
 
-    return DiscussionService.client.search<IDiscussion>({
+    return DiscussionService.client.search({
       index: DiscussionService.index,
       body,
     });

@@ -88,9 +88,9 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
   constructor(private settingsService: SettingsService) {
     this.settingsService.colorsArrayBS.subscribe(() => {
       this.colors = this.settingsService.getColorDomain(2);
-      console.log('something');
-      console.log(this.colors);
-      this.chart.redraw();
+      //console.log('something');
+      //console.log(this.colors);
+      // this.chart.redraw();
     });
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -143,6 +143,6 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       },
     });
     this.chart.reflow();
-    console.log(this.chart);
+    //console.log(this.chart);
   }
 }

@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // this.dataFilering();
     // this.settingsService.initColorsArray().subscribe(() => {
-    console.log(this.settingsService.colorsArray);
+    //console.log(this.settingsService.colorsArray);
     this.dataFilering();
     // });
   }

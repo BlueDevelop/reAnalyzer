@@ -7,6 +7,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagCloudModule } from 'angular-tag-cloud-module';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { AvatarModule } from 'ngx-avatar';
 
 import { HighchartsChartModule } from 'highcharts-angular';
 
@@ -46,6 +47,9 @@ import { LeaderboardChartComponent } from './leaderboard-chart/leaderboard-chart
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ModalComponent } from './modal/modal.component';
 import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAvatarComponent } from './ag-grid-avatar/ag-grid-avatar.component';
+import { AgGridMaterialDatepickerComponent } from './ag-grid-material-datepicker/ag-grid-material-datepicker.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +83,8 @@ import { RefreshButtonComponent } from './refresh-button/refresh-button.componen
     UserProfileComponent,
     ModalComponent,
     RefreshButtonComponent,
+    AgGridAvatarComponent,
+    AgGridMaterialDatepickerComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,6 +92,7 @@ import { RefreshButtonComponent } from './refresh-button/refresh-button.componen
     MaterialModule,
     AppRoutingModule,
     NgxChartsModule,
+    AvatarModule,
     FormsModule,
     ReactiveFormsModule,
     TagCloudModule,
@@ -99,6 +106,10 @@ import { RefreshButtonComponent } from './refresh-button/refresh-button.componen
         deps: [HttpClient],
       },
     }),
+    AgGridModule.withComponents([
+      AgGridAvatarComponent,
+      AgGridMaterialDatepickerComponent,
+    ]),
   ],
   providers: [],
   bootstrap: [AppComponent],

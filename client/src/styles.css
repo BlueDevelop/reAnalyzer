@@ -5,6 +5,8 @@
 /*introjs*/
 @import '~intro.js/minified/introjs.min.css';
 @import '~intro.js/minified/introjs-rtl.min.css';
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-material.css";
 /* @import '~intro.js/themes/introjs-flattener.css'; */
 
 /* hebrew */
@@ -48,6 +50,22 @@
     src: url(./assets/fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
   }
   
+ /* enable basic browser text selection in grid cells */
+div.ag-root .ag-cell-focus {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+.ag-theme-material .ag-rtl .ag-cell-focus {
+  border: 0px rgba(0,0,0,0) !important;
+  outline: initial;
+}
+.ag-theme-material .ag-rtl .ag-cell-focus {
+  border: 0px rgba(0,0,0,0) !important;
+  outline: initial;
+}
+
   .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;

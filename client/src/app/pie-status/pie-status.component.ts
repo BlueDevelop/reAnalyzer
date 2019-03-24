@@ -46,10 +46,8 @@ export class PieStatusComponent implements OnInit {
   }
 
   getTask(event) {
-    this.taskService
-      .getTasksByFilter({ status: event.name })
-      .subscribe(data => {
-        this.dialog.open(ModalComponent, { data: data });
-      });
+    this.dialog.open(ModalComponent, {
+      data: this.taskService.getTasksByFilter({ status: event.name }),
+    });
   }
 }

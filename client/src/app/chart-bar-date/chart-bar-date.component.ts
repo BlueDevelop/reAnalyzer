@@ -65,7 +65,7 @@ export class ChartBarDateComponent implements OnInit {
     //this.getFieldCountPerInterval(this.intervals[this.interval]);
 
     this.settings.interval = this.interval;
-    console.log(this.settings.interval);
+    //console.log(this.settings.interval);
     this.data = this.aggData[this.settings.interval];
   }
 
@@ -138,14 +138,12 @@ export class ChartBarDateComponent implements OnInit {
   }
 
   getTask(event) {
-    this.taskService
-      .getTasksByFilter({
+    this.dialog.open(ModalComponent, {
+      data: this.taskService.getTasksByFilter({
         date: event.category,
         name: event.series.name,
         interval: this.settings.interval,
-      })
-      .subscribe(data => {
-        this.dialog.open(ModalComponent, { data: data });
-      });
+      }),
+    });
   }
 }

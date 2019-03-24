@@ -38,7 +38,7 @@ export class UserProfileComponent implements OnInit {
     reader.onprogress = data => {
       if (data.lengthComputable) {
         var progress = Math.round((data.loaded / data.total) * 100);
-        console.log(progress);
+        //console.log(progress);
       }
     };
     reader.readAsDataURL(input.files[0]);

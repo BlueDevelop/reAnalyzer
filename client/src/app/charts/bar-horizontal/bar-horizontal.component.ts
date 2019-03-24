@@ -38,6 +38,6 @@ export class BarHorizontalComponent implements OnInit {
   colorScheme = {};
 
   onSelect(event) {
-    console.log(event);
+    //console.log(event);
   }
 }

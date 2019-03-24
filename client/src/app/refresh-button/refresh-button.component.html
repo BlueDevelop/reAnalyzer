@@ -1,12 +1,12 @@
-<button *ngIf="interval===0" mat-icon-button (click)="updateInterval(5)">
+<button id="step10" *ngIf="interval===0" mat-icon-button (click)="updateInterval(5)">
   <mat-icon >refresh</mat-icon>
 </button>
-<button *ngIf="interval===5" mat-icon-button (click)="updateInterval(15)">
+<button id="step10" *ngIf="interval===5" mat-icon-button (click)="updateInterval(15)">
   <mat-icon matBadge="5" >update</mat-icon>
 </button>
-<button *ngIf="interval===15" mat-icon-button (click)="updateInterval(30)">
+<button id="step10" *ngIf="interval===15" mat-icon-button (click)="updateInterval(30)">
   <mat-icon matBadge="15" >update</mat-icon>
 </button>
-<button *ngIf="interval===30" mat-icon-button (click)="updateInterval(0)">
+<button id="step10" *ngIf="interval===30" mat-icon-button (click)="updateInterval(0)">
   <mat-icon matBadge="30" >update</mat-icon>
 </button>
