@@ -7,8 +7,10 @@ import { filter } from 'rxjs/operators';
 })
 export class RefreshService {
   private interval: number = 0;
+  public inProgress: number = 0;
   private intervalBS = new BehaviorSubject(0);
   private intervalObservable = this.intervalBS.asObservable();
+
   //only emit if the interval is dvisiable by the number of seconds passed
   //also if interval is 0 dont emit
   //interval value is in miliseconds

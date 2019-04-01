@@ -35,7 +35,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   names: object = { due: 'תאריך יעד', created: 'תאריך יצירה' };
   chartOptions: any = {
     chart: {
-      height: window.innerHeight * 0.38,
+      height: window.innerHeight * 0.37,
       zoomType: 'x',
     },
     title: {
@@ -107,7 +107,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     this.chartOptions = {
       ...this.chartOptions,
       chart: {
-        height: window.innerHeight * 0.38,
+        height: window.innerHeight * 0.37,
         zoomType: 'x',
       },
       xAxis: {
@@ -139,7 +139,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   onResize() {
     this.chart.update({
       chart: {
-        height: window.innerHeight * 0.38,
+        height: window.innerHeight * 0.37,
       },
     });
     this.chart.reflow();

@@ -14,6 +14,7 @@ import {
   CloudOptions,
   ZoomOnHoverOptions,
 } from 'angular-tag-cloud-module';
+import { RefreshService } from '../_services/refresh.service';
 
 @Component({
   selector: 'app-tag-cloud',
@@ -26,7 +27,8 @@ export class TagCloudComponent implements OnInit {
   Highcharts = Highcharts;
   updateFlag = true;
   data: any[] = [];
-  loading: boolean;
+  loading: boolean = false;
+  empty: boolean = false;
   colors: any[] = [];
   chartOptions = {
     chart: {
@@ -67,7 +69,8 @@ export class TagCloudComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private settingsService: SettingsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
@@ -87,10 +90,11 @@ export class TagCloudComponent implements OnInit {
     });
   }
 
-  getTagClouds(): void {
-    this.loading = true;
+  getTagClouds(showLoading: boolean = false): void {
+    this.loading = true && showLoading;
+    this.refresh.inProgress++;
+    this.empty = false;
     this.taskService.getTagClouds().subscribe(data => {
-      this.loading = false;
       this.editData(data);
       this.chartOptions = {
         ...this.chartOptions,
@@ -114,6 +118,10 @@ export class TagCloudComponent implements OnInit {
           },
         ],
       };
+
+      this.empty = this.data.length === 0;
+      this.loading = false;
+      this.refresh.inProgress--;
     });
   }
   getChartInstance(chart: Highcharts.Chart) {

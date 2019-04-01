@@ -6,6 +6,7 @@ import verboseLogger from '../loggers/verbose.logger';
 import errorLogger from '../loggers/error.logger';
 import filterHelper from '../helpers/userhierarchy.helper';
 import _ from 'lodash';
+import moment from 'moment';
 
 const striptags = require('striptags');
 const Entities = require('html-entities').AllHtmlEntities; // remove html entities like &nbsp
@@ -502,9 +503,9 @@ export default class TaskController {
     const fullNameGenerator = (name?: string, lastname?: string) =>
       `${name ? name : ''} ${lastname ? lastname : ''}`;
     const tasksList = tasks.map(task => {
-      let due: any = undefined;
+      let due: string | undefined = undefined;
       if (task.due) {
-        due = new Date(task.due);
+        due = task.due as string;
       }
 
       const ret = {

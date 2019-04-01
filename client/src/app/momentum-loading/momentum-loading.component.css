@@ -1,0 +1,136 @@
+/*!
+ * Pure CSS Newton's cradle 
+ * Copyright 2016 Jakub Hájek
+ * Licensed under MIT (https://opensource.org/licenses/MIT)
+ */
+ *,
+ *::before,
+ *::after {
+   box-sizing: border-box;
+ }
+ .container{
+
+    width:250px;
+    height: 175px;
+ }
+ .cradle {
+   position: relative;
+   display: flex;
+   justify-content: center;
+   margin: 2% auto;
+   width: 15em;
+   height: 2em;
+   font-size: 13px;
+   border: 0.75em solid #000000;
+   border-bottom-left-radius: 2em;
+   border-bottom-right-radius: 2em;
+ }
+
+ .cradle__ball {
+   position: relative;
+   top: 1em;
+   width: 0.8em;
+   height: 7em;
+   background-color: #000000;
+   margin: 0 1.6em;
+ }
+ .cradle__ball:before {
+   content: '';
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 4em;
+   height: 4em;
+   background-color: #ffffff;
+   border: 0.8em solid #000000;
+   border-radius: 2em;
+   -webkit-transform: translate(-1.75em, 3em);
+           transform: translate(-1.75em, 3em);
+ }
+
+ .cradle__ball:first-child,
+ .cradle__ball:last-child {
+   -webkit-transform-origin: top center;
+           transform-origin: top center;
+ }
+ .cradle__ball:first-child {
+   -webkit-animation: swing--left 1.2s cubic-bezier(0, 0.15, 0.58, 1.11) infinite;
+           animation: swing--left 1.2s cubic-bezier(0, 0.15, 0.58, 1.11) infinite;
+ }
+ .cradle__ball:last-child {
+   -webkit-animation: swing--right 1.2s cubic-bezier(0, 0.15, 0.58, 1.11) 0.6s infinite;
+           animation: swing--right 1.2s cubic-bezier(0, 0.15, 0.58, 1.11) 0.6s infinite;
+ }
+ @-webkit-keyframes swing--left {
+   0% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   25% {
+     -webkit-transform: rotate(30deg);
+             transform: rotate(30deg);
+   }
+   50% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   100% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+ }
+ @keyframes swing--left {
+   0% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   25% {
+     -webkit-transform: rotate(30deg);
+             transform: rotate(30deg);
+   }
+   50% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   100% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+ }
+ @-webkit-keyframes swing--right {
+   0% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   25% {
+     -webkit-transform: rotate(-30deg);
+             transform: rotate(-30deg);
+   }
+   50% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   100% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+ }
+ @keyframes swing--right {
+   0% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   25% {
+     -webkit-transform: rotate(-30deg);
+             transform: rotate(-30deg);
+   }
+   50% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+   100% {
+     -webkit-transform: rotate(0deg);
+             transform: rotate(0deg);
+   }
+ }
+ 

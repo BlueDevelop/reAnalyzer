@@ -5,6 +5,7 @@ import { SettingsService } from '../_services/settings.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalComponent } from '../modal/modal.component';
 import { MatDialog } from '@angular/material';
+import { RefreshService } from '../_services/refresh.service';
 @Component({
   selector: 'app-time-rates',
   templateUrl: './time-rates.component.html',
@@ -17,26 +18,29 @@ export class TimeRatesComponent implements OnInit {
     private taskService: TaskService,
     private settingsService: SettingsService,
     private translate: TranslateService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
     this.getTimeRates();
   }
 
-  getTimeRates(): void {
-    this.loading = true;
+  getTimeRates(showLoading: boolean = false): void {
+    //this.loading = true && showLoading;
+    this.refresh.inProgress++;
     this.taskService.getTimeRates().subscribe(data => {
-      this.loading = false;
       this.data = _.map(data.ratios, ratio => {
         return { name: ratio.name, y: ratio.value };
       });
+      // this.loading = false;
+      this.refresh.inProgress--;
     });
   }
 
   getTask(event) {
-    console.log('time rates component event');
-    console.log(event);
+    // console.log('time rates component event');
+    // console.log(event);
     const name = event.name;
     let ratioMin, ratioMax;
     if (name.indexOf('-') > -1) {

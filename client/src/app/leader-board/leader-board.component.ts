@@ -3,6 +3,7 @@ import { TaskService } from '../_services/task.service';
 import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
 import { ModalComponent } from '../modal/modal.component';
+import { RefreshService } from '../_services/refresh.service';
 
 @Component({
   selector: 'app-leader-board',
@@ -13,7 +14,11 @@ export class LeaderBoardComponent implements OnInit {
   data: any = { done: [], total: [], keys: [] };
   loading: boolean;
 
-  constructor(private taskService: TaskService, public dialog: MatDialog) {}
+  constructor(
+    private taskService: TaskService,
+    public dialog: MatDialog,
+    private refresh: RefreshService
+  ) {}
 
   ngOnInit() {
     this.getLeaderboard();
@@ -37,11 +42,13 @@ export class LeaderBoardComponent implements OnInit {
     this.data = { done, total, keys };
   }
 
-  getLeaderboard(): void {
-    this.loading = true;
+  getLeaderboard(showLoading: boolean = false): void {
+    //this.loading = true && showLoading;
+    this.refresh.inProgress++;
     this.taskService.getLeaderboard().subscribe(data => {
-      this.loading = false;
       this.editData(data);
+      //  this.loading = false;
+      this.refresh.inProgress--;
     });
   }
 

@@ -190,7 +190,7 @@ export default class TaskService {
     const staticMust = [
       {
         range: {
-          created: {
+          [field]: {
             gte: from,
             lte: to,
             format: 'epoch_millis',
@@ -548,7 +548,7 @@ export default class TaskService {
               //field: 'assign.id.keyword',
               // the :? operator returns the right side expression if its not null otherwise it returns the left side expression
               // new: "doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ?:doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value",
-              script: "doc['assign.id.keyword'].value",
+              field: 'assign.id.keyword',
               size: size || 10,
               order: {
                 _count: 'desc',

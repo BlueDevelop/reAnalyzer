@@ -1,4 +1,5 @@
-<div (window:resize)="onResize($event)" *ngIf="data.length>0 else spinner" class="tag-cloud">
+<div *ngIf="empty&&!loading">אין נתונים להצגה </div>
+<div (window:resize)="onResize($event)" *ngIf="!empty&&!loading else spinner" class="tag-cloud">
   <!-- <angular-tag-cloud class="custom-css" (window:resize)="onResize($event)"
     [strict]="false"
     [data]="data"
@@ -23,6 +24,8 @@
 ></highcharts-chart>
 </div>
 <ng-template #spinner>
-  <mat-spinner *ngIf="loading"></mat-spinner>
-  <div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>
+  <!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
+  <div  *ngIf="loading" class="container" style="direction: ltr">
+      <app-momentum-loading></app-momentum-loading>
+  </div>
 </ng-template>

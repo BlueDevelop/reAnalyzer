@@ -56,8 +56,7 @@ export class PieChartComponent implements OnInit, OnChanges {
     },
     tooltip: {
       useHTML: true,
-      format:
-        '<small style="direction:rtl">{point.name}:{point.y}</small><br/>',
+      pointFormat: '<small style="direction:rtl">{point.y}</small><br/>',
     },
     series: [
       {

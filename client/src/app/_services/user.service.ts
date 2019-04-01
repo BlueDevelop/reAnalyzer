@@ -5,6 +5,7 @@ import { User } from '../_models/user';
 //import { config } from '../../config';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 interface SignupObj {
   uniqueId: string;
@@ -27,6 +28,7 @@ export class UserService {
   }
 
   setUser(user: object): void {
+    localStorage.setItem('user', JSON.stringify(user));
     this.user.next(user);
   }
 
@@ -64,7 +66,10 @@ export class UserService {
   }
 
   update(user: User) {
-    return this.http.put(`${environment.apiUrl}/user`, user);
+    return this.http.put(`${environment.apiUrl}/user`, user).pipe(
+      map((res: any) => res),
+      tap(data => this.setUser(data))
+    );
   }
 
   // getUser() {

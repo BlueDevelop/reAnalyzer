@@ -50,6 +50,8 @@ import { RefreshButtonComponent } from './refresh-button/refresh-button.componen
 import { AgGridModule } from 'ag-grid-angular';
 import { AgGridAvatarComponent } from './ag-grid-avatar/ag-grid-avatar.component';
 import { AgGridMaterialDatepickerComponent } from './ag-grid-material-datepicker/ag-grid-material-datepicker.component';
+import { AgGridStatusChipComponent } from './ag-grid-status-chip/ag-grid-status-chip.component';
+import { MomentumLoadingComponent } from './momentum-loading/momentum-loading.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +87,8 @@ import { AgGridMaterialDatepickerComponent } from './ag-grid-material-datepicker
     RefreshButtonComponent,
     AgGridAvatarComponent,
     AgGridMaterialDatepickerComponent,
+    AgGridStatusChipComponent,
+    MomentumLoadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -109,6 +113,7 @@ import { AgGridMaterialDatepickerComponent } from './ag-grid-material-datepicker
     AgGridModule.withComponents([
       AgGridAvatarComponent,
       AgGridMaterialDatepickerComponent,
+      AgGridStatusChipComponent,
     ]),
   ],
   providers: [],

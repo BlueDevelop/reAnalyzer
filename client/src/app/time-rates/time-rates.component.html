@@ -1,7 +1,10 @@
 <!-- <app-bar [data]="data" legendTitle="אחוזים" xAxisLabel="ציר אחוזים" yAxisLabel="כמות המשימות" *ngIf="data.length>0 else spinner"></app-bar> -->
 <!-- <app-pie [data]="data"  doughnut="true" legendTitle="אחוזים" xAxisLabel="ציר אחוזים" yAxisLabel="כמות המשימות" *ngIf="data.length>0 else spinner"></app-pie> -->
-<app-pie-chart [data]="data" (getTasks)="getTask($event)" innerSize="70%" name="משימות" *ngIf="data.length>0 else spinner"></app-pie-chart>
+<div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>
+<app-pie-chart [data]="data" (getTasks)="getTask($event)" innerSize="70%" name="משימות" *ngIf="!loading && data.length>0"></app-pie-chart>
 <ng-template #spinner>
-    <mat-spinner *ngIf="loading"></mat-spinner>
-    <div *ngIf="data.length==0&&!loading">אין נתונים להצגה </div>
+    <!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
+    <div class="container" style="direction: ltr">
+            <app-momentum-loading></app-momentum-loading>
+        </div>
 </ng-template>

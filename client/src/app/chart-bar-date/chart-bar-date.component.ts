@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { MatDialog } from '@angular/material';
 import { ModalComponent } from '../modal/modal.component';
 import { SettingsService } from '../_services/settings.service';
+import { RefreshService } from '../_services/refresh.service';
 
 @Component({
   selector: 'app-chart-bar-date',
@@ -14,8 +15,10 @@ import { SettingsService } from '../_services/settings.service';
 export class ChartBarDateComponent implements OnInit {
   data: object[] = [];
   aggData: any = { without: [], day: [], week: [], month: [], year: [] };
-  loading: boolean;
+  loading: boolean = false;
+  empty: boolean = false;
   formatting: any;
+  inProgress: number = 0;
 
   //intervals: string[] = ['1d', '1w', '1m', '1y'];
   intervals: string[] = ['without', 'day', 'week', 'month', 'year'];
@@ -34,7 +37,8 @@ export class ChartBarDateComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     public dialog: MatDialog,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private refresh: RefreshService
   ) {
     // this.formatting = this.format.bind(this);
   }
@@ -93,7 +97,7 @@ export class ChartBarDateComponent implements OnInit {
         name: series.field,
         series: _.map(series.data, bucket => {
           return {
-            x: bucket.key,
+            x: moment.parseZone(bucket.key_as_string).valueOf(),
             y: bucket.doc_count,
           };
         }),
@@ -106,16 +110,25 @@ export class ChartBarDateComponent implements OnInit {
           return {
             name: series['name'],
             series: _.groupBy(series['series'], bucket => {
+              // console.log(moment(bucket['x']).startOf(interval as any));
               return moment(bucket['x']).startOf(interval as any);
             }),
           };
         });
-
+        // console.log(interval);
+        // console.log(currAgg);
         currAgg = _.map(currAgg, series => {
           return {
             name: series.name,
             series: _.map(series['series'], (bucket, key) => {
-              return { x: moment(key).valueOf(), y: bucket.length };
+              // console.log('after group by bucket');
+              // console.log(key);
+              // console.log(bucket);
+              // console.log(_.sumBy(bucket, (o: any) => o.y));
+              return {
+                x: bucket[0].x,
+                y: _.sumBy(bucket, (o: any) => o.y),
+              };
             }),
           };
         });
@@ -123,17 +136,21 @@ export class ChartBarDateComponent implements OnInit {
         this.aggData[interval] = currAgg;
       }
     });
+    this.refresh.inProgress--;
     this.data = this.aggData[this.settings.interval]; //default
   }
 
-  getFieldCountPerInterval(): void {
-    this.loading = true;
+  getFieldCountPerInterval(showLoading: boolean = false): void {
+    //this.loading = true && showLoading;
+    this.empty = false;
+    this.refresh.inProgress++;
     this.taskService.getFieldCountPerInterval().subscribe(data => {
       //Move slide to correct position
       // this.interval = this.intervals.indexOf(interval);
       //data array of series [due,created]
-      this.loading = false;
       this.editData(data);
+      this.empty = !(this.data[0] && this.data[0]['series'].length > 0);
+      //this.loading = false;
     });
   }
 

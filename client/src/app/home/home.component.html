@@ -5,6 +5,7 @@
   <mat-sidenav-content>
 
 <app-nav-bar></app-nav-bar>
+<mat-progress-bar *ngIf="this.refresh.inProgress!=0" mode="indeterminate"></mat-progress-bar>
         <router-outlet name="app"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

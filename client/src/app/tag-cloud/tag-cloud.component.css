@@ -2,3 +2,14 @@
     height:42vh;
     width: 100%;
   }
+  .container{
+    display: flex;
+    flex-direction: rows;
+    justify-content: center;
+    align-items: center;
+}
+
+* /deep/ .cradle{
+transform: scale(0.5);
+
+}

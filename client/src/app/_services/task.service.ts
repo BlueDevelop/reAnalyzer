@@ -125,7 +125,7 @@ export class TaskService {
     } else if ('name' in filter) {
       filter['name'] = this.translate.instant(filter['name']);
       let interval =
-        filter['interval'] == 'without' ? 'day' : filter['interval'];
+        filter['interval'] == 'without' ? 'hour' : filter['interval'];
       delete filter['interval'];
       //delete filter['date'];
       if (interval) {

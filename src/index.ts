@@ -124,7 +124,7 @@ function setRoutes() {
 
   app.get('/api/isAlive', (_, res) => {
     if (connection.readyState) {
-      return res.send('ok');
+      return res.send('alive');
     }
     return res.status(500).send();
   });

@@ -1,26 +1,30 @@
-<mat-spinner *ngIf="loading"></mat-spinner>
+<!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
+<div class="container" *ngIf="loading" style="direction: ltr">
+    <app-momentum-loading></app-momentum-loading>
+</div>
 <button *ngIf="!loading" (click)="save()" mat-icon-button>
     <mat-icon >save</mat-icon>
   </button>
-<div *ngIf="!loading" class="container mat-elevation-z8">
+<div #container [ngStyle]="style" (window:resize)="onGridSizeChanged($event)" *ngIf="!loading" class="container mat-elevation-z8">
     <ag-grid-angular
-    style="width: 100%; height: 98%;"
-
+    
+    #agGrid
+    style="height: 100%;width:100%;"
     class="ag-theme-material"
     [rowData]="tableData" 
     [columnDefs]="displayedColumns"
-    [enableRtl]="true"
-    [suppressChangeDetection]=true
-    [pivotPanelShow]="true"
-    [paginationPageSize]="10"
-    [pagination]="true"
+    enableRtl="true"
+    
     [localeText]="localeText"
     [frameworkComponents]="frameworkComponents"
-    
+    [pagination] = "true"
+    [paginationAutoPageSize]="10"
+
     rowSelection = "single"
     animateRows
     
     (selectionChanged)="onSelectionChanged($event)"
+    (gridSizeChanged)="onGridSizeChanged($event)"
     (gridReady)="onGridReady($event)"
     >
 </ag-grid-angular>

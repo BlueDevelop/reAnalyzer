@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
 import { ModalComponent } from '../modal/modal.component';
+import { RefreshService } from '../_services/refresh.service';
 
 @Component({
   selector: 'app-pie-status',
@@ -12,12 +13,14 @@ import { ModalComponent } from '../modal/modal.component';
 })
 export class PieStatusComponent implements OnInit {
   data: object[] = [];
-  loading: boolean;
+  //loading: boolean = false;
+  empty: boolean = false;
 
   constructor(
     private taskService: TaskService,
     private translate: TranslateService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
@@ -37,11 +40,15 @@ export class PieStatusComponent implements OnInit {
     });
   }
 
-  getCountByStatus(): void {
-    this.loading = true;
+  getCountByStatus(showLoading: boolean = false): void {
+    //this.loading = true && showLoading;
+    this.empty = false;
+    this.refresh.inProgress++;
     this.taskService.getTaskCountByStatus().subscribe(data => {
-      this.loading = false;
       this.editData(data);
+      this.empty = this.data.length == 0;
+      // this.loading = false;
+      this.refresh.inProgress--;
     });
   }
 

@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { AgGridAvatarComponent } from '../ag-grid-avatar/ag-grid-avatar.component';
+import { AgGridStatusChipComponent } from '../ag-grid-status-chip/ag-grid-status-chip.component';
 import { AgGridMaterialDatepickerComponent } from '../ag-grid-material-datepicker/ag-grid-material-datepicker.component';
 
 @Component({
@@ -14,6 +15,10 @@ import { AgGridMaterialDatepickerComponent } from '../ag-grid-material-datepicke
   styleUrls: ['./modal.component.css'],
 })
 export class ModalComponent implements OnInit {
+  private style: any = {
+    height: `${0.7 * window.innerHeight}px`,
+    width: '100%',
+  };
   private gridApi;
   private gridColumnApi;
   frameworkComponents = { agDateInput: AgGridMaterialDatepickerComponent };
@@ -61,11 +66,13 @@ export class ModalComponent implements OnInit {
     },
     {
       headerName: this.translate.instant('statusTask'),
+      cellRendererFramework: AgGridStatusChipComponent,
       field: 'status',
       sortable: true,
       // filter: true,
       valueGetter: params => {
-        return this.translate.instant(`status.${params.data.status}`);
+        // return this.translate.instant(`status.${params.data.status}`);
+        return params.data.status;
       },
       valueFormatter: params => {
         return params.value.status;
@@ -128,7 +135,9 @@ export class ModalComponent implements OnInit {
         return !a ? -1 : !b ? 1 : a.diff(b) >= 0 ? 1 : -1;
       },
       valueGetter: function(params) {
-        return !params.data.due ? undefined : moment(params.data.due);
+        return !params.data.due
+          ? undefined
+          : moment.utc(params.data.due).local();
       },
       valueFormatter: function(params) {
         return !params.value ? '' : params.value.format('DD/MM/YYYY');
@@ -140,6 +149,7 @@ export class ModalComponent implements OnInit {
   ];
   //dataArray = [this.data];
   dataSource: any; //= new MatTableDataSource(this.data as object[]);
+
   @ViewChild(MatTable)
   table: MatTable<any>;
   @ViewChild(MatSort)
@@ -156,7 +166,10 @@ export class ModalComponent implements OnInit {
     this.data.subscribe(data => {
       this.tableData = data;
       this.loading = false;
-      if (this.gridApi) this.gridApi.refreshCells();
+      if (this.gridApi) {
+        this.gridApi.refreshCells();
+        this.gridApi.sizeColumnsToFit();
+      }
     });
     // this.dataSource = new MatTableDataSource(this.tableData as object[]);
     // this.dataSource.sort = this.sort;
@@ -174,6 +187,13 @@ export class ModalComponent implements OnInit {
     //   this.tableData = data;
     //   this.loading = false;
     // });
+  }
+  onGridSizeChanged(params) {
+    this.style = {
+      height: `${0.7 * window.innerHeight}px`,
+      width: '100%',
+    };
+    if (params.api) params.api.resetRowHeights();
   }
   save() {
     this.gridApi.exportDataAsCsv({

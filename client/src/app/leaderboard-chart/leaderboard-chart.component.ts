@@ -19,7 +19,7 @@ const formatXLabels = (str: string) => {
     .replace(/\s+/g, ' ')
     .trim()
     .split(' ')
-    .slice(0, 1)
+    .slice(0, 2)
     .join(' ');
 };
 
