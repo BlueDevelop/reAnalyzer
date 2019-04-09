@@ -5,7 +5,7 @@ import { User } from '../_models/user';
 //import { config } from '../../config';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 interface SignupObj {
   uniqueId: string;
@@ -69,6 +69,18 @@ export class UserService {
     return this.http.put(`${environment.apiUrl}/user`, user).pipe(
       map((res: any) => res),
       tap(data => this.setUser(data))
+    );
+  }
+
+  // getPersonsUnderPerson() {
+  //   return this.http.get(
+  //     `${environment.apiUrl}/hierarchy/getPersonsUnderPerson`
+  //   );
+  // }
+
+  getPersonsUnderPerson(): Observable<any> {
+    return this.http.get(
+      `${environment.apiUrl}/hierarchy/getPersonsUnderPerson`
     );
   }
 

@@ -9,33 +9,18 @@
     align-items: center;
 }
 
-* /deep/ .cradle{
-transform: scale(0.5);
-
-}
-
 .chart{
     width: 90%;
 }
-.slider{
-    /* margin-top: 15px; */
-}
+
 .mat-slider-vertical{
     min-height: 72%;
     width: 32px;
     margin-right: 20px;
 }
 
-.mat-primary .mat-slider-thumb, .mat-primary .mat-slider-thumb-label, .mat-primary .mat-slider-track-fill {
-    background-color: #74467e !important;
-    color:white;
-}
-/* 
-.mat-button-toggle-appearance-standard .mat-button-toggle-label-content /deep/ {
-line-height: 0;
-} */
 mat-button-toggle-group /deep/ .mat-button-toggle-label-content{
-line-height: 30px;
+    line-height: 30px;
 }
 mat-button-toggle-group /deep/ .mat-button-toggle-button{
     font-size: 70%;

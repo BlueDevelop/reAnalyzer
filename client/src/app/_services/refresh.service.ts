@@ -7,7 +7,8 @@ import { filter } from 'rxjs/operators';
 })
 export class RefreshService {
   private interval: number = 0;
-  public inProgress: number = 0;
+  private inProgressBS = new BehaviorSubject(0);
+  public inProgressObservable = this.inProgressBS.asObservable();
   private intervalBS = new BehaviorSubject(0);
   private intervalObservable = this.intervalBS.asObservable();
 
@@ -25,5 +26,11 @@ export class RefreshService {
   }
   updateInterval(newInterval: number) {
     this.intervalBS.next(1000 * newInterval); // interval values are in miliseconds
+  }
+  increaseProgress() {
+    this.inProgressBS.next(this.inProgressBS.getValue() + 1);
+  }
+  decreaseProgress() {
+    this.inProgressBS.next(this.inProgressBS.getValue() - 1);
   }
 }

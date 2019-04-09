@@ -12,7 +12,6 @@ import { RefreshService } from '../_services/refresh.service';
 })
 export class LeaderBoardComponent implements OnInit {
   data: any = { done: [], total: [], keys: [] };
-  loading: boolean;
 
   constructor(
     private taskService: TaskService,
@@ -42,13 +41,11 @@ export class LeaderBoardComponent implements OnInit {
     this.data = { done, total, keys };
   }
 
-  getLeaderboard(showLoading: boolean = false): void {
-    //this.loading = true && showLoading;
-    this.refresh.inProgress++;
+  getLeaderboard(): void {
+    this.refresh.increaseProgress();
     this.taskService.getLeaderboard().subscribe(data => {
       this.editData(data);
-      //  this.loading = false;
-      this.refresh.inProgress--;
+      this.refresh.decreaseProgress();
     });
   }
 

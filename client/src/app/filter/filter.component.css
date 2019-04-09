@@ -64,3 +64,10 @@
     font-size: medium;
   }
   
+  .pick-unit-button{
+    height: 0%;
+    margin-top: 1%;
+  }
+.hierarchy-input{
+  display: flex;
+}

@@ -230,6 +230,12 @@ export class FilterComponent implements OnInit {
     this.model[model].itemSelected.setValue(null);
   }
 
+  addFromList(event, model: string): void {
+    this.model[model].items.push(event.currentTarget.value);
+    //this.model[model].itemInput.nativeElement.value = '';
+    //this.model[model].itemSelected.setValue(null);
+  }
+
   remove(item: string, model: string): void {
     const index = this.model[model].items.indexOf(item);
 

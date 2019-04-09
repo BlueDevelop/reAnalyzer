@@ -36,6 +36,7 @@
   </mat-expansion-panel-header>
   <mat-divider></mat-divider>
   <div class="filter-inputs">
+    <div class="hierarchy-input">
     <mat-form-field class="unit-select">
         <mat-chip-list #chipListUnit>
             <mat-chip *ngFor="let unit of units" [selectable]="selectable" [removable]="removable" (removed)="remove(unit, 'units')">
@@ -51,6 +52,10 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+    <button mat-stroked-button class="pick-unit-button" [matMenuTriggerFor]="animals">
+        <mat-icon>call_split</mat-icon>
+    </button>
+  </div>
     <mat-form-field class="project-select">
         <mat-chip-list #chipListProject>
             <mat-chip *ngFor="let project of projects" [selectable]="selectable" [removable]="removable" (removed)="remove(project, 'projects')">
@@ -101,3 +106,53 @@
     </button>
   </div>
 </mat-expansion-panel>
+
+
+
+
+<mat-menu #animals="matMenu">
+  <button mat-menu-item [matMenuTriggerFor]="vertebrates" value="Vertebrates" (click)="addFromList($event, 'units')">Vertebrates</button>
+  <button mat-menu-item [matMenuTriggerFor]="invertebrates" value="Invertebrates" (click)="addFromList($event, 'units')">Invertebrates</button>
+  <button mat-menu-item [matMenuTriggerFor]="invertebrates" *ngFor="let unit of filteredUnits | async" value="{{unit.key}}" (click)="addFromList($event, 'units')">{{unit.value}}</button>
+</mat-menu>
+
+<mat-menu #vertebrates="matMenu">
+  <button mat-menu-item [matMenuTriggerFor]="fish" value="Fishes" (click)="addFromList($event, 'units')">Fishes</button>
+  <button mat-menu-item [matMenuTriggerFor]="amphibians" value="Amphibians" (click)="addFromList($event, 'units')">Amphibians</button>
+  <button mat-menu-item [matMenuTriggerFor]="reptiles" value="Reptiles" (click)="addFromList($event, 'units')">Reptiles</button>
+  <button mat-menu-item value="fish" (click)="addFromList($event, 'units')">Birds</button>
+  <button mat-menu-item>Mammals</button>
+</mat-menu>
+
+<mat-menu #invertebrates="matMenu">
+  <button mat-menu-item>Insects</button>
+  <button mat-menu-item>Molluscs</button>
+  <button mat-menu-item>Crustaceans</button>
+  <button mat-menu-item>Corals</button>
+  <button mat-menu-item>Arachnids</button>
+  <button mat-menu-item>Velvet worms</button>
+  <button mat-menu-item>Horseshoe crabs</button>
+</mat-menu>
+
+<mat-menu #fish="matMenu">
+  <button mat-menu-item>Baikal oilfish</button>
+  <button mat-menu-item>Bala shark</button>
+  <button mat-menu-item>Ballan wrasse</button>
+  <button mat-menu-item>Bamboo shark</button>
+  <button mat-menu-item>Banded killifish</button>
+</mat-menu>
+
+<mat-menu #amphibians="matMenu">
+  <button mat-menu-item>Sonoran desert toad</button>
+  <button mat-menu-item>Western toad</button>
+  <button mat-menu-item>Arroyo toad</button>
+  <button mat-menu-item>Yosemite toad</button>
+</mat-menu>
+
+<mat-menu #reptiles="matMenu">
+  <button mat-menu-item value="Banded Day Gecko" (click)="addFromList($event, 'units')">Banded Day Gecko</button>
+  <button mat-menu-item value="Banded Gila Monster" (click)="addFromList($event, 'units')">Banded Gila Monster</button>
+  <button mat-menu-item value="Black Tree Monitor" (click)="addFromList($event, 'units')">Black Tree Monitor</button>
+  <button mat-menu-item value="Blue Spiny Lizard" (click)="addFromList($event, 'units')">Blue Spiny Lizard</button>
+  <button mat-menu-item disabled>Velociraptor</button>
+</mat-menu>

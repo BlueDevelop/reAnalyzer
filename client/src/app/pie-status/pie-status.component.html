@@ -1,9 +1,2 @@
-<!-- <app-pie [data]="data" legendTitle="סטטוס" *ngIf="data.length>0 else spinner"></app-pie> -->
-<div *ngIf="empty&&!loading">אין נתונים להצגה </div>
-<app-pie-chart name="משימות" [data]="data" (getTasks)="getTask($event)" legendTitle="סטטוס" *ngIf="!loading && !empty"></app-pie-chart>
-<ng-template #spinner>
-    <!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
-    <div *ngIf="loading" class="container" style="direction: ltr">
-        <app-momentum-loading></app-momentum-loading>
-    </div>
-  </ng-template>
+<div *ngIf="empty">אין נתונים להצגה </div>
+<app-pie-chart name="משימות" [data]="data" (getTasks)="getTask($event)" legendTitle="סטטוס" *ngIf="!empty"></app-pie-chart>

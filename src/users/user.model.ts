@@ -21,6 +21,10 @@ const userSchema = new Schema(
       type: {},
       default: { colors: ['#E9A951', '#237675', '#2E1510'] },
     },
+    officeMembers: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,

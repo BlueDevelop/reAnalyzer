@@ -1,5 +1,15 @@
 import path from 'path';
 
+interface ISaml {
+  entryPoint: string;
+  issuer: string;
+  callbackUrl: string;
+  authnContext: string;
+  identifierFormat: string | null;
+  signatureAlgorithm: string;
+  acceptedClockSkewMs: number;
+}
+
 interface IConfig {
   port: number;
   connString: string;
@@ -19,6 +29,9 @@ interface IConfig {
   hierarchyServiceAddrGetMembers?: (hierarchy: string) => string; // function that generates the route to get all members\users under a given hierarchy from the api
   hierarchyServiceAddrGetUser?: (userID: string) => string; // function that generates the route to get a single user\member info
   debug?: boolean;
+  useSaml?: boolean;
+  saml?: ISaml;
+  samlClaimMapper?: any; // used in the saml strategy to map profile keys to id,firstName,lastName
 }
 
 const prod: IConfig = {

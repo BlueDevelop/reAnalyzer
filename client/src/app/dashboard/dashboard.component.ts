@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
     private refresh: RefreshService
   ) {
     //initial data load
-    this.refresh.source.subscribe(() => this.dataFilering(false)); //refresh;
+    this.refresh.source.subscribe(() => this.dataFilering()); //refresh;
   }
 
   ngOnInit() {
@@ -56,14 +56,17 @@ export class DashboardComponent implements OnInit {
     // });
   }
 
-  dataFilering(showLoading: boolean = true) {
+  dataFilering() {
     // this.settingsService.initColorsArray();
     // this.settingsService.initColorsArray().subscribe(() => {
-    this.barDate.getFieldCountPerInterval(showLoading);
-    this.pieStatus.getCountByStatus(showLoading);
-    this.leaderBoard.getLeaderboard(showLoading);
-    this.tagCloud.getTagClouds(showLoading);
-    this.timeRates.getTimeRates(showLoading);
+    // setTimeout(() => {
+    this.barDate.getFieldCountPerInterval();
+    this.pieStatus.getCountByStatus();
+    this.leaderBoard.getLeaderboard();
+    this.tagCloud.getTagClouds();
+    this.timeRates.getTimeRates();
+    // }, 0);
+
     // });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -15,10 +15,8 @@ import { RefreshService } from '../_services/refresh.service';
 export class ChartBarDateComponent implements OnInit {
   data: object[] = [];
   aggData: any = { without: [], day: [], week: [], month: [], year: [] };
-  loading: boolean = false;
   empty: boolean = false;
   formatting: any;
-  inProgress: number = 0;
 
   //intervals: string[] = ['1d', '1w', '1m', '1y'];
   intervals: string[] = ['without', 'day', 'week', 'month', 'year'];
@@ -38,7 +36,8 @@ export class ChartBarDateComponent implements OnInit {
     private taskService: TaskService,
     public dialog: MatDialog,
     private settings: SettingsService,
-    private refresh: RefreshService
+    private refresh: RefreshService,
+    private cdRef: ChangeDetectorRef
   ) {
     // this.formatting = this.format.bind(this);
   }
@@ -61,6 +60,7 @@ export class ChartBarDateComponent implements OnInit {
   // }
 
   ngOnInit() {
+    this.empty = true;
     this.interval = this.settings.interval;
     this.getFieldCountPerInterval();
   }
@@ -136,21 +136,24 @@ export class ChartBarDateComponent implements OnInit {
         this.aggData[interval] = currAgg;
       }
     });
-    this.refresh.inProgress--;
+
     this.data = this.aggData[this.settings.interval]; //default
   }
 
-  getFieldCountPerInterval(showLoading: boolean = false): void {
-    //this.loading = true && showLoading;
-    this.empty = false;
-    this.refresh.inProgress++;
+  getFieldCountPerInterval(): void {
+    this.refresh.increaseProgress();
     this.taskService.getFieldCountPerInterval().subscribe(data => {
       //Move slide to correct position
       // this.interval = this.intervals.indexOf(interval);
       //data array of series [due,created]
       this.editData(data);
-      this.empty = !(this.data[0] && this.data[0]['series'].length > 0);
-      //this.loading = false;
+      //this.cdRef.detectChanges();
+      this.refresh.decreaseProgress();
+      this.empty =
+        this.data[0] &&
+        this.data[1] &&
+        this.data[0]['series'].length === 0 &&
+        this.data[1]['series'].length === 0;
     });
   }
 

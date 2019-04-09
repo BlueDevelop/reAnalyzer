@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RefreshService } from '../_services/refresh.service';
 
 @Component({
@@ -7,7 +7,16 @@ import { RefreshService } from '../_services/refresh.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private refresh: RefreshService) {}
+  private inProgress: number = 0;
+  constructor(
+    private refresh: RefreshService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.refresh.inProgressObservable.subscribe(newVal => {
+      this.inProgress = newVal;
+      this.cdRef.detectChanges();
+    });
+  }
 }

@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: '/api', //'http://localhost:3000/api',
+  useSaml: false,
 };
 
 /*

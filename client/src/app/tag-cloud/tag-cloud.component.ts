@@ -9,11 +9,11 @@ import wordcloud from 'highcharts/modules/wordcloud.src';
 import { MatDialog } from '@angular/material';
 wordcloud(Highcharts);
 // HC_exporting(Highcharts);
-import {
-  CloudData,
-  CloudOptions,
-  ZoomOnHoverOptions,
-} from 'angular-tag-cloud-module';
+// import {
+//   CloudData,
+//   CloudOptions,
+//   ZoomOnHoverOptions,
+// } from 'angular-tag-cloud-module';
 import { RefreshService } from '../_services/refresh.service';
 
 @Component({
@@ -27,7 +27,6 @@ export class TagCloudComponent implements OnInit {
   Highcharts = Highcharts;
   updateFlag = true;
   data: any[] = [];
-  loading: boolean = false;
   empty: boolean = false;
   colors: any[] = [];
   chartOptions = {
@@ -90,9 +89,8 @@ export class TagCloudComponent implements OnInit {
     });
   }
 
-  getTagClouds(showLoading: boolean = false): void {
-    this.loading = true && showLoading;
-    this.refresh.inProgress++;
+  getTagClouds(): void {
+    this.refresh.increaseProgress();
     this.empty = false;
     this.taskService.getTagClouds().subscribe(data => {
       this.editData(data);
@@ -120,15 +118,14 @@ export class TagCloudComponent implements OnInit {
       };
 
       this.empty = this.data.length === 0;
-      this.loading = false;
-      this.refresh.inProgress--;
+      this.refresh.decreaseProgress();
     });
   }
   getChartInstance(chart: Highcharts.Chart) {
     this.chart = chart;
   }
 
-  onClickTag(tagClicked: CloudData) {
+  onClickTag(tagClicked) {
     console.log(tagClicked);
   }
   getTasks(name: string) {

@@ -14,5 +14,16 @@ router.get(
   authenticate,
   hierarchyController.getHierarchiesNamesList
 );
+router.get(
+  '/usersUnderHierarchy',
+  authenticate,
+  hierarchyController.getUsersUnderHierarchy
+);
+
+router.get(
+  '/getPersonsUnderPerson',
+  authenticate,
+  hierarchyController.getPersonsUnderPerson
+);
 
 export default router;

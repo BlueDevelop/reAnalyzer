@@ -140,6 +140,12 @@ function setRoutes() {
     return res.status(500).send();
   });
 
+  //metadata.xml
+  if (config.useSaml)
+    app.all('/metadata.xml', (req, res, next) => {
+      res.sendFile(path.join(__dirname, '../metadata.xml'));
+    });
+
   // Static files
   app.use(express.static(path.join(__dirname, '../client/dist/App')));
 

@@ -1,48 +1,26 @@
-<div class="container" *ngIf="!loading else spinner">
-  <div *ngIf="empty">אין נתונים להצגה</div>
-    <div class="chart" *ngIf="!empty">
-<!-- <app-bar  [interval]="interval" [xAxisTickFormatting]="formatting" [data]="data" legendTitle="תאריך" xAxisLabel="ציר זמן" yAxisLabel="כמות המשימות" [view]="[1150, undefined]"></app-bar> -->
-<!-- <mat-radio-group (change)="changeInterval()" [(ngModel)]="interval">
-  <mat-radio-button *ngFor="let interval of intervals"  [value]="interval" >{{ interval | translate}}</mat-radio-button>
-</mat-radio-group> -->
-<div>
-<mat-button-toggle-group (change)="changeInterval()" [(ngModel)]="interval" >
-  <mat-button-toggle *ngFor="let interval of intervals" [value]="interval">{{ interval | translate}}</mat-button-toggle>
-</mat-button-toggle-group>
+<div class="container">
+    <div *ngIf="empty">אין נתונים להצגה</div>
+  <div class="chart"  *ngIf="!empty">
+    <div>
+      <mat-button-toggle-group
+        (change)="changeInterval()"
+        [(ngModel)]="interval"
+      >
+        <mat-button-toggle
+          *ngFor="let interval of intervals"
+          [value]="interval"
+          >{{ interval | translate }}</mat-button-toggle
+        >
+      </mat-button-toggle-group>
+    </div>
+    <app-timeline-chart
+      [interval]="interval"
+      [data]="data"
+      (getTasks)="getTask($event)"
+    ></app-timeline-chart>
+  </div>
 </div>
-<app-timeline-chart [interval]="interval" [data]="data" (getTasks)="getTask($event)"></app-timeline-chart>
-</div>
-</div>
-<!-- <div class="slider">
-        <p class="example-h2">מרווח זמן</p>
-<mat-slider color="primary"
 
-  class="example-margin"
-  [disabled]="disabled"
-  [invert]="invert"
-  [max]="max"
-  [min]="min"
-  [step]="step"
-  [thumbLabel]="thumbLabel"
-  [tickInterval]="tickInterval"
-  [(ngModel)]="interval"
-  [vertical]="vertical"
-  [displayWith]="formatLabel"
-  (change)="changeInterval()">
-</mat-slider>
-</div>
-</div> -->
-<!-- <app-apex-chart></app-apex-chart> -->
-<ng-template #spinner>
-  <!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
-  <div class="container" style="direction: ltr">
-  <app-momentum-loading></app-momentum-loading>
-</div>
-  <!-- <div *ngIf="data[0] && data[0].series.length==0&&!loading">אין נתונים להצגה </div> -->
+<ng-template #nil>
+  <div>אין נתונים להצגה</div>
 </ng-template>
-<!-- <ng-template #empty>
-  <div>אין נתונים להצגה </div>
-</ng-template> -->
-<!-- <ng-template #noData>
-  אין נתונים להצגה 
-</ng-template> -->

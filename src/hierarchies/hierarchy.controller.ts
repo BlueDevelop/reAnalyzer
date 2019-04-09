@@ -29,4 +29,12 @@ export default class HierarchyController {
     // });
     return res.json(ret);
   }
+
+  public static getUsersUnderHierarchy(req: Request, res: Response) {
+    res.send(['blablabla', 'hahaha', 'lalala']);
+  }
+
+  public static getPersonsUnderPerson(req: Request, res: Response) {
+    return res.json({ persons: ['blablabla', 'hahaha', 'lalala'] });
+  }
 }

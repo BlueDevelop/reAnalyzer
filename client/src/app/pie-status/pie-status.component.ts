@@ -13,7 +13,6 @@ import { RefreshService } from '../_services/refresh.service';
 })
 export class PieStatusComponent implements OnInit {
   data: object[] = [];
-  //loading: boolean = false;
   empty: boolean = false;
 
   constructor(
@@ -40,15 +39,13 @@ export class PieStatusComponent implements OnInit {
     });
   }
 
-  getCountByStatus(showLoading: boolean = false): void {
-    //this.loading = true && showLoading;
+  getCountByStatus(): void {
     this.empty = false;
-    this.refresh.inProgress++;
+    this.refresh.increaseProgress();
     this.taskService.getTaskCountByStatus().subscribe(data => {
       this.editData(data);
       this.empty = this.data.length == 0;
-      // this.loading = false;
-      this.refresh.inProgress--;
+      this.refresh.decreaseProgress();
     });
   }
 

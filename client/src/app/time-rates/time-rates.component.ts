@@ -13,7 +13,6 @@ import { RefreshService } from '../_services/refresh.service';
 })
 export class TimeRatesComponent implements OnInit {
   data: object[] = [];
-  loading: boolean;
   constructor(
     private taskService: TaskService,
     private settingsService: SettingsService,
@@ -26,15 +25,13 @@ export class TimeRatesComponent implements OnInit {
     this.getTimeRates();
   }
 
-  getTimeRates(showLoading: boolean = false): void {
-    //this.loading = true && showLoading;
-    this.refresh.inProgress++;
+  getTimeRates(): void {
+    this.refresh.increaseProgress();
     this.taskService.getTimeRates().subscribe(data => {
       this.data = _.map(data.ratios, ratio => {
         return { name: ratio.name, y: ratio.value };
       });
-      // this.loading = false;
-      this.refresh.inProgress--;
+      this.refresh.decreaseProgress();
     });
   }
 

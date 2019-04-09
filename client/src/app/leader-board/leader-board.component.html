@@ -1,9 +1,3 @@
 <!-- <app-bar-horizontal [data]="data" legendTitle="משתמשים" xAxisLabel="משימות שהסתיימו" yAxisLabel="משתמשים" *ngIf="data.length>0 else spinner"></app-bar-horizontal> -->
 <div *ngIf="data.done.length==0">אין נתונים להצגה </div>
 <app-leaderboard-chart name="משימות" [data]="data" (getTasks)="getTask($event)" *ngIf="data.done.length>0"></app-leaderboard-chart>
-<ng-template #spinner>
-    <!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
-    <div class="container" style="direction: ltr">
-            <app-momentum-loading></app-momentum-loading>
-        </div>
-</ng-template>

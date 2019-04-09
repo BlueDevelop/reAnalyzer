@@ -42,7 +42,7 @@ export class SettingsService {
             : this.colorsArrayDefault;
         this.colorsArrayBS.next(this.colorsArray);
         observer.next(this.colorsArray);
-        observer.complete();
+        // observer.complete();
       });
     });
   }
