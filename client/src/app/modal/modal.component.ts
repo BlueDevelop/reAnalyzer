@@ -193,7 +193,10 @@ export class ModalComponent implements OnInit {
       height: `${0.7 * window.innerHeight}px`,
       width: '100%',
     };
-    if (params.api) params.api.resetRowHeights();
+    if (params.api) {
+      // params.api.sizeColumnsToFit();
+      params.api.resetRowHeights();
+    }
   }
   save() {
     this.gridApi.exportDataAsCsv({

@@ -36,21 +36,27 @@ async function userIDToHierarchyID(userID: string) {
  * @param {string} userID
  * @returns The user's office members (if exists)
  */
-async function getOfficeMembersFromUser(
-  userID: string,
-  transformID?: (id: string) => string
-) {
-  transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
-  userID = transformID(userID);
-  const userIDToOfficeMembersMaper = memoizedReadAndParseJSON(
-    config.userIDToOfficeMembersFile
-  );
-  const officeMembers: string[] = userIDToOfficeMembersMaper[userID]
-    ? userIDToOfficeMembersMaper[userID]
-    : [];
-
-  return officeMembers;
-}
+// async function getOfficeMembersFromUser(
+//   user: any,
+//   transformID?: (id: string) => string
+// ) {
+//   transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
+//   const userID = transformID(user['uniqueId']);
+//   let userIDToOfficeMembersMaper;
+//   if (config.userIDToOfficeMembersFile) {
+//     userIDToOfficeMembersMaper = memoizedReadAndParseJSON(
+//       config.userIDToOfficeMembersFile
+//     );
+//     const officeMembers: string[] = userIDToOfficeMembersMaper[userID]
+//       ? userIDToOfficeMembersMaper[userID]
+//       : [];
+//     return officeMembers;
+//   } else {
+//     console.log(user);
+//     return user.officeMembers
+//     // return [];
+//   }
+// }
 
 /**
  *
@@ -108,24 +114,34 @@ async function getMembersByUser(
 ) {
   transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
   userID = transformID(userID);
-  const userHierarchy = await userIDToHierarchyID(userID);
-  // if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
-  //   // use mock
-  //   return userHierarchy
-  //     ? memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[userHierarchy]
-  //     : [];
-  // }
-  // use api
-  const directMembers = await getDirectMembersOfHierarchy(userHierarchy);
-  let indirectMembers: any[] = [];
-  // if (config.hierarchyServiceGroupMembersFile) {
-  //   indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
-  // }
-  indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
+  if (config.hierarchyServiceAddrGetMembersUnderUser) {
+    console.log('in getMembersByUser');
+    const genURL = config.hierarchyServiceAddrGetMembersUnderUser;
+    const getURL = genURL(userID);
+    console.log(`getURL: ${getURL}`);
+    const userResponse = await axios.get(getURL); // retrieves the user
+    const user = userResponse.data;
+    return user;
+  } else {
+    const userHierarchy = await userIDToHierarchyID(userID);
+    // if (config.hierarchyServiceUseMock && config.hierarchyServiceMockFile) {
+    //   // use mock
+    //   return userHierarchy
+    //     ? memoizedReadAndParseJSON(config.hierarchyServiceMockFile)[userHierarchy]
+    //     : [];
+    // }
+    // use api
+    const directMembers = await getDirectMembersOfHierarchy(userHierarchy);
+    let indirectMembers: any[] = [];
+    // if (config.hierarchyServiceGroupMembersFile) {
+    //   indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
+    // }
+    indirectMembers = await getIndirectMembersOfHierarchy(userHierarchy);
 
-  //console.log('user hierarchy getMembersByUser');
-  //console.log(indirectMembers);
-  return _.union(directMembers, indirectMembers);
+    //console.log('user hierarchy getMembersByUser');
+    //console.log(indirectMembers);
+    return _.union(directMembers, indirectMembers);
+  }
 }
 
 /**
@@ -141,19 +157,23 @@ async function getHierarchyOfUser(
 ) {
   transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
   userID = transformID(userID);
-
-  if (config.hierarchyServiceUseMock && config.hierarchyUserIDToHierarchyFile) {
+  if (config.hierarchyServiceAddrGetUser) {
+    console.log('in Get Hierarchy of user');
+    const genURL = config.hierarchyServiceAddrGetUser;
+    const getURL = genURL(userID);
+    console.log(`getURL: ${getURL}`);
+    const userResponse = await axios.get(getURL); // retrieves the user
+    const user = userResponse.data;
+    return user.directGroup;
+  } else if (
+    config.hierarchyServiceUseMock &&
+    config.hierarchyUserIDToHierarchyFile
+  ) {
     const userToHierarchMaper = memoizedReadAndParseJSON(
       config.hierarchyUserIDToHierarchyFile
     );
     const hierarchy: string = userToHierarchMaper[userID];
     return hierarchy;
-  } else if (config.hierarchyServiceAddrGetUser) {
-    const genURL = config.hierarchyServiceAddrGetUser;
-    const getURL = genURL(userID);
-    const userResponse = await axios.get(getURL); // retrieves the user
-    const user = userResponse.data;
-    return user.directGroup;
   } else {
     // TODO:throw error or do nothing
     throw new Error('hierarchy not configured');
@@ -229,13 +249,13 @@ async function getIndirectMembersOfHierarchy(hierarchyID: string) {
 
 const hierarchyService = {
   getDirectMembersOfHierarchy,
-  getIndirectMembersOfHierarchy,
-  getMembersByUser,
+  getIndirectMembersOfHierarchy, //used in filters
+  getMembersByUser, //used in filters and controllers
   getHierarchyOfUser,
   userIDToHierarchyID,
-  getDirectSubHierarchiesFromUser,
+  getDirectSubHierarchiesFromUser, //used to get the direct hirarchies
   getGroupNameByID,
-  getOfficeMembersFromUser,
+  // getOfficeMembersFromUser, //should move to the user
 };
 
 export default hierarchyService;

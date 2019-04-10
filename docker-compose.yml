@@ -61,15 +61,40 @@ services:
     network_mode: host
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-  sso:
-    image: kristophjunge/test-saml-idp
+  neo4j:
+    image: rabiran/neo4j-apoc
     ports:
-     - 8080:8080
-     - 8443:8443
+      - 7474:7474
+      - 7473:7473
+      - 7687:7687
+    volumes:
+      - $HOME/neo4j/data:/data
     environment: 
-     - SIMPLESAMLPHP_SP_ENTITY_ID=http://app.example.com
-     - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
-     - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.\\\*
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true 
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+  #assumes neo4j-hierarchy is in the sibling directory
+  neo4j-server:
+    image: server
+    build: ../neo4j-hierarchy/server
+    environment:
+      NODE_ENV: production
+      PORT: 8001
+    ports:
+      - 8001:8001
+    volumes:
+      - ../neo4j-hierarchy/server:/usr/src/app 
+  # sso:
+  #   image: kristophjunge/test-saml-idp
+  #   ports:
+  #    - 8080:8080
+  #    - 8443:8443
+  #   environment: 
+  #    - SIMPLESAMLPHP_SP_ENTITY_ID=http://app.example.com
+  #    - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
+  #    - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
   # ----------python consumer------------------
   # python-consumer:
   #   image: rabiran/python-consumer

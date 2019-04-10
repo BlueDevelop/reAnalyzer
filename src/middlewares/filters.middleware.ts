@@ -80,9 +80,7 @@ async function getMembersOfHierarchy(
   // console.log(req.query.officeAssign);
   // console.log(typeof req.query.officeCreated);
   if (req.query.officeCreated == true || req.query.officeAssign == true) {
-    req.query.officeMembers = await filterHelper.getOfficeMembersFromUser(
-      req.user.uniqueId
-    );
+    req.query.officeMembers = req.user.officeMembers; //await filterHelper.getOfficeMembersFromUser(req.user);
     // console.log('filters office members');
     // console.log(req.query.officeMembers);
     //req.query.officeMembers = _.union([req.user], req.query.officeMembers);

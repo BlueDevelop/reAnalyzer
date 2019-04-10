@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { NativeDateAdapter } from '@angular/material';
 import { SettingsService } from '../_services/settings.service';
 import { UserService } from '../_services/user.service';
@@ -11,12 +12,11 @@ export interface UserGroup {
   letter: string;
   names: string[];
 }
-
-export const _filter = (opt: string[], value: string): string[] => {
-  const filterValue = value.toLowerCase();
-
-  return opt.filter(item => item.toLowerCase().indexOf(filterValue) === 0);
-};
+function isFirstColumn(params) {
+  var displayedColumns = params.columnApi.getAllDisplayedColumns();
+  var thisIsFirstColumn = displayedColumns[0] === params.column;
+  return thisIsFirstColumn;
+}
 
 @Component({
   selector: 'app-user-profile',
@@ -24,92 +24,72 @@ export const _filter = (opt: string[], value: string): string[] => {
   styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent implements OnInit {
-  @ViewChild('output')
-  fileInput;
-  avatarBase64: string;
-
-  typesOfShoes: string[] = [
-    'Boots',
-    'Clogs',
-    'Loafers',
-    'Moccasins',
-    'Sneakers',
-  ];
-
-  userForm: FormGroup = this.fb.group({
-    userGroup: '',
-  });
-
-  userGroups: UserGroup[];
-  usersGroupOptions: Observable<UserGroup[]>;
-
-  constructor(
-    private settingsService: SettingsService,
-    private userService: UserService,
-    private fb: FormBuilder
-  ) {}
+  private gridApi;
+  private gridColumnApi;
+  private user;
+  private columnDefs;
+  private defaultColDef;
+  private rowSelection;
+  private rowData: any[];
+  private quickFilter: string = '';
+  constructor(private http: HttpClient, private userService: UserService) {
+    this.columnDefs = [
+      {
+        headerName: 'משתמש',
+        field: 'name',
+      },
+      {
+        headerName: 'מזהה משתמש',
+        field: 'id',
+      },
+    ];
+    this.defaultColDef = {
+      width: 100,
+      headerCheckboxSelection: isFirstColumn,
+      checkboxSelection: isFirstColumn,
+      resizable: true,
+    };
+    this.rowSelection = 'multiple';
+  }
 
   ngOnInit() {
-    // this.usersGroupOptions = this.userForm.get('userGroup')!.valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this._filterGroup(value))
-    // );
-    // this.userService.getUser().subscribe(res => {
-    //   this.fileInput.nativeElement.src = res.avatarImg;
-    // });
-    // this.getPersonsUnderPerson();
-  }
-
-  private _filterGroup(value: string): UserGroup[] {
-    if (value) {
-      return this.userGroups
-        .map(group => ({
-          letter: group.letter,
-          names: _filter(group.names, value),
-        }))
-        .filter(group => group.names.length > 0);
-    }
-
-    return this.userGroups;
-  }
-
-  openFile(event) {
-    let input = event.target;
-
-    let reader = new FileReader();
-
-    reader.onload = () => {
-      let dataURL = reader.result;
-      this.avatarBase64 = dataURL as string;
-      this.fileInput.nativeElement.src = dataURL;
-    };
-
-    reader.onprogress = data => {
-      if (data.lengthComputable) {
-        var progress = Math.round((data.loaded / data.total) * 100);
-        //console.log(progress);
-      }
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-
-  saveAvatar() {
-    this.userService.setUser({ avatarImg: this.avatarBase64 });
-  }
-  deleteAvatar() {
-    this.userService.setUser({ avatarImg: undefined });
-    this.avatarBase64 = undefined;
-  }
-
-  getPersonsUnderPerson() {
-    this.userService.getPersonsUnderPerson().subscribe(data => {
-      const groups = _.groupBy(data.persons, function(username) {
-        return username[0];
-      });
-      this.userGroups = _.map(groups, usersArray => {
-        return { letter: usersArray[0][0], names: usersArray };
-      });
-      console.dir(this.userGroups);
+    this.userService.getUser().subscribe(user => {
+      this.user = user;
     });
+  }
+  onQuickFilterChanged() {
+    this.gridApi.setQuickFilter(this.quickFilter);
+  }
+
+  saveOffice() {
+    console.log('inSaveOffice');
+    const officeMemebersIDs = _.map(
+      this.gridApi.getSelectedRows(),
+      person => person.id
+    );
+    this.user.officeMembers = officeMemebersIDs; // selected members/users/persons
+    this.userService
+      .update(this.user)
+      .subscribe(something => console.log('saved'));
+  }
+
+  onGridReady(params) {
+    console.log('onGridReady');
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    params.api.sizeColumnsToFit();
+    const user = this.user;
+    // params.api.resetRowHeights();
+    this.http
+      .get('/api/hierarchy/getPersonsUnderPerson')
+      .subscribe((data: any) => {
+        console.log(data);
+        this.rowData = data;
+        setTimeout(() => {
+          params.api.forEachNode(function(node) {
+            node.setSelected(_.includes(user.officeMembers, node.data.id));
+          });
+        }, 0);
+      });
   }
 }

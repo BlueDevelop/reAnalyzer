@@ -1,3 +1,35 @@
+<div dir="rtl">
+<div style="height: 100%; padding-top: 35px; box-sizing: border-box;">
+  <ag-grid-angular
+    #usersTable
+    style="width: 500px; height: 500px;"
+
+    class="ag-theme-material"
+    enableRtl="true"
+    id="myGrid"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressRowClickSelection]="true"
+    [rowSelection]="rowSelection"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+  ></ag-grid-angular>
+</div>
+<div style="position: absolute; top: 0; right: 0;width: 550px;">
+
+  
+  <mat-form-field style="width: 450px;">
+    <input matInput type="text" (input)="onQuickFilterChanged()" [(ngModel)]="quickFilter" id="quickFilter" placeholder="{{'FILTER'|translate}}" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  <button (click)="saveOffice()" mat-button style="position: absolute; left: 20px;width: 50px;">שמור</button>
+</div>
+</div>
+
+
+
+
+
 <!-- <p>
   user-profile works!
 </p>

@@ -14,4 +14,11 @@ export default class HierarchyService {
     });
     return keyValuesFromHierarchies;
   }
+  public static async getPersonsUnderPerson(user: any) {
+    const persons = await hierarchyHelper.getMembersByUser(user.uniqueId);
+    const persons2 = await hierarchyHelper.getMembersByUser('1');
+    console.log(persons);
+    console.log(persons2);
+    return persons;
+  }
 }

@@ -36,6 +36,7 @@
     "creator":"יוצר",
     "statusTask":"סטטוס",
     "assign":"אחראי",
-    "watchers":"משתתפים"
+    "watchers":"משתתפים",
+    "FILTER":"התחל להקליד בכדי לחפש"
 
 }

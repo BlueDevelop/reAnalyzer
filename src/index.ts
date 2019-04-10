@@ -104,6 +104,9 @@ function setMiddlewares() {
   );
   app.use(
     session({
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+      },
       secret: config.sessionSecret,
       resave: true,
       saveUninitialized: false,

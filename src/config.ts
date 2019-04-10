@@ -23,11 +23,12 @@ interface IConfig {
   hierarchyServiceMockFile?: string; // local file describing return value for each hierarchy id
   hierarchyServiceGroupMembersFile?: string; // local file describing each groups members,
   hierarchyFile?: string; // local file describing indirect sub groups of a each group
-  userIDToOfficeMembersFile: string; // maps each user id to its office members
+  userIDToOfficeMembersFile?: string; // maps each user id to its office members
   hierarchyUserIDToHierarchyFile?: string; // local file containing a mapping between userIDS and its hierarchy
   hierarchyGroupIdToGroupName?: string; // maps group id to group name and vice versa
   hierarchyServiceAddrGetMembers?: (hierarchy: string) => string; // function that generates the route to get all members\users under a given hierarchy from the api
   hierarchyServiceAddrGetUser?: (userID: string) => string; // function that generates the route to get a single user\member info
+  hierarchyServiceAddrGetMembersUnderUser?: (userID: string) => string;
   debug?: boolean;
   useSaml?: boolean;
   saml?: ISaml;
@@ -71,6 +72,8 @@ const dev: IConfig = {
   hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
   hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
+  hierarchyServiceAddrGetMembersUnderUser: userID =>
+    `http://neo4j-server:8001/personsUnderPerson/${userID}`,
   userIDToOfficeMembersFile: path.join(
     __dirname,
     '../src/mock/userIDToOfficeMembers.json'

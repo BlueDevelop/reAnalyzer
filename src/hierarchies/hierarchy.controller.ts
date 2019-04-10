@@ -34,7 +34,16 @@ export default class HierarchyController {
     res.send(['blablabla', 'hahaha', 'lalala']);
   }
 
-  public static getPersonsUnderPerson(req: Request, res: Response) {
-    return res.json({ persons: ['blablabla', 'hahaha', 'lalala'] });
+  public static async getPersonsUnderPerson(req: Request, res: Response) {
+    let ret;
+    if (req.user) {
+      ret = await HierarchyService.getPersonsUnderPerson(req.user);
+    } else {
+      return res.sendStatus(400);
+    }
+    // let keyAndValueFromRet = _.map(ret, doc => {
+    //   return { key: doc._id, value: doc._source.title };
+    // });
+    return res.json(ret);
   }
 }
