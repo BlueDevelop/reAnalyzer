@@ -40,7 +40,6 @@ router.post('/', async (req, res, next) => {
 router.put('/', async (req, res, next) => {
   try {
     const user = req.body;
-    //console.log(user);
     await UserService.update(user);
     return res.json(user);
   } catch (err) {
@@ -56,8 +55,6 @@ router.put('/', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const user = await UserService.find(req.user._id);
-    //console.log('the user is');
-    //console.log(user);
     return res.json(user);
   } catch (err) {
     errorLogger.error('%j', {

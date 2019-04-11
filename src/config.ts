@@ -29,6 +29,12 @@ interface IConfig {
   hierarchyServiceAddrGetMembers?: (hierarchy: string) => string; // function that generates the route to get all members\users under a given hierarchy from the api
   hierarchyServiceAddrGetUser?: (userID: string) => string; // function that generates the route to get a single user\member info
   hierarchyServiceAddrGetMembersUnderUser?: (userID: string) => string;
+  hierarchyServiceAddrGetDirectSubHierarchiesFromUser?: (
+    userId: string
+  ) => string;
+  hierarchyServiceAddrGetMembersDirectlyUnderHierarchy?: (
+    HierarchyID: string
+  ) => string;
   debug?: boolean;
   useSaml?: boolean;
   saml?: ISaml;
@@ -69,11 +75,17 @@ const dev: IConfig = {
   apmAdress: process.env.APM_ADDR || 'http://apm:8200',
   apmServiceName: process.env.APM_NAME || 'momentum_dev',
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
-  hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
+  // hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
-  hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
+  // hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
+  hierarchyServiceAddrGetMembers: hierarchyID =>
+    `http://neo4j-server:8001/personsUnderHierarchy/${hierarchyID}`,
   hierarchyServiceAddrGetMembersUnderUser: userID =>
     `http://neo4j-server:8001/personsUnderPerson/${userID}`,
+  hierarchyServiceAddrGetDirectSubHierarchiesFromUser: userID =>
+    `http://neo4j-server:8001/subHierarchiesByPersonID/${userID}`,
+  hierarchyServiceAddrGetMembersDirectlyUnderHierarchy: hierarchyID =>
+    `http://neo4j-server:8001/personsDirectlyUnderHierarchy/${hierarchyID}`,
   userIDToOfficeMembersFile: path.join(
     __dirname,
     '../src/mock/userIDToOfficeMembers.json'

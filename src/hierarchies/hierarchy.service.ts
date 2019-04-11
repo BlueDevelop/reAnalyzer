@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 import hierarchyHelper from '../helpers/userhierarchy.helper';
+import getConfig from '../config';
+const config = getConfig();
 
 export default class HierarchyService {
   public static async getHierarchiesNamesList(user: any) {
@@ -12,13 +14,12 @@ export default class HierarchyService {
         value: hierarchyHelper.getGroupNameByID(groupID),
       };
     });
-    return keyValuesFromHierarchies;
+    if (!config.hierarchyServiceAddrGetDirectSubHierarchiesFromUser)
+      return keyValuesFromHierarchies;
+    else return hierarchies;
   }
   public static async getPersonsUnderPerson(user: any) {
     const persons = await hierarchyHelper.getMembersByUser(user.uniqueId);
-    const persons2 = await hierarchyHelper.getMembersByUser('1');
-    console.log(persons);
-    console.log(persons2);
     return persons;
   }
 }

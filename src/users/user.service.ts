@@ -30,8 +30,6 @@ export default class UserService {
       if (err) {
         throw err;
       } else {
-        console.log('FOUND USER');
-        console.log(res);
         return res;
       }
     });

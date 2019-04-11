@@ -434,9 +434,6 @@ export default class TaskController {
       );
 
       const ratios: number[] = TaskController.getRatiosByTasks(doneTasks);
-      console.log('getEndTimeRatio');
-      console.log(doneTasks.length);
-      console.dir(doneTasks);
       const under100interval = 0.25;
       const under100buckets = ['0%-25%', '25%-50%', '50%-75%', '75%-100%'];
       const above100interval = 3;

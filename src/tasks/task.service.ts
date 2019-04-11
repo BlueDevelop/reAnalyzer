@@ -25,9 +25,6 @@ export default class TaskService {
     officeMembers: object[] = []
   ) {
     const name = filter['name'] ? filter['name'] : 'created';
-    // console.log('===NAME===');
-    // console.log(filter);
-    //const searchField = field || '_id';
 
     // const should =
     //   officeCreated == false && officeAssign == false
@@ -593,6 +590,7 @@ export default class TaskService {
           },
         });
     });
+
     return should;
   }
 }
@@ -602,9 +600,7 @@ function generateOfficeMembersMust(
   officeCreated: boolean,
   officeAssign: boolean
 ) {
-  const officeMembersIDs = _.map(officeMembers, (om: any) => om.id);
-  //console.log('officeMembersIDs:');
-  //console.log(officeMembersIDs);
+  const officeMembersIDs = officeMembers; //_.map(officeMembers, (om: any) => om.id);
   if (officeMembers.length <= 0) return {};
   if (officeCreated)
     return {
