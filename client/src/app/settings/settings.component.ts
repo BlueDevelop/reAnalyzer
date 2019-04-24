@@ -18,7 +18,7 @@ export class SettingsComponent implements OnInit {
 
   chartColorsOrdinal = [
     {
-      name: 'Vivid',
+      name: 'בהיר',
       colors: [
         '#62CD8C',
         '#3D4EB4',
@@ -33,7 +33,7 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Natural',
+      name: 'טבעי',
       colors: [
         '#C09E77',
         '#EA9551',
@@ -48,7 +48,7 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Cool',
+      name: 'קריר',
       colors: [
         '#ACCCED',
         '#A9E3F5',
@@ -63,7 +63,7 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Fire',
+      name: 'אש',
       colors: [
         '#FF3E00',
         '#C0370A',
@@ -78,7 +78,7 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Solar',
+      name: 'שמשי',
       colors: [
         '#FFF8E1',
         '#FFEDB4',
@@ -93,7 +93,7 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Air',
+      name: 'אוויר',
       colors: [
         '#E1F5FE',
         '#B2E5FC',
@@ -108,7 +108,7 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Aqua',
+      name: 'מים',
       colors: [
         '#E0F7FA',
         '#B1EBF2',
@@ -123,87 +123,87 @@ export class SettingsComponent implements OnInit {
       ],
     },
     {
-      name: 'Fresh & Bright',
+      name: 'רענן ובהיר',
       colors: ['#F98866', '#FF420E', '#0BD9E', '#89DA59'],
     },
     {
-      name: 'Subdued & Professional',
+      name: 'מאופק ומקצועי',
       colors: ['#90AFC5', '#336B87', '#2A3132', '#763626'],
     },
     {
-      name: 'Crisp & Dramatic',
+      name: 'קריספי ודרמטי',
       colors: ['#505160', '#68823E', '#AEBD38', '#598234'],
     },
     {
-      name: 'Outdoorsy & Natural',
+      name: 'בחוץ וטבעי',
       colors: ['#2E4600', '#486B00', '#A2C523', '#7D4427'],
     },
     {
-      name: 'Primary Colors With a Vibrant Twist',
+      name: 'צבעים ראשיים עם טוויסט תוסס',
       colors: ['#375E97', '#FB6542', '#FFBB00', '#3F681C'],
     },
     {
-      name: 'Refreshing & Pretty',
+      name: 'מרענן ונאה',
       colors: ['#98DBC6', '#5BC8AC', '#E6D72A', '#F18D9E'],
     },
     {
-      name: 'Fresh & Energetic',
+      name: 'רענן ואנרגטי',
       colors: ['#4CB5F6', '#B7B8B6', '#34675C', '#B3C100'],
     },
     {
-      name: 'Icy Blues and Grays',
+      name: 'קרח כחול ואפור',
       colors: ['#F1F1F2', '#BCBABE', '#A1D6E2', '#1995AD'],
     },
     {
-      name: 'Birds & Berries',
+      name: 'ציפורים ופירות יער',
       colors: ['#9A9EAB', '#5D535E', '#EC96A4', '#DFE166'],
     },
     {
-      name: 'Bright & Tropical',
+      name: 'בהיר וטרופי',
       colors: ['#F52549', '#FA6775', '#FFD64D', '#9BC01C'],
     },
     {
-      name: 'Summer Sunflower',
+      name: 'חמניה קייצית',
       colors: ['#34888C', '#7CAA2D', '#F5E356', '#CB6318'],
     },
     {
-      name: 'Bold Berries',
+      name: 'פירות יער מודגשים',
       colors: ['#50312F', '#cb0000', '#E4EA8C', '#3F6C45'],
     },
     {
-      name: 'Timeless & Nautical',
+      name: 'חסר זמן וימי',
       colors: ['#00293C', '#1E656D', '#F1F3CE', '#F62A00'],
     },
     {
-      name: 'Neutral & Versatile',
+      name: 'נטרלי ומגוון',
       colors: ['#626D71', '#CDCDC0', '#DDBC95', '#B38867'],
     },
     {
-      name: 'Cheerful Brights',
+      name: 'בריונים עליזים',
       colors: ['#258039', '#F5BE41', '#31A9B8', '#CF3721'],
     },
     {
-      name: 'Berry Blues',
+      name: 'ברי בלוז',
       colors: ['#1E1F26', '#283655', '#4D648D', '#D0E1F9'],
     },
     {
-      name: 'Sunny Citrus',
+      name: 'הדרים שמשיים',
       colors: ['#FAAF08', '#FA812F', '#FA4032', '#FEF3E2'],
     },
     {
-      name: 'Crisp Complementary Colors',
+      name: 'צבעים קריספיים',
       colors: ['#F4EC6A', '#BBCF4A', '#E73FOB', '#A11FOC'],
     },
     {
-      name: 'Candy-Coated Brights',
+      name: 'סוכריה',
       colors: ['#F47D4A', '#E1315B', '#FFEC5C', '#008DCB'],
     },
     {
-      name: 'Nightlife',
+      name: 'חיי לילה',
       colors: ['#00CFFA', '#FF0038', '#FFCE38', '#020509'],
     },
     {
-      name: 'Mediterranean Afternoon',
+      name: 'אחר צהריים ים תיכוני',
       colors: ['#8C0004', '#C8000A', '#E8A735', '#E2C499'],
     },
     {

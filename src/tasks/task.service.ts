@@ -3,6 +3,8 @@ import Itask from './task.interface';
 import * as _ from 'lodash';
 import { stat } from 'fs';
 import { Ingest } from 'elasticsearch';
+import getConfig from '../config';
+const config = getConfig();
 
 export default class TaskService {
   public static index = 'tasks_test';
@@ -474,8 +476,9 @@ export default class TaskService {
               //field: 'assign.id.keyword',
               // the :? operator returns the right side expression if its not null otherwise it returns the left side expression
               // new: "doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ?:doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value",
-              script:
-                "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
+              script: config.usersHaveLastNameField
+                ? "doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ?:doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value"
+                : "doc['assign.name.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value?:doc['assign.name.keyword'].value + ' ' + doc['assign.lastname.keyword'].value + '\t\t\t\t' + doc['assign.id.keyword'].value ",
               size: size || 10,
               order: {
                 _count: 'desc',

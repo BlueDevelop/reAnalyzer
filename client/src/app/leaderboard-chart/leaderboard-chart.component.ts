@@ -52,6 +52,10 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
     plotOptions: {
       series: {
         stacking: 'percent',
+        dataLabels: {
+          enabled: true,
+          format: '{point.percentage:.1f} %',
+        },
       },
     },
     title: {

@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { ExcelService } from '../_services/excel.service';
 import { AgGridAvatarComponent } from '../ag-grid-avatar/ag-grid-avatar.component';
 import { AgGridStatusChipComponent } from '../ag-grid-status-chip/ag-grid-status-chip.component';
 import { AgGridMaterialDatepickerComponent } from '../ag-grid-material-datepicker/ag-grid-material-datepicker.component';
@@ -104,8 +105,6 @@ export class ModalComponent implements OnInit {
       cellStyle: { 'white-space': 'normal' },
       autoHeight: true,
       comparator: (a, b) => {
-        // console.log(a)
-        // console.log(b)
         let aLength = a.split(',').length;
         let bLength = b.split(',').length;
         return aLength >= bLength ? 1 : -1;
@@ -159,7 +158,8 @@ export class ModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Observable<any>,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private excelService: ExcelService
   ) {}
 
   ngOnInit() {
@@ -171,22 +171,12 @@ export class ModalComponent implements OnInit {
         this.gridApi.sizeColumnsToFit();
       }
     });
-    // this.dataSource = new MatTableDataSource(this.tableData as object[]);
-    // this.dataSource.sort = this.sort;
-    // this.table.renderRows();
-    // });
-    //console.log(this.data);
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     this.gridApi.refreshCells();
-    // this.data.subscribe(data => {
-    //   this.gridApi.setRowData(data);
-    //   this.tableData = data;
-    //   this.loading = false;
-    // });
   }
   onGridSizeChanged(params) {
     this.style = {
@@ -199,12 +189,22 @@ export class ModalComponent implements OnInit {
     }
   }
   save() {
-    this.gridApi.exportDataAsCsv({
-      fileName: `momentum_export_${moment().format()}`,
+    //TODO: add description in server and table + hide:true in table, and translate headers and status and check why watchers is not printed
+    let excelJson = [];
+    this.gridApi.forEachNode(function(rowNode, index) {
+      //iterates over every row in the table and pushes the row to excelJson
+      //should translate keys/status with translateService
+      excelJson.push({
+        ...rowNode.data,
+        due: moment
+          .utc(rowNode.data.due)
+          .local()
+          .toDate(),
+      });
     });
+    this.excelService.jsonToExcel(excelJson);
   }
   onSelectionChanged() {
     var selectedRows = this.gridApi.getSelectedRows();
-    // console.log(selectedRows[0].due);
   }
 }

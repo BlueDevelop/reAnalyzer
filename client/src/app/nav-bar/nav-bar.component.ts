@@ -31,8 +31,6 @@ export class NavBarComponent implements OnInit {
     this.userService.getUser().subscribe(
       res => {
         this.avatarImg = res.avatarImg;
-        //console.log('subject');
-        console.log(res);
       },
       err => {
         console.error(`An error occurred: ${err.message}`);

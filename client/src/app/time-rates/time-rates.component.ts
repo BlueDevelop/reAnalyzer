@@ -36,8 +36,6 @@ export class TimeRatesComponent implements OnInit {
   }
 
   getTask(event) {
-    // console.log('time rates component event');
-    // console.log(event);
     const name = event.name;
     let ratioMin, ratioMax;
     if (name.indexOf('-') > -1) {
@@ -48,8 +46,6 @@ export class TimeRatesComponent implements OnInit {
       ratioMin = 10;
       ratioMax = -1;
     }
-
-    console.log(`ratioMin:${ratioMin} , ratioMax:${ratioMax}`);
     this.dialog.open(ModalComponent, {
       data: this.taskService.getTasksByFilter({
         ratioMin: ratioMin,

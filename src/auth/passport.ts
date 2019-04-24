@@ -4,7 +4,7 @@ import { Application, Request, Response, NextFunction } from 'express';
 import userModel from '../users/user.model';
 import Iuser from '../users/user.interface';
 import LocalStrategy from './passport.local';
-import SamlStrategy from './passport.saml';
+import SamlStrategyGenerator from './passport.saml';
 import getConfig from '../config';
 import { Strategy } from 'passport-strategy';
 import { urlencoded } from 'body-parser';
@@ -54,7 +54,7 @@ export const init = (app: Application) => {
     });
   });
   if (config.useSaml) {
-    passport.use(SamlStrategy);
+    passport.use(SamlStrategyGenerator());
     app.all(
       '/api/login/callback',
       urlencoded({ extended: false }),

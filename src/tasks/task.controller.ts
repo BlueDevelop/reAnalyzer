@@ -104,10 +104,6 @@ export default class TaskController {
 
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
-      // console.log('query!');
-      // console.log(req.query);
-      // console.log('USERS!');
-      // console.log(filter);
 
       verboseLogger.verbose(
         `getCountByStatus filter for user ${req.user.uniqueId} is ${filter}.`
@@ -233,18 +229,10 @@ export default class TaskController {
       }
 
       const size = req.query.size ? +req.query.size : undefined;
-      // console.log('===SIZE===');
-      // console.log(size);
 
-      // const filter: object[] = (await filterHelper.getMembersByUser(
-      //   req.user.uniqueId,
-      //   TaskController.cut
-      // )) as object[];
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
 
-      // console.log('===FILTER===');
-      // console.log(filter);
       verboseLogger.verbose(
         `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
       );
@@ -258,8 +246,6 @@ export default class TaskController {
         size,
         officeMembers
       );
-      // console.log('===DONE TASKS ===');
-      // console.log(doneTasksCount.body.aggregations['1']);
 
       //get the top users with most done tasks
       const topUsers = _.map(
@@ -268,8 +254,6 @@ export default class TaskController {
           return { id: obj.key };
         }
       );
-      // console.log('===TOP USERS===');
-      // console.log(topUsers);
 
       // get total tasks count for the top users
       const totalTasksCount = await taskService.getTotalTasksCount(
@@ -282,8 +266,6 @@ export default class TaskController {
         officeMembers
       );
 
-      // console.log('===Total TASKS COUNT===');
-      // console.log(totalTasksCount.aggregations['1'].buckets);
       const response = _.map(
         doneTasksCount.body.aggregations['1'].buckets,
         bucket => {
@@ -303,9 +285,6 @@ export default class TaskController {
           };
         }
       );
-
-      // console.log('===response===');
-      // console.log(response);
 
       verboseLogger.verbose(`getLeaderboard function returned ${response}.`);
 
@@ -526,6 +505,7 @@ export default class TaskController {
               };
             })
           : [],
+        description: task.description ? task.description : '',
       };
       return ret;
     });
@@ -596,8 +576,6 @@ export default class TaskController {
       return task['_source'];
     });
     tasks = TaskController.buildTasksList(tasks);
-
-    // console.log(`the length= ${tasks.length}`);
     res.json(tasks);
   }
 
@@ -623,7 +601,6 @@ export default class TaskController {
     const responses: any = Promise.all(responsesPromises);
 
     res.json(responses);
-    // console.log(responses);
   }
 
   /**

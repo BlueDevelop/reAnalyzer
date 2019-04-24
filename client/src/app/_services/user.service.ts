@@ -42,10 +42,12 @@ export class UserService {
 
   getCurrentUser() {
     let userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-    return {
-      ...userFromLocalStorage,
-      initials: this.getNameInitials(userFromLocalStorage.name),
-    };
+    if (userFromLocalStorage)
+      return {
+        ...userFromLocalStorage,
+        initials: this.getNameInitials(userFromLocalStorage.name),
+      };
+    else return undefined;
   }
 
   getNameInitials(name?: string) {
@@ -84,9 +86,9 @@ export class UserService {
     );
   }
 
-  // getUser() {
-  //   return this.http.get(`${environment.apiUrl}/user`);
-  // }
+  getUserFromAPI() {
+    return this.http.get(`${environment.apiUrl}/user`);
+  }
 
   // delete(id: number) {
   //     return this.http.delete(`${config.apiUrl}/users/` + id);

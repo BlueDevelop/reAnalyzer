@@ -112,6 +112,5 @@ export class PieChartComponent implements OnInit, OnChanges {
       },
     });
     this.chart.reflow();
-    //console.log(this.chart);
   }
 }

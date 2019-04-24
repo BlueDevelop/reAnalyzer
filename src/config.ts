@@ -37,6 +37,7 @@ interface IConfig {
   ) => string;
   debug?: boolean;
   useSaml?: boolean;
+  usersHaveLastNameField?: boolean;
   saml?: ISaml;
   samlClaimMapper?: any; // used in the saml strategy to map profile keys to id,firstName,lastName
 }

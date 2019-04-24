@@ -24,6 +24,7 @@ function isFirstColumn(params) {
   styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent implements OnInit {
+  public selectedUsers: any[] = [];
   private gridApi;
   private gridColumnApi;
   private user;
@@ -43,12 +44,7 @@ export class UserProfileComponent implements OnInit {
         field: 'id',
       },
     ];
-    this.defaultColDef = {
-      width: 100,
-      headerCheckboxSelection: isFirstColumn,
-      checkboxSelection: isFirstColumn,
-      resizable: true,
-    };
+
     this.rowSelection = 'multiple';
   }
 
@@ -56,38 +52,52 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUser().subscribe(user => {
       this.user = user;
     });
+    this.defaultColDef = {
+      width: 20,
+      headerCheckboxSelection: isFirstColumn,
+      checkboxSelection: isFirstColumn,
+      resizable: true,
+    };
   }
   onQuickFilterChanged() {
     this.gridApi.setQuickFilter(this.quickFilter);
   }
 
+  getSelecedUserRow(user) {
+    this.gridApi.ensureNodeVisible(user, 'top');
+  }
+
   saveOffice() {
-    console.log('inSaveOffice');
     const officeMemebersIDs = _.map(
       this.gridApi.getSelectedRows(),
       person => person.id
     );
     this.user.officeMembers = officeMemebersIDs; // selected members/users/persons
-    this.userService
-      .update(this.user)
-      .subscribe(something => console.log('saved'));
+    this.userService.update(this.user).subscribe(something => {
+      this.selectedUsers = this.gridApi.getSelectedRows();
+    });
   }
 
   onGridReady(params) {
-    console.log('onGridReady');
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
     params.api.sizeColumnsToFit();
     const user = this.user;
+    const selectedUsers = this.selectedUsers;
+
     // params.api.resetRowHeights();
     this.http
       .get('/api/hierarchy/getPersonsUnderPerson')
       .subscribe((data: any) => {
-        console.log(data);
         this.rowData = data;
         setTimeout(() => {
           params.api.forEachNode(function(node) {
-            node.setSelected(_.includes(user.officeMembers, node.data.id));
+            const predicate: boolean = _.includes(
+              user.officeMembers,
+              node.data.id
+            );
+            node.setSelected(predicate);
+            if (predicate) selectedUsers.push(node.data);
           });
         }, 0);
       });

@@ -65,20 +65,25 @@ async function userIDToHierarchyID(userID: string) {
  */
 async function getDirectSubHierarchiesFromUser(userID: string) {
   if (config.hierarchyServiceAddrGetDirectSubHierarchiesFromUser) {
-    const genURL = config.hierarchyServiceAddrGetDirectSubHierarchiesFromUser;
-    const getURL = genURL(userID);
-    const response = await axios.get(getURL);
-    const usersHierarchyNode = response.data[0].value;
-    const above = usersHierarchyNode.above;
-    //return [{key:<id>,value:<name>}]
-    const subHierarchies: any = [
-      { key: usersHierarchyNode._id, value: usersHierarchyNode.name },
-      ..._.map(above, node => {
-        return { key: node._id, value: node.name };
-      }),
-    ];
+    try {
+      const genURL = config.hierarchyServiceAddrGetDirectSubHierarchiesFromUser;
+      const getURL = genURL(userID);
+      const response = await axios.get(getURL);
+      const usersHierarchyNode = response.data[0].value;
+      const above = usersHierarchyNode.above;
+      //return [{key:<id>,value:<name>}]
+      const subHierarchies: any = [
+        { key: usersHierarchyNode._id, value: usersHierarchyNode.name },
+        ..._.map(above, node => {
+          return { key: node._id, value: node.name };
+        }),
+      ];
 
-    return subHierarchies;
+      return subHierarchies;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   } else {
     const userHierarchy = await getHierarchyOfUser(userID);
     let subHierarchies: string[] = [];
@@ -133,9 +138,15 @@ async function getMembersByUser(
   if (config.hierarchyServiceAddrGetMembersUnderUser) {
     const genURL = config.hierarchyServiceAddrGetMembersUnderUser;
     const getURL = genURL(userID);
-    const userResponse = await axios.get(getURL); // retrieves the user
-    const members = userResponse.data;
-    return members;
+    try {
+      const userResponse = await axios.get(getURL); // retrieves the user
+
+      const members = userResponse.data;
+      return members;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   } else {
     userID = transformID(userID);
     const userHierarchy = await userIDToHierarchyID(userID);
@@ -170,11 +181,16 @@ async function getHierarchyOfUser(
   transformID = transformID || defaultIDTransform; // if no transform function is given, use the default transform function
   userID = transformID(userID);
   if (config.hierarchyServiceAddrGetUser) {
-    const genURL = config.hierarchyServiceAddrGetUser;
-    const getURL = genURL(userID);
-    const userResponse = await axios.get(getURL); // retrieves the user
-    const user = userResponse.data;
-    return user.directGroup;
+    try {
+      const genURL = config.hierarchyServiceAddrGetUser;
+      const getURL = genURL(userID);
+      const userResponse = await axios.get(getURL); // retrieves the user
+      const user = userResponse.data;
+      return user.directGroup;
+    } catch (err) {
+      console.log(err);
+      return '';
+    }
   } else if (
     config.hierarchyServiceUseMock &&
     config.hierarchyUserIDToHierarchyFile
@@ -195,15 +211,21 @@ async function getHierarchyOfUser(
  * @returns members under the given hierarchy
  */
 async function getDirectMembersOfHierarchy(hierarchyID: string) {
-  if (config.hierarchyServiceAddrGetMembers) {
+  if (config.hierarchyServiceAddrGetMembersDirectlyUnderHierarchy) {
     // if theres an api to get the hirerchy from and a root hirerchy to get then make then make the request to the api
-    const genURL = config.hierarchyServiceAddrGetMembers; // renamed for shorter name when called
-    const getURL: string = genURL(hierarchyID); // generate the url to call to get the immediate members of the group(rootHierarchy)
-    const response = await axios.get(getURL); // get direct members\submembers
-    const resData = response.data;
-    // return only ids
-    const idList = _.map(resData, person => person.id);
-    return idList;
+    try {
+      const genURL =
+        config.hierarchyServiceAddrGetMembersDirectlyUnderHierarchy; // renamed for shorter name when called
+      const getURL: string = genURL(hierarchyID); // generate the url to call to get the immediate members of the group(rootHierarchy)
+      const response = await axios.get(getURL); // get direct members\submembers
+      const resData = response.data;
+      // return only ids
+      const idList = _.map(resData, person => person.id);
+      return idList;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   } else if (
     config.hierarchyServiceUseMock &&
     config.hierarchyServiceMockFile
@@ -222,10 +244,16 @@ async function getDirectMembersOfHierarchy(hierarchyID: string) {
 async function getIndirectMembersOfHierarchy(hierarchyID: string) {
   //latest
   if (config.hierarchyServiceAddrGetMembers) {
-    const genURL = config.hierarchyServiceAddrGetMembers;
-    const getURL = genURL(hierarchyID);
-    const response = await axios.get(getURL);
-    return response.data;
+    try {
+      if (hierarchyID.length <= 0) return []; //empty select
+      const genURL = config.hierarchyServiceAddrGetMembers;
+      const getURL = genURL(hierarchyID);
+      const response = await axios.get(getURL);
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   } else if (
     config.hierarchyServiceUseMock &&
     config.hierarchyServiceMockFile

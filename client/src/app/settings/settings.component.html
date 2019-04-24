@@ -1,13 +1,13 @@
 <div class="tab-wrap">
 
     <input type="radio" id="tab1" name="tabGroup1" class="tab" [checked]="activeTab=='colors'">
-    <label for="tab1">Colors</label>
+    <label for="tab1">{{'colors' | translate}}</label>
   
     <input type="radio" id="tab2" name="tabGroup1" class="tab" [checked]="activeTab=='profile'">
-    <label for="tab2">Profile</label>
+    <label for="tab2">{{'profile' | translate}}</label>
   
     <input type="radio" id="tab3" name="tabGroup1" class="tab">
-    <label for="tab3">Section Three</label>
+    <label for="tab3">{{'etc' | translate}}</label>
   
     <div class="tab__content">
       <div class="color-template">
