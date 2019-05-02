@@ -92,7 +92,7 @@ export default class TaskService {
         };
       }
     }
-    return TaskService.client.search({
+    return esClient.search({
       index: TaskService.index,
       body,
     });
@@ -157,7 +157,7 @@ export default class TaskService {
     };
 
     body.query.bool.must[1].match[searchField] = value;
-    return TaskService.client.search({
+    return esClient.search({
       index: TaskService.index,
       body,
     });
@@ -203,7 +203,7 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
-    return TaskService.client.search({
+    return esClient.search({
       index: TaskService.index,
       body: {
         aggs: {
@@ -288,7 +288,7 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
-    return TaskService.client.search({
+    return esClient.search({
       index: TaskService.index,
       body: {
         aggs: {
@@ -378,7 +378,7 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
-    return TaskService.client.search({
+    return esClient.search({
       index: TaskService.index,
       body: {
         aggs: {
@@ -458,7 +458,7 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
-    return TaskService.client.search({
+    return esClient.search({
       index: TaskService.index,
       body: {
         query: {
@@ -558,10 +558,8 @@ export default class TaskService {
         },
       },
     };
-    return TaskService.client.search(esQuery);
+    return esClient.search(esQuery);
   }
-
-  private static client = esClient.getClient();
 
   /**
    * returns the should query.

@@ -21,7 +21,7 @@ export default class DiscussionService {
       },
     };
 
-    return DiscussionService.client.search({
+    return esClient.search({
       index: DiscussionService.index,
       body,
     });

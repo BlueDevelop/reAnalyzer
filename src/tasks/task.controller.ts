@@ -317,15 +317,13 @@ export default class TaskController {
       // Due date of the task.
       const due = new Date(sourceTask.due).getTime();
 
+      //! icu update model change created => -> date
+
       // Initiating value for the first assign date.
-      let minAssignDate = new Date(
-        sourceTask.assignUpdates[0].created
-      ).getTime();
+      let minAssignDate = new Date(sourceTask.assignUpdates[0].date).getTime();
 
       // Initiating value for the last "done" status date.
-      let maxStatusDate = new Date(
-        sourceTask.statusUpdates[0].created
-      ).getTime();
+      let maxStatusDate = new Date(sourceTask.statusUpdates[0].date).getTime();
 
       if (
         !minAssignDate ||
@@ -338,7 +336,7 @@ export default class TaskController {
       // Go through all the assign updates and finding the first
       // (The first assign date is the start date of the task).
       for (const update of sourceTask.assignUpdates) {
-        const currDate = new Date(update.created).getTime();
+        const currDate = new Date(update.date).getTime();
         if (minAssignDate > currDate) {
           minAssignDate = currDate;
         }
@@ -347,7 +345,7 @@ export default class TaskController {
       // Go through all the status updates and finding the last(The date when the task really ended,
       // will always be a done status, otherwise it wont get it from elasticsearch).
       for (const update of sourceTask.statusUpdates) {
-        const currDate = new Date(update.created).getTime();
+        const currDate = new Date(update.date).getTime();
         if (maxStatusDate < currDate) {
           maxStatusDate = currDate;
         }
@@ -505,7 +503,9 @@ export default class TaskController {
               };
             })
           : [],
-        description: task.description ? task.description : '',
+        description: task.description
+          ? decodeEntities(striptags(task.description))
+          : '',
       };
       return ret;
     });

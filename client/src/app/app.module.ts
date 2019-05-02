@@ -93,8 +93,8 @@ import { MomentumLoadingComponent } from './momentum-loading/momentum-loading.co
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
     AppRoutingModule,
+    MaterialModule,
     NgxChartsModule,
     AvatarModule,
     FormsModule,

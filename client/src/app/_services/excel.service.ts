@@ -18,7 +18,6 @@ export class ExcelService {
   }
   public async jsonToExcel(data: any) {
     const filename = new Date().toDateString() + '.xlsx';
-    // data = [[1, 2, 3], ['a', true, new Date()]];
     const ws_name = 'Excel Export';
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(data);

@@ -1,5 +1,5 @@
 <section class="login-form">
-  <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form *ngIf="!useSaml; else saml"  [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <mat-form-field hintLabel="Please enter your email">
       <input 
       matInput 
@@ -21,3 +21,11 @@
   </form>
   
   </section>
+
+
+  <ng-template #saml>
+    go 2 proxy
+    <div style="direction:ltr;">
+      <app-momentum-loading></app-momentum-loading>
+    </div>
+  </ng-template>

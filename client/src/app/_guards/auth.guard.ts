@@ -23,21 +23,9 @@ export class AuthGuard implements CanActivate {
     if (environment.useSaml) {
       console.log('use saml');
       console.log(environment.useSaml);
-      //add redirect if no user
-
-      this.userService
-        .getUserFromAPI()
-        .toPromise()
-        .then(user => {
-          if (user) {
-            this.userService.setUser(user);
-          } else {
-            //window.redirect
-          }
-        });
-
-      //not logged in so redirect to adfs/login route
-      //window.location.href = `/api/login`;
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: state.url },
+      });
       return false;
     } else {
       // not logged in so redirect to login page with the return url
