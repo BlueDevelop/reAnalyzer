@@ -8,6 +8,8 @@ export default class HierarchyService {
     const hierarchies: string[] = await hierarchyHelper.getDirectSubHierarchiesFromUser(
       user.uniqueId
     );
+    console.log('hierarchies/////////////////////');
+    console.log(hierarchies);
     const keyValuesFromHierarchies = _.map(hierarchies, groupID => {
       return {
         key: groupID,

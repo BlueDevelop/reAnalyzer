@@ -103,6 +103,7 @@ export class FilterComponent implements OnInit {
 
   units: object[] = [];
   allUnits: object[] = [];
+  nestedUnits;
 
   projects: string[] = [];
   allProjects: string[] = [];
@@ -147,7 +148,12 @@ export class FilterComponent implements OnInit {
     filteredEntity: string
   ) {
     this.filterService[filterServiceListFunctionName]().subscribe(data => {
-      this.model[entity].allItems = data;
+      if (entity == 'units') {
+        this.nestedUnits = data;
+        this.model[entity].allItems = this.filterService.flatHierarchy([data]);
+      } else {
+        this.model[entity].allItems = data;
+      }
       this[filteredEntity] = this.model[entity].itemSelected.valueChanges.pipe(
         startWith(null),
         map(
@@ -209,7 +215,8 @@ export class FilterComponent implements OnInit {
     if (!this.model[model].autocompleteType.isOpen) {
       const input = event.input;
       const value = event.value;
-
+      // console.log('add');
+      // console.log(value);
       // Add our item
       if ((value || '').trim()) {
         this.model[model].items.push(value.trim());
@@ -226,12 +233,17 @@ export class FilterComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent, model: string): void {
     this.model[model].items.push(event.option.viewValue);
+    // console.log('selected');
+    // console.log(event.option.viewValue);
     this.model[model].itemInput.nativeElement.value = '';
     this.model[model].itemSelected.setValue(null);
   }
 
   addFromList(event, model: string): void {
+    debugger;
     this.model[model].items.push(event.currentTarget.value);
+
+    // console.log(this.model[model].items, event.currentTarget);
     //this.model[model].itemInput.nativeElement.value = '';
     //this.model[model].itemSelected.setValue(null);
   }

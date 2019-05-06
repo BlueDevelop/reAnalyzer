@@ -94,15 +94,30 @@ export class FilterService {
     return this.http
       .get(`${environment.apiUrl}/hierarchy/hierarchiesNamesList`)
       .pipe(
-        tap(data =>
+        tap(data => {
           this.logsService.log(
             this.serviceName,
             'fetched data from getUnitNameList'
-          )
-        ),
+          );
+        }),
+        //map(data => this.flatHierarchy([data])),
         catchError(
           this.logsService.handleError(this.serviceName, 'getUnitNameList', [])
         )
       );
+  }
+
+  flatHierarchy(curArr, underWho = '', flatHierarchy = []) {
+    curArr.forEach(element => {
+      if (element.above) {
+        this.flatHierarchy(element.above, element.name, flatHierarchy);
+      }
+      flatHierarchy.push({
+        key: element._id,
+        value: element.name,
+        under: underWho,
+      });
+    });
+    return flatHierarchy;
   }
 }

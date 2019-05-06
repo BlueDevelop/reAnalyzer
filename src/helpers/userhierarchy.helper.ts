@@ -70,16 +70,19 @@ async function getDirectSubHierarchiesFromUser(userID: string) {
       const getURL = genURL(userID);
       const response = await axios.get(getURL);
       const usersHierarchyNode = response.data[0].value;
-      const above = usersHierarchyNode.above;
-      //return [{key:<id>,value:<name>}]
-      const subHierarchies: any = [
-        { key: usersHierarchyNode._id, value: usersHierarchyNode.name },
-        ..._.map(above, node => {
-          return { key: node._id, value: node.name };
-        }),
-      ];
 
-      return subHierarchies;
+      return usersHierarchyNode;
+
+      // const above = usersHierarchyNode.above;
+      // //return [{key:<id>,value:<name>}]
+      // const subHierarchies: any = [
+      //   { key: usersHierarchyNode._id, value: usersHierarchyNode.name },
+      //   ..._.map(above, node => {
+      //     return { key: node._id, value: node.name };
+      //   }),
+      // ];
+
+      // return subHierarchies;
     } catch (err) {
       console.log(err);
       return [];
