@@ -17,7 +17,7 @@ export default class DiscussionController {
   public static async getDiscussionsNamesList(req: Request, res: Response) {
     let ret;
     if (req.user) {
-      ret = await DiscussionService.getDiscussionsNamesList(req.user);
+      ret = await DiscussionService.getDiscussionsNamesList(req.user,req.query.officeFilteredUsers);
     } else {
       errorLogger.info(
         `getDiscussionsNamesList - req.user not exists - status 400 returned.`
