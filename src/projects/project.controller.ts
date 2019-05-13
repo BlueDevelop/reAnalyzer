@@ -17,7 +17,7 @@ export default class ProjectController {
   public static async getProjectsNamesList(req: Request, res: Response) {
     let ret;
     if (req.user) {
-      ret = await ProjectService.getProjectsNamesList(req.user);
+      ret = await ProjectService.getProjectsNamesList(req.user,req.query.officeFilteredUsers);
     } else {
       errorLogger.info(
         `getProjectsNamesList - req.user not exists - status 400 returned.`
