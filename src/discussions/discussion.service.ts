@@ -6,10 +6,10 @@ import filterHelper from '../helpers/userhierarchy.helper';
 export default class DiscussionService {
   public static index = 'discussions_test';
 
-  public static async getDiscussionsNamesList(user: any) {
-    const users: object[] = (await filterHelper.getMembersByUser(
-      user.uniqueId
-    )) as object[];
+  public static async getDiscussionsNamesList(user: any,users:object[]) {
+   // const users: object[] = (await filterHelper.getMembersByUser(
+   //   user.uniqueId
+  //  )) as object[];
 
     const should = DiscussionService.shouldQuery(users);
     const body: any = {
