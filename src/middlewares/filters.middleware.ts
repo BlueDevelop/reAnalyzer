@@ -58,13 +58,19 @@ async function getMembersOfHierarchy(
   const intersectIfUnitsExistsAndNotEmpty =
     units && units.length > 0 && clientSendsEmptyStringAsTheUnitsParameter;
 
+    
+   req.query.officeFilteredUsers = _.filter(
+     usersUnderUsersHierarchy,
+   (person:any)=>_.includes(req.user.officeMembers,preson.id)
+     )
+    
   const filter: object[] = intersectIfUnitsExistsAndNotEmpty
     ? _.intersectionBy(
         usersUnderUsersHierarchy,
         selectedUnits,
         (person: any) => person.id
       )
-    : usersUnderUsersHierarchy;
+    : req.query.officeFilteredUsers;
 
   req.query.users = filter;
 
@@ -76,6 +82,9 @@ async function getMembersOfHierarchy(
   } else {
     req.query.officeMembers = [];
   }
+    
+  if(!req.query.officeCreated && !req.query.officeAssign)
+    req.query.users = [req.user.uniqueId]
   next();
 }
 
