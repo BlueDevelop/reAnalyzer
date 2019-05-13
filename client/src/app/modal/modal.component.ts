@@ -195,11 +195,16 @@ export class ModalComponent implements OnInit {
       //iterates over every row in the table and pushes the row to excelJson
       //should translate keys/status with translateService
       excelJson.push({
-        ...rowNode.data,
-        due: moment
+        "כותרת":rowNode.data.title,
+        "יוצר":rowNode.data.creator,
+        "אחראי":rowNode.data.assign.name,
+        "תאריך יעד":moment
           .utc(rowNode.data.due)
           .local()
           .toDate(),
+        "משתתפים":rowNode.data.watchers.map(w=>w.name).join(","),
+        "סטטוס":rowNode.data.status,
+        "תיאור":rowNode.data.description,
       });
     });
     this.excelService.jsonToExcel(excelJson);
