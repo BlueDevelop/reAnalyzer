@@ -61,7 +61,7 @@ async function getMembersOfHierarchy(
     
    req.query.officeFilteredUsers = _.filter(
      usersUnderUsersHierarchy,
-   (person:any)=>_.includes(req.user.officeMembers,preson.id)
+   (person:any)=>_.includes(req.user.officeMembers,person.id)
      )
     
   const filter: object[] = intersectIfUnitsExistsAndNotEmpty
