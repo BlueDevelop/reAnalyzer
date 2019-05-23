@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NativeDateAdapter } from '@angular/material';
+import { NativeDateAdapter, MatSnackBar } from '@angular/material';
 import { SettingsService } from '../_services/settings.service';
 import { UserService } from '../_services/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -33,7 +33,11 @@ export class UserProfileComponent implements OnInit {
   private rowSelection;
   private rowData: any[];
   private quickFilter: string = '';
-  constructor(private http: HttpClient, private userService: UserService) {
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private snackBar: MatSnackBar
+  ) {
     this.columnDefs = [
       {
         headerName: 'משתמש',
@@ -65,6 +69,21 @@ export class UserProfileComponent implements OnInit {
 
   getSelecedUserRow(user) {
     this.gridApi.ensureNodeVisible(user, 'top');
+  }
+  onSelectionChanged(event) {
+    const rowCount = this.gridApi.getSelectedRows().length;
+    // console.log(event.api.getSelectedNodes());
+  }
+
+  onRowSelected(event) {
+    console.log(event.node);
+    const rowCount = this.gridApi.getSelectedRows().length;
+    if (rowCount > 50) {
+      event.node.setSelected(false);
+      this.snackBar.open('אין לבחור מעל 50 משתמשים', 'סגור', {
+        duration: 2000,
+      });
+    }
   }
 
   saveOffice() {

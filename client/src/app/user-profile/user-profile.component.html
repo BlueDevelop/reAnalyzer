@@ -31,6 +31,8 @@
       [rowSelection]="rowSelection"
       [rowData]="rowData"
       (gridReady)="onGridReady($event)"
+      (selectionChanged)="onSelectionChanged($event)"
+      (rowSelected)="onRowSelected($event)"
     ></ag-grid-angular>
   </div>
   <mat-chip-list>
