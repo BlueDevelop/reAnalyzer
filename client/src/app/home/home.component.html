@@ -6,6 +6,14 @@
 
 <app-nav-bar></app-nav-bar>
         <mat-progress-bar *ngIf="inProgress!=0" mode="indeterminate"></mat-progress-bar>
-        <router-outlet name="app"></router-outlet>
+        <ng-container #vc>
+          
+        </ng-container>
+        <router-outlet name="app" ></router-outlet>
+
+        <ng-template #tpl>
+        <app-splash-screen ></app-splash-screen>
+        </ng-template>
   </mat-sidenav-content>
+ 
 </mat-sidenav-container>

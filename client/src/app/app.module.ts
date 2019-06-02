@@ -53,6 +53,7 @@ import { AgGridMaterialDatepickerComponent } from './ag-grid-material-datepicker
 import { AgGridStatusChipComponent } from './ag-grid-status-chip/ag-grid-status-chip.component';
 import { MomentumLoadingComponent } from './momentum-loading/momentum-loading.component';
 import { MenuItemComponent } from './menu-item/menu-item.component';
+import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
     AgGridStatusChipComponent,
     MomentumLoadingComponent,
     MenuItemComponent,
+    SplashScreenComponent,
   ],
   imports: [
     BrowserModule,

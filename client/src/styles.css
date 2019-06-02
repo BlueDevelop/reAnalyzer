@@ -69,6 +69,11 @@ div.ag-root .ag-cell-focus {
   padding: 0 !important;
 }
 
+.ag-theme-material .ag-header-select-all span {
+  height: 100%;
+  display: none;
+}
+
   .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;
