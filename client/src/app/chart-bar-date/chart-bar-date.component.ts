@@ -17,7 +17,11 @@ export class ChartBarDateComponent implements OnInit {
   aggData: any = { without: [], day: [], week: [], month: [], year: [] };
   empty: boolean = false;
   formatting: any;
+  // dueCanAlakazam: boolean = false;
+  // createdCanAlakazam: boolean = false;
 
+  // showDueAlakazam: boolean = false;
+  // showCreatedAlakazam: boolean = false;
   //intervals: string[] = ['1d', '1w', '1m', '1y'];
   intervals: string[] = ['without', 'day', 'week', 'month', 'year'];
   interval: string = this.settings.interval || 'without';
@@ -72,6 +76,10 @@ export class ChartBarDateComponent implements OnInit {
     //console.log(this.settings.interval);
     this.data = this.aggData[this.settings.interval];
   }
+
+  predictByCreated() {}
+
+  predictByDue() {}
 
   // formatLabel(ind: number | null) {
   //   const values = ['יום', 'שבוע', 'חודש', 'שנה'];
@@ -146,6 +154,10 @@ export class ChartBarDateComponent implements OnInit {
       //Move slide to correct position
       // this.interval = this.intervals.indexOf(interval);
       //data array of series [due,created]
+      console.log('the data:::::');
+      console.log(data);
+      this.dueCanAlakazam = data[0].canAlakazam;
+      this.createdCanAlakazam = data[1].canAlakazam;
       this.editData(data);
       //this.cdRef.detectChanges();
       this.refresh.decreaseProgress();

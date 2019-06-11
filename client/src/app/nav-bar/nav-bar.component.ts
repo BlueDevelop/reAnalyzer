@@ -16,6 +16,7 @@ export class NavBarComponent implements OnInit {
     { path: [{ outlets: { app: ['units'] } }], label: 'units' },
     { path: [{ outlets: { app: ['projects'] } }], label: 'פרויקטים' },
     { path: [{ outlets: { app: ['users'] } }], label: 'משתמשים' },
+    { path: [{ outlets: { app: ['predictions'] } }], label: 'תחזיות' },
     {
       path: [{ outlets: { app: ['settings'] } }],
       queryParams: { tabName: 'colors' },

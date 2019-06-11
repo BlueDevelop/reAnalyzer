@@ -54,6 +54,7 @@ import { AgGridStatusChipComponent } from './ag-grid-status-chip/ag-grid-status-
 import { MomentumLoadingComponent } from './momentum-loading/momentum-loading.component';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
+import { PredictionComponent } from './prediction/prediction.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { SplashScreenComponent } from './splash-screen/splash-screen.component';
     MomentumLoadingComponent,
     MenuItemComponent,
     SplashScreenComponent,
+    PredictionComponent,
   ],
   imports: [
     BrowserModule,

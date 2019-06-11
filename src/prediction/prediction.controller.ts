@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 
-import taskService from './task.service';
+import predictionService from './prediction.service';
 import infoLogger from '../loggers/info.logger';
 import verboseLogger from '../loggers/verbose.logger';
 import errorLogger from '../loggers/error.logger';
 import filterHelper from '../helpers/userhierarchy.helper';
 import _ from 'lodash';
+import axios from 'axios';
 import moment from 'moment';
 
 const striptags = require('striptags');
@@ -13,14 +14,21 @@ const Entities = require('html-entities').AllHtmlEntities; // remove html entiti
 const entities = new Entities();
 const decodeEntities = entities.decode;
 
-export default class TaskController {
+export default class PredictionController {
+  public static async generateAlakazamArray(res: any) {
+    return 0;
+  }
+
   /**
    * validates queries and fetch the count of tasks per interval as given by a given field in given time range.
    *
    * @param {Request} req
    * @param {Response} res
    */
-  public static async getFieldCountPerInterval(req: Request, res: Response) {
+  public static async predictFieldCountPerInterval(
+    req: Request,
+    res: Response
+  ) {
     try {
       if (!req.query.field || !req.query.from || !req.query.to) {
         errorLogger.info(
@@ -50,43 +58,22 @@ export default class TaskController {
           req.user.uniqueId
         } is ${filter}.`
       );
-      const response = await taskService.getFieldCountPerInterval(
+      const response = await predictionService.getFieldCountPerInterval(
         req.query.field,
-        +req.query.from,
-        +req.query.to,
         filter,
         req.query.officeCreated,
         req.query.officeAssign,
-        req.query.interval,
         officeMembers
       );
-      // const maximalD = await taskService.getMaximalFieldDate(
-      //   req.query.field,
-      //   +req.query.from,
-      //   filter,
-      //   req.query.officeCreated,
-      //   req.query.officeAssign,
-      //   req.query.interval,
-      //   officeMembers
-      // );
-      // const maximalDate = 0;
-      // const from = new Date(req.query.from);
-      // const to = new Date(req.query.to);
-      // const md = new Date(maximalD.body.aggregations.max_date);
-      // let canAlakazam = false;
-      // if (+from <= +md && +md <= +to) {
-      //   canAlakazam = true;
-      // }
-      verboseLogger.verbose(
-        `getFieldCountPerInterval function returned ${
-          response.body.aggregations['1'].buckets
-        }.`
+      let alakazamArray: any = PredictionController.generateAlakazamArray(
+        response
       );
+      //TO DO GET ARRAY OF THE FORM {ds:"date",y:"number"}
 
+      const prediction = await predictionService.alakazam(alakazamArray);
       return res.json({
         field: req.query.field,
-        data: response.body.aggregations['1'].buckets,
-        // canAlakazam: true,
+        prediction: prediction,
       });
     } catch (err) {
       errorLogger.error('%j', {
@@ -104,7 +91,7 @@ export default class TaskController {
    * @param {Request} req
    * @param {Response} res
    */
-  public static async getCountByStatus(req: Request, res: Response) {
+  public static async predictCountByStatus(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
         errorLogger.info(
@@ -126,7 +113,7 @@ export default class TaskController {
         `getCountByStatus filter for user ${req.user.uniqueId} is ${filter}.`
       );
 
-      const response = await taskService.getCountByStatus(
+      const response = await predictionService.predictCountByStatus(
         +req.query.from,
         +req.query.to,
         filter,
@@ -157,7 +144,7 @@ export default class TaskController {
    * @param {Request} req
    * @param {Response} res
    */
-  public static async getTagCloud(req: Request, res: Response) {
+  public static async predictTagCloud(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
         errorLogger.info(
@@ -180,7 +167,7 @@ export default class TaskController {
 
       // const filter: object[] = (await filterHelper.getMembersByUser(
       //   req.user.uniqueId,
-      //   TaskController.cut
+      //   PredictionController.cut
       // )) as object[];
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
@@ -189,7 +176,7 @@ export default class TaskController {
         `getTagCloud filter for user ${req.user.uniqueId} is ${filter}.`
       );
 
-      const response = await taskService.getTagCloud(
+      const response = await predictionService.predictTagCloud(
         +req.query.from,
         +req.query.to,
         filter,
@@ -226,7 +213,7 @@ export default class TaskController {
    * @param {Request} req
    * @param {Response} res
    */
-  public static async getLeaderboard(req: Request, res: Response) {
+  public static async predictLeaderboard(req: Request, res: Response) {
     try {
       if (!req.query.from || !req.query.to) {
         errorLogger.info(
@@ -254,7 +241,7 @@ export default class TaskController {
         `getLeaderboard filter for user ${req.user.uniqueId} is ${filter}.`
       );
 
-      const doneTasksCount = await taskService.getLeaderboard(
+      const doneTasksCount = await predictionService.predictLeaderboard(
         +req.query.from,
         +req.query.to,
         filter,
@@ -273,7 +260,7 @@ export default class TaskController {
       );
 
       // get total tasks count for the top users
-      const totalTasksCount = await taskService.getTotalTasksCount(
+      const totalTasksCount = await predictionService.getTotalTasksCount(
         +req.query.from,
         +req.query.to,
         topUsers,
@@ -316,7 +303,7 @@ export default class TaskController {
     }
   }
 
-  public static getRatiosByTasks(doneTasks: any[]) {
+  public static predictRatiosByTasks(doneTasks: any[]) {
     const ratios: number[] = doneTasks.map((task: any) => {
       // Extract data from the task.
       const sourceTask: any = task._source;
@@ -383,7 +370,7 @@ export default class TaskController {
    * @param {Request} req
    * @param {Response} res
    */
-  public static async getEndTimeRatio(req: Request, res: Response) {
+  public static async predictEndTimeRatio(req: Request, res: Response) {
     try {
       // Validate input.
       if (!req.query.from || !req.query.to) {
@@ -401,7 +388,7 @@ export default class TaskController {
 
       // const filter: object[] = (await filterHelper.getMembersByUser(
       //   req.user.uniqueId,
-      //   TaskController.cut
+      //   PredictionController.cut
       // )) as object[];
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
@@ -411,7 +398,7 @@ export default class TaskController {
       );
 
       // Get all the tasks with status done from elasticsearch.
-      let doneTasks = await taskService.getByField(
+      let doneTasks = await predictionService.predictByField(
         'done',
         +req.query.from,
         +req.query.to,
@@ -427,7 +414,9 @@ export default class TaskController {
         `getByField service function returned ${doneTasks}.`
       );
 
-      const ratios: number[] = TaskController.getRatiosByTasks(doneTasks);
+      const ratios: number[] = PredictionController.predictRatiosByTasks(
+        doneTasks
+      );
       const under100interval = 0.25;
       const under100buckets = ['0%-25%', '25%-50%', '50%-75%', '75%-100%'];
       const above100interval = 3;
@@ -500,7 +489,7 @@ export default class TaskController {
       }
 
       const ret = {
-        title: task.title ? TaskController.clearTitle(task.title) : '',
+        title: task.title ? PredictionController.clearTitle(task.title) : '',
         creator: task.creator
           ? fullNameGenerator(task.creator.name, task.creator.lastname)
           : '',
@@ -552,7 +541,7 @@ export default class TaskController {
     );
     let tasks: any;
     if ('ratioMin' in filter) {
-      tasks = await taskService.getByField(
+      tasks = await predictionService.predictByField(
         'done',
         +req.query.from,
         +req.query.to,
@@ -563,7 +552,7 @@ export default class TaskController {
         officeMembers
       );
     } else {
-      tasks = await taskService.getTasksByFilter(
+      tasks = await predictionService.predictTasksByFilter(
         +req.query.from,
         +req.query.to,
         users,
@@ -578,7 +567,7 @@ export default class TaskController {
     if ('ratioMin' in filter && 'ratioMax' in filter) {
       const ratioMin = +filter['ratioMin'];
       const ratioMax = +filter['ratioMax'];
-      TaskController.getRatiosByTasks(tasks);
+      PredictionController.predictRatiosByTasks(tasks);
       tasks = _.filter(tasks, task => {
         if (ratioMax == -1) {
           return task._source.ratio >= ratioMin;
@@ -592,7 +581,7 @@ export default class TaskController {
     tasks = _.map(tasks, (task: any) => {
       return task['_source'];
     });
-    tasks = TaskController.buildTasksList(tasks);
+    tasks = PredictionController.buildTasksList(tasks);
     res.json(tasks);
   }
 
@@ -602,11 +591,11 @@ export default class TaskController {
    * @param res
    * @description gets the tasks statuses for each person
    */
-  public static async statusCountOfPersons(req: Request, res: Response) {
+  public static async predictStatusCountOfPersons(req: Request, res: Response) {
     const { persons } = req.query;
     //TODO: add intersection of persons and people under my hierarchy
     const responsesPromises: any = _.map(persons, async person => {
-      const response = await taskService.getCountByStatus(
+      const response = await predictionService.predictCountByStatus(
         +req.query.from,
         +req.query.to,
         [person],

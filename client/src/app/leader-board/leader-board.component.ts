@@ -44,7 +44,30 @@ export class LeaderBoardComponent implements OnInit {
   getLeaderboard(): void {
     this.refresh.increaseProgress();
     this.taskService.getLeaderboard().subscribe(data => {
+      // data = [
+      //   {
+      //     key: 'aaa',
+      //     done: 4,
+      //     total: 9,
+      //   },
+      //   {
+      //     key: 'bbb',
+      //     done: 5,
+      //     total: 10,
+      //   },
+      //   {
+      //     key: 'ccc',
+      //     done: 6,
+      //     total: 7,
+      //   },
+      //   {
+      //     key: 'ddd',
+      //     done: 10,
+      //     total: 13,
+      //   },
+      // ];
       this.editData(data);
+
       this.refresh.decreaseProgress();
     });
   }

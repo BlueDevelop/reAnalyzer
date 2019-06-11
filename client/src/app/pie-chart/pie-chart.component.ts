@@ -40,9 +40,9 @@ export class PieChartComponent implements OnInit, OnChanges {
       plotBorderWidth: null,
       plotShadow: false,
     },
-    title: {
-      text: '',
-    },
+    // title: {
+    //   text: 'כמות משימות לפי יחס בין זמן סיום לזמן יעד',
+    // },
     yAxis: {
       title: {
         text: '',

@@ -28,6 +28,17 @@ export class TimeRatesComponent implements OnInit {
   getTimeRates(): void {
     this.refresh.increaseProgress();
     this.taskService.getTimeRates().subscribe(data => {
+      // let data:any = {};
+      // data['ratios'] = [
+      //   {
+      //     name: '100%-400%',
+      //     value: 4,
+      //   },
+      //   {
+      //     name: '400%-700%',
+      //     value: 1,
+      //   },
+      // ];
       this.data = _.map(data.ratios, ratio => {
         return { name: ratio.name, y: ratio.value };
       });

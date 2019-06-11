@@ -12,11 +12,25 @@
           >{{ interval | translate }}</mat-button-toggle
         >
       </mat-button-toggle-group>
+
+      <!-- <mat-button-toggle class="alakazamButton"
+      [value]="showCreatedAlakazam" *ngIf="createdCanAlakazam" (click)="predictByCreated()"
+      >{{ 'createdAlakazam' | translate }}</mat-button-toggle
+    >
+
+    <mat-button-toggle class="alakazamButton"
+    [value]="showDueAlakazam" *ngIf="dueCanAlakazam" (click)="predictByDue()"
+    >{{ 'dueAlakazam' | translate }}</mat-button-toggle
+  > -->
+      
     </div>
+    
     <app-timeline-chart
       [interval]="interval"
       [data]="data"
       (getTasks)="getTask($event)"
+      [showDueAlakazam]="showDueAlakazam"
+      [showCreatedAlakazam]="showCreatedAlakazam"
     ></app-timeline-chart>
   </div>
 </div>

@@ -65,7 +65,23 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       title: {
         text: '',
       },
+      labels: {
+        enabled: false,
+      },
+      gridLineWidth: 0,
+      minorGridLineWidth: 0,
+      lineColor: 'transparent',
+      tickLength: 0,
+      minorTickLength: 0,
     },
+    xAxis: {
+      gridLineWidth: 0,
+      minorGridLineWidth: 0,
+      lineColor: 'transparent',
+      tickLength: 0,
+      minorTickLength: 0,
+    },
+
     tooltip: {
       useHTML: true,
       format:

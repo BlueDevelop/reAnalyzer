@@ -8,6 +8,7 @@ import { LoginComponent } from '../app/auth/login/login.component';
 import { DashboardComponent } from '../app/dashboard/dashboard.component';
 import { HomeComponent } from '../app/home/home.component';
 import { SettingsComponent } from '../app/settings/settings.component';
+// import { PredictionComponent } from '../app/prediction/prediction.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'units', component: DashboardComponent, outlet: 'app' },
       { path: 'projects', component: DashboardComponent, outlet: 'app' },
       { path: 'users', component: DashboardComponent, outlet: 'app' },
+      // { path: 'predictions', component: PredictionComponent, outlet: 'app' },
       {
         path: 'settings',
         component: SettingsComponent,

@@ -26,6 +26,15 @@ mat-button-toggle-group /deep/ .mat-button-toggle-button{
     font-size: 70%;
 }
 
-mat-button-toggle-group{
+.alakazamButton /deep/ .mat-button-toggle-label-content{
+    line-height: 30px;
+}
+.alakazamButton /deep/ .mat-button-toggle-button{
+    font-size: 70%;
+}
+
+mat-button-toggle-group .alakazamButton{
     margin-top: 5px;
 }
+
+

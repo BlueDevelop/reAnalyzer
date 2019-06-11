@@ -119,7 +119,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "../../assets/script/piwikConf.js"
+            ]
           },
           "configurations": {
             "production": {

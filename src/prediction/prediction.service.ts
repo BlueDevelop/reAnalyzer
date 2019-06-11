@@ -1,12 +1,14 @@
 import esClient from '../helpers/elasticsearch.helper';
-import Itask from './task.interface';
+import Itask from './prediction.interface';
 import * as _ from 'lodash';
 import { stat } from 'fs';
 import { Ingest } from 'elasticsearch';
 import getConfig from '../config';
-const config = getConfig();
+import axios from 'axios';
 
-export default class TaskService {
+const config = getConfig();
+const alakazamUrl = 'http://localhost:8080/';
+export default class PredictionService {
   public static index = 'tasks_test';
 
   /**
@@ -17,7 +19,7 @@ export default class TaskService {
    * @param {object[]} filter filter by users.
    * @param {string?} field The field to search by, defaults to '_id'.
    */
-  public static getTasksByFilter(
+  public static predictTasksByFilter(
     from: number,
     to: number,
     users: object[] = [],
@@ -32,7 +34,7 @@ export default class TaskService {
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
     //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-    const should = TaskService.prefixQuery(users);
+    const should = PredictionService.prefixQuery(users);
     const staticMust = [
       {
         range: {
@@ -93,7 +95,7 @@ export default class TaskService {
       }
     }
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body,
     });
   }
@@ -106,7 +108,7 @@ export default class TaskService {
    * @param {object[]} filter filter by users.
    * @param {string?} field The field to search by, defaults to '_id'.
    */
-  public static getByField(
+  public static predictByField(
     value: string,
     from: number,
     to: number,
@@ -122,7 +124,7 @@ export default class TaskService {
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
     //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-    const should = TaskService.prefixQuery(filter);
+    const should = PredictionService.prefixQuery(filter);
     const staticMust = [
       {
         range: {
@@ -158,7 +160,7 @@ export default class TaskService {
 
     body.query.bool.must[1].match[searchField] = value;
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body,
     });
   }
@@ -181,7 +183,7 @@ export default class TaskService {
     interval?: string,
     officeMembers: object[] = []
   ) {
-    const should = TaskService.prefixQuery(filter);
+    const should = PredictionService.prefixQuery(filter);
     const staticMust = [
       {
         range: {
@@ -200,7 +202,7 @@ export default class TaskService {
       officeAssign
     );
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body: {
         // aggs: {
         //   1: {
@@ -261,29 +263,28 @@ export default class TaskService {
    */
   public static getFieldCountPerInterval(
     field: string,
-    from: number,
-    to: number,
+    // from: number,
+    // to: number,
     filter: object[] = [],
     officeCreated: boolean,
     officeAssign: boolean,
-    interval?: string,
     officeMembers: object[] = []
   ) {
     // const should =
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
     //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-    const should = TaskService.prefixQuery(filter);
-    const staticMust = [
-      {
-        range: {
-          [field]: {
-            gte: from,
-            lte: to,
-            format: 'epoch_millis',
-          },
-        },
-      },
+    const should = PredictionService.prefixQuery(filter);
+    const staticMust: any = [
+      // {
+      //   range: {
+      //     [field]: {
+      //       gte: from,
+      //       lte: to,
+      //       format: 'epoch_millis',
+      //     },
+      //   },
+      // },
     ];
     const must: any[] = generateMust(
       staticMust,
@@ -292,7 +293,7 @@ export default class TaskService {
       officeAssign
     );
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body: {
         aggs: {
           1: {
@@ -339,6 +340,14 @@ export default class TaskService {
     });
   }
 
+  //data - an aray of sample objects of the form {ds:"date",y:"numeric value"}
+  public static alakazam(data: any) {
+    const req = {
+      data: data,
+    };
+    return axios.post(alakazamUrl, req);
+  }
+
   /**
    * Returns the count of tasks per status in a given time range.
    *
@@ -346,7 +355,7 @@ export default class TaskService {
    * @param {number} to Date to search to in epoch_millis.
    * @param {object[]} filter filter by users.
    */
-  public static getCountByStatus(
+  public static predictCountByStatus(
     from: number,
     to: number,
     filter: object[] = [],
@@ -358,7 +367,7 @@ export default class TaskService {
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
     //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-    const should = TaskService.prefixQuery(filter);
+    const should = PredictionService.prefixQuery(filter);
     const staticMust = [
       {
         range: {
@@ -377,7 +386,7 @@ export default class TaskService {
       officeAssign
     );
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body: {
         aggs: {
           1: {
@@ -432,7 +441,7 @@ export default class TaskService {
    * @param {object[]} filter filter by users.
    * @param {number?} size The number of tags, defaults to 40.
    */
-  public static getTagCloud(
+  public static predictTagCloud(
     from: number,
     to: number,
     filter: object[] = [],
@@ -445,7 +454,7 @@ export default class TaskService {
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
     //     : TaskService.prefixQuery(filter, officeCreated, officeAssign);
-    const should = TaskService.prefixQuery(filter);
+    const should = PredictionService.prefixQuery(filter);
     const staticMust = [
       {
         match_all: {},
@@ -467,7 +476,7 @@ export default class TaskService {
       officeAssign
     );
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body: {
         aggs: {
           1: {
@@ -528,7 +537,7 @@ export default class TaskService {
     officeMembers: object[] = []
   ) {
     // dont filter by creator only look at assignees
-    const should = TaskService.prefixQuery(filter, false);
+    const should = PredictionService.prefixQuery(filter, false);
     const staticMust = [
       {
         range: {
@@ -547,7 +556,7 @@ export default class TaskService {
       officeAssign
     );
     return esClient.search({
-      index: TaskService.index,
+      index: PredictionService.index,
       body: {
         query: {
           bool: {
@@ -586,7 +595,7 @@ export default class TaskService {
    * @param {object[]} filter filter by users.
    * @param {number?} size The number of tags, defaults to 10.
    */
-  public static getLeaderboard(
+  public static predictLeaderboard(
     from: number,
     to: number,
     filter: object[] = [],
@@ -595,7 +604,7 @@ export default class TaskService {
     size?: number,
     officeMembers: object[] = []
   ) {
-    const should = TaskService.prefixQuery(filter, true, false);
+    const should = PredictionService.prefixQuery(filter, true, false);
     const staticMust = [
       {
         terms: {
@@ -619,7 +628,7 @@ export default class TaskService {
       officeAssign
     );
     let esQuery: any = {
-      index: TaskService.index,
+      index: PredictionService.index,
       body: {
         query: {
           bool: {
