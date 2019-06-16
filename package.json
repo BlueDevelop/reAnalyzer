@@ -17,7 +17,10 @@
     "test:run": "NODE_ENV=test npx mocha src/**/*.spec.ts --opts ./mocha.opts",
     "test:coverage": "npm run build:tsc && npx nyc npm run test:run",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "copy": "cp -r ../mock src/"
+    "copy": "cp -r ../mock src/",
+    "client": "npm start --prefix client",
+    "build:live": "NODE_ENV=local nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "dev": "concurrently \"npm run build:live\" \"npm run client\""
   },
   "bin": {
     "tsc": "./node_modules/.bin/tsc",
@@ -32,6 +35,7 @@
     "axios": "^0.18.0",
     "bcrypt": "^2.0.0",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -78,9 +82,10 @@
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
     "mochawesome": "3.0.3",
+    "nodemon": "^1.19.1",
     "nyc": "^13.0.1",
     "prettier": "1.14.3",
-    "ts-node": "7.0.1",
+    "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.0.3"

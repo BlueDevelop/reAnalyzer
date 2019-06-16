@@ -13,6 +13,9 @@
   .project-select, .discussion-select, .unit-select, .filter-button{
    width: 100%;
   }
+  .project-select, .discussion-select:hover{
+    cursor: not-allowed !important;
+  }
   
   .start-date, .end-date{
    width: 47%;

@@ -108,22 +108,36 @@ const dev: IConfig = {
 };
 
 const local: IConfig = {
-  port: process.env.PORT ? +process.env.PORT : 3000,
+  port: process.env.PORT ? +process.env.PORT : 4000,
   connString: process.env.MONGO || 'mongodb://localhost:27017/reAnalyzer_dev',
   sessionSecret: 'OmerIsTheBestProgrammer',
   logLevel: process.env.LOGLEVEL || 'verbose',
   apmAdress: process.env.APM_ADDR || 'http://localhost:8200',
-  apmServiceName: process.env.APM_NAME || 'reAnalyzer_dev',
+  apmServiceName: process.env.APM_NAME || 'momentum_dev',
   elasticsearch: process.env.ELASTIC || 'http://localhost:9200',
-  hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
+  // hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
+  hierarchyServiceUseMock: true,
+  // hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
+  hierarchyServiceAddrGetMembers: hierarchyID =>
+    `http://localhost:8001/personsUnderHierarchy/${hierarchyID}`,
+  hierarchyServiceAddrGetMembersUnderUser: userID =>
+    `http://localhost:8001/personsUnderPerson/${userID}`,
+  hierarchyServiceAddrGetDirectSubHierarchiesFromUser: userID =>
+    `http://localhost:8001/subHierarchiesByPersonID/${userID}`,
+  hierarchyServiceAddrGetMembersDirectlyUnderHierarchy: hierarchyID =>
+    `http://localhost:8001/personsDirectlyUnderHierarchy/${hierarchyID}`,
   userIDToOfficeMembersFile: path.join(
     __dirname,
     '../src/mock/userIDToOfficeMembers.json'
   ),
-  hierarchyServiceUseMock: true,
   hierarchyUserIDToHierarchyFile: path.join(
     __dirname,
     '../src/mock/userIDToHierarchy.json'
+  ),
+
+  hierarchyGroupIdToGroupName: path.join(
+    __dirname,
+    '../src/mock/hierarchyGroupIdToGroupName.json'
   ),
   debug: process.env.DEBUG
     ? process.env.DEBUG === 'true'

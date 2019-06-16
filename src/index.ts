@@ -50,7 +50,6 @@ export const app = express();
   initDbConnection();
   setMiddlewares();
   setRoutes();
-
   app.listen(config.port, () => {
     verboseLogger.info(`Server is listening on port ${config.port}`);
     console.log(`Server is listening on port ${config.port}`);
@@ -94,7 +93,7 @@ function setMiddlewares() {
   app.use(cookieParser());
   app.use(
     morgan('combined', {
-      skip: (_, res) => res.statusCode < 400,
+      // skip: (_, res) => res.statusCode < 400,
       stream: {
         write: meta => {
           morganLogger.error(meta);

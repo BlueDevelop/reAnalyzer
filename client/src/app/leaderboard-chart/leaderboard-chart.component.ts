@@ -73,6 +73,9 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       lineColor: 'transparent',
       tickLength: 0,
       minorTickLength: 0,
+      startOnTick: false,
+      endOnTick: false,
+      tickPositions: [],
     },
     xAxis: {
       gridLineWidth: 0,
@@ -80,6 +83,9 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       lineColor: 'transparent',
       tickLength: 0,
       minorTickLength: 0,
+      startOnTick: false,
+      endOnTick: false,
+      tickPositions: [],
     },
 
     tooltip: {
