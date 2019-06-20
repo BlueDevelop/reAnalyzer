@@ -1,7 +1,30 @@
-<app-filter (valueChange)="dataFilering()" [showProjects]=false [showDiscussions]=false  [showStartDate]=false [showEndDate]=false ></app-filter>
-<div class="prediction"  id="prediction">
-    <div class="item a" ></div>
-    <div class="item b" > </div>
-    <div class="item c" ></div> 
-    <div class="item d" > </div>
+<app-filter
+  #filter
+  (valueChange)="dataFilering()"
+  [showProjects]="false"
+  [showDiscussions]="false"
+  [showStartDate]="false"
+  [showEndDate]="false"
+></app-filter>
+<div class="prediction" id="prediction">
+  <div #prediction class="item a">
+    <app-timeline-chart
+      [data]="timelinePrediction"
+      interval="day"
+    ></app-timeline-chart>
+  </div>
+  <div #weekly class="item b">
+    <app-timeline-chart
+      [data]="weeklyPrediction"
+      [zoomtype]="None"
+      interval="dayName"
+    ></app-timeline-chart>
+  </div>
+  <div #monthly class="item c">
+    <app-timeline-chart
+      [data]="trendPrediction"
+      interval="day"
+    ></app-timeline-chart>
+  </div>
+  <div #yearly class="item d"></div>
 </div>

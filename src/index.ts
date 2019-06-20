@@ -27,6 +27,7 @@ import taskRouter from './tasks/task.router';
 import discussionRouter from './discussions/discussion.router';
 import projectRouter from './projects/project.router';
 import hierarchyRouter from './hierarchies/hierarchy.router';
+import predictionRouter from './prediction/prediction.router';
 import morganLogger from './loggers/morgan.logger';
 import errorLogger from './loggers/error.logger';
 import verboseLogger from './loggers/verbose.logger';
@@ -123,6 +124,7 @@ function setRoutes() {
   app.use('/api/discussion', discussionRouter);
   app.use('/api/project', projectRouter);
   app.use('/api/hierarchy', hierarchyRouter);
+  app.use('/api/prediction', predictionRouter);
 
   app.get('/api/isAlive', (_, res) => {
     if (connection.readyState) {

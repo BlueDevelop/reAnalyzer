@@ -75,6 +75,17 @@ export class FilterComponent implements OnInit {
   @ViewChild('autoProject')
   autocompleteProject: MatAutocomplete;
 
+  @Input()
+  showProjects: boolean = true;
+  @Input()
+  showDiscussions: boolean = true;
+  @Input()
+  showStartDate: boolean = true;
+  @Input()
+  showEndDate: boolean = true;
+  @Input()
+  showDateType: boolean = true;
+
   visible = true;
   selectable = false;
   removable = true;
@@ -109,6 +120,7 @@ export class FilterComponent implements OnInit {
   allProjects: string[] = [];
   officeCreated: boolean = true;
   officeAssign: boolean = false;
+  dateType : any;
 
   constructor(
     private taskService: TaskService,

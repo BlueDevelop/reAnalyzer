@@ -156,8 +156,8 @@ export class ChartBarDateComponent implements OnInit {
       //data array of series [due,created]
       console.log('the data:::::');
       console.log(data);
-      this.dueCanAlakazam = data[0].canAlakazam;
-      this.createdCanAlakazam = data[1].canAlakazam;
+      // this.dueCanAlakazam = data[0].canAlakazam;
+      // this.createdCanAlakazam = data[1].canAlakazam;
       this.editData(data);
       //this.cdRef.detectChanges();
       this.refresh.decreaseProgress();

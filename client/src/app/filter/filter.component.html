@@ -13,7 +13,7 @@
         </mat-chip>
       </mat-chip-list>
     </mat-panel-description>
-    <mat-panel-description>
+    <mat-panel-description *ngIf="showProjects">
       <p> פרויקטים:</p>
       <mat-chip-list #chipListProject *ngIf="filterService.filterParams.projects.length>0 else All">
         <mat-chip *ngFor="let project of filterService['selectedProjectNames']">
@@ -21,7 +21,7 @@
         </mat-chip>
       </mat-chip-list>
     </mat-panel-description>
-    <mat-panel-description>
+    <mat-panel-description *ngIf="showDiscussions">
       <p> דיונים:</p>
       <mat-chip-list #chipListDiscussion *ngIf="filterService.filterParams.discussions.length>0 else All">
         <mat-chip *ngFor="let discussion of filterService['selectedDiscussionNames']">
@@ -29,7 +29,7 @@
         </mat-chip>
       </mat-chip-list>
     </mat-panel-description>
-    <mat-panel-description>
+    <mat-panel-description *ngIf="showStartDate">
       <p> מתאריך {{filterService.filterParams.date.firstDay | date: "dd/MM/yyyy"}} עד תאריך {{filterService.filterParams.date.lastDay | date : "dd/MM/yyyy"}}</p>
     </mat-panel-description>
     <ng-template #All><p>הכל</p></ng-template>
@@ -56,13 +56,13 @@
         <mat-icon class="rotate-45">call_split</mat-icon>
     </button>
   </div>
-    <mat-form-field class="project-select">
-        <mat-chip-list #chipListProject>
+    <mat-form-field *ngIf="showProjects" class="project-select" disabled>
+        <mat-chip-list  #chipListProject matTooltip="...בקרוב"  matTooltipPosition="right">
             <mat-chip *ngFor="let project of projects" [selectable]="selectable" [removable]="removable" (removed)="remove(project, 'projects')">
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
               {{project}}
             </mat-chip>
-      <input matInput placeholder="בחר פרויקט" #projectInput [formControl]="projectSelected" [matAutocomplete]="autoProject" [matChipInputFor]="chipListProject"
+      <input  disabled matInput placeholder="בחר פרויקט" #projectInput [formControl]="projectSelected" [matAutocomplete]="autoProject" [matChipInputFor]="chipListProject"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event, 'projects')">
       </mat-chip-list>
         <mat-autocomplete #autoProject="matAutocomplete" (optionSelected)="selected($event, 'projects')">
@@ -71,13 +71,13 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <mat-form-field class="discussion-select">
-      <mat-chip-list #chipListDiscussion>
+    <mat-form-field  *ngIf="showDiscussions" class="discussion-select" >
+      <mat-chip-list  #chipListDiscussion  matTooltip="...בקרוב"  matTooltipPosition="right">
         <mat-chip *ngFor="let discussion of discussions" [selectable]="selectable" [removable]="removable" (removed)="remove(discussion, 'discussions')">
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           {{discussion}}
         </mat-chip>
-        <input matInput placeholder="בחר דיון" #discussionInput [formControl]="discussionSelected" [matAutocomplete]="autoDiscussion"
+        <input disabled matInput placeholder="בחר דיון" #discussionInput [formControl]="discussionSelected" [matAutocomplete]="autoDiscussion"
           [matChipInputFor]="chipListDiscussion" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
           (matChipInputTokenEnd)="add($event, 'discussions')">
       </mat-chip-list>
@@ -87,12 +87,12 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <mat-form-field class="start-date">
+    <mat-form-field *ngIf="showStartDate" class="start-date">
       <input matInput placeholder="תאריך התחלה" [matDatepicker]="picker" [formControl]="startDate" (dateChange)="addEvent('change', $event)">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
     </mat-form-field>
-    <mat-form-field class="end-date">
+    <mat-form-field *ngIf="showEndDate" class="end-date">
       <input matInput placeholder="תאריך סיום" [matDatepicker]="picker2" [matDatepickerFilter]="dateFilter" [formControl]="endDate" (dateChange)="addEvent('change', $event)">
       <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
       <mat-datepicker #picker2></mat-datepicker>
@@ -101,17 +101,20 @@
       <mat-checkbox class="example-margin" [(ngModel)]="officeCreated">היוצר מהלשכה שלי</mat-checkbox>
       <mat-checkbox class="example-margin" [(ngModel)]="officeAssign">האחראי מהלשכה שלי</mat-checkbox>
     </section>
+
+    <section *ngIf="showDateType" class="example-section">
+      <label class="example-margin">חיזוי לפי</label>
+      <mat-radio-group [(ngModel)]="dateType">
+        <mat-radio-button class="example-margin" value="due">תאריך יעד</mat-radio-button>
+        <mat-radio-button class="example-margin" value="created">תאריך יצירה</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
     <button mat-raised-button class="filter-button" (click)="dataFilering(); mep.expanded = false">
+      סנן
       <mat-icon>filter_list</mat-icon>
     </button>
   </div>
 </mat-expansion-panel>
-
-
-
-<!-- 
-<mat-menu #animals="matMenu">
-  <button mat-menu-item [matMenuTriggerFor]="invertebrates" *ngFor="let unit of filteredUnits | async" value="{{unit.value}}" (click)="addFromList($event, 'units')">{{unit.value}}</button>
-</mat-menu> -->
 
 <app-menu-item #bigMenu [items]="[nestedUnits]"  (ValueClick)="addFromList($event, 'units')"></app-menu-item>

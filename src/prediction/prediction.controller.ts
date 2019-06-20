@@ -15,8 +15,15 @@ const entities = new Entities();
 const decodeEntities = entities.decode;
 
 export default class PredictionController {
-  public static async generateAlakazamArray(res: any) {
-    return 0;
+  //TO DO GET ARRAY OF THE FORM {ds:"date",y:"number"}
+
+  public static generateAlakazamArray(histogram: any) {
+    return _.map(histogram, item => {
+      return {
+        ds: new Date(item.key).toISOString().slice(0, 10),
+        y: item.doc_count,
+      };
+    });
   }
 
   /**
@@ -30,27 +37,21 @@ export default class PredictionController {
     res: Response
   ) {
     try {
-      if (!req.query.field || !req.query.from || !req.query.to) {
+      if (!req.query.field) {
         errorLogger.info(
-          `getFieldCountPerInterval - field, from or to queries are missing - status 400 returned.`
+          `predictFieldCountPerInterval - field is missing - status 400 returned.`
         );
         return res.sendStatus(400);
       }
       if (req.query.field !== 'due' && req.query.field !== 'created') {
         errorLogger.info(
-          `getFieldCountPerInterval - field is not due or created - status 400 returned.`
+          `predictFieldCountPerInterval - field is not due or created - status 400 returned.`
         );
         return res.sendStatus(400);
       }
-      if (isNaN(req.query.from) || isNaN(req.query.to)) {
-        errorLogger.info(
-          `getFieldCountPerInterval - from or to are not a number - status 400 returned.`
-        );
-        return res.sendStatus(400);
-      }
-
-      verboseLogger.verbose(`getFieldCountPerInterval function was called.`);
-
+      verboseLogger.verbose(
+        `predictFieldCountPerInterval function was called.`
+      );
       const filter: object[] = req.query.users;
       const officeMembers: object[] = req.query.officeMembers;
       verboseLogger.verbose(
@@ -65,15 +66,24 @@ export default class PredictionController {
         req.query.officeAssign,
         officeMembers
       );
-      let alakazamArray: any = PredictionController.generateAlakazamArray(
-        response
-      );
-      //TO DO GET ARRAY OF THE FORM {ds:"date",y:"number"}
 
+      const histogram = response.body.aggregations['1'].buckets;
+
+      let alakazamArray: any = PredictionController.generateAlakazamArray(
+        histogram
+      );
       const prediction = await predictionService.alakazam(alakazamArray);
+      console.log(prediction.data);
+      const forcast = prediction.data.forcast;
       return res.json({
         field: req.query.field,
-        prediction: prediction,
+        forcast: forcast,
+        existingData: _.map(histogram, item => {
+          return {
+            ds: item.key,
+            y: item.doc_count,
+          };
+        }),
       });
     } catch (err) {
       errorLogger.error('%j', {

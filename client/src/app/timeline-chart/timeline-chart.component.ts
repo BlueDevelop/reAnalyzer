@@ -12,7 +12,8 @@ import * as _ from 'lodash';
 import * as Highcharts from 'highcharts';
 import * as moment from 'moment';
 import { Chart } from 'highcharts/highcharts.src';
-
+import * as more_HC from 'highcharts/highcharts-more.src';
+more_HC(Highcharts);
 @Component({
   selector: 'app-timeline-chart',
   templateUrl: './timeline-chart.component.html',
@@ -25,18 +26,38 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   innerSize: string;
   @Input()
   interval: string = 'without';
+  @Input()
+  zoomtype: string = 'x';
+  @Input()
+  isTimeline: boolean = true;
   @Output()
   getTasks: EventEmitter<object> = new EventEmitter<object>();
+
   chart: Highcharts.Chart;
   updateFlag = true;
   Highcharts = Highcharts;
   colors: string[] = [];
-  intervals: string[] = ['without', 'day', 'week', 'month', 'year'];
-  names: object = { due: 'תאריך יעד', created: 'תאריך יצירה' };
+  intervals: string[] = ['without', 'day', 'week', 'month', 'year', 'dayName'];
+  dayNames: object = {
+    Sunday: 'ראשון',
+    Monday: 'שני',
+    Tuesday: 'שלישי',
+    Wednesday: 'רביעי',
+    Thursday: 'חמישי',
+    Friday: 'שישי',
+    Saturday: 'שבת',
+  };
+  names: object = {
+    due: 'תאריך יעד',
+    created: 'תאריך יצירה',
+    prediction: 'חיזוי',
+    weeklyPrediction: 'חיזוי שבועי',
+    trendPrediction: 'חיזוי טרנד',
+  };
   chartOptions: any = {
     chart: {
       height: window.innerHeight * 0.34,
-      zoomType: 'x',
+      zoomType: this.zoomtype,
     },
     title: {
       text: '',
@@ -66,6 +87,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     },
     plotOptions: {},
     tooltip: {
+      crosshairs: true,
+      shared: true,
       useHTML: true,
       format:
         '<small style="direction:rtl">{point.name}:{point.y}</small><br/>',
@@ -97,6 +120,23 @@ export class TimelineChartComponent implements OnInit, OnChanges {
       H: function(timestamp) {
         return moment(timestamp).hour(); //hour
       },
+      R: function(timestamp) {
+        const dayNames: object = {
+          Sunday: 'ראשון',
+          Monday: 'שני',
+          Tuesday: 'שלישי',
+          Wednesday: 'רביעי',
+          Thursday: 'חמישי',
+          Friday: 'שישי',
+          Saturday: 'שבת',
+        };
+        return dayNames[
+          moment(timestamp)
+            .format('dddd')
+            .toString()
+        ];
+        // return moment(timestamp).format('dddd');
+      },
     };
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -108,7 +148,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
       ...this.chartOptions,
       chart: {
         height: window.innerHeight * 0.34,
-        zoomType: 'x',
+        zoomType: this.zoomtype,
       },
       xAxis: {
         ...this.staticXAxis(),
@@ -119,17 +159,40 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     };
   }
   generateSeries() {
-    return _.map(this.data, series => {
-      return {
-        name: this.names[series.name],
-        data: series.series,
-        type: 'area',
-        showInLegend: true,
-        colors: this.colors,
-        events: {
-          click: e => this.getTasks.emit(e.point),
-        },
-      };
+    return _.map(this.data, (series, i) => {
+      if (series.name != 'Range') {
+        return {
+          name: this.names[series.name],
+          data: series.series,
+          type: 'line',
+          showInLegend: true,
+          zIndex: 1,
+          colors: this.colors,
+          events: {
+            click: e => this.getTasks.emit(e.point),
+          },
+          marker: {
+            fillColor: 'white',
+            lineWidth: 1,
+            lineColor: this.colors[i],
+          },
+        };
+      } else {
+        return {
+          name: series.name,
+          data: series.series,
+          type: 'arearange',
+          lineWidth: 0,
+          linkedTo: ':previous',
+          fillOpacity: 0.3,
+          zIndex: 0,
+          colors: this.colors,
+          showInLegend: false,
+          marker: {
+            enabled: false,
+          },
+        };
+      }
     });
   }
   getChartInstance(chart: Highcharts.Chart) {
@@ -160,7 +223,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
           // tickInterval: 24 * 36e5, // one  day
           minTickInterval: 36e5, // one  hour
           labels: {
-            format: '{value: %H/%D/%M/%Y}',
+            // format: '{value: %H/%D/%M/%Y}',
+            format: '{value: %D/%M/%Y : %H}',
             align: 'right',
             rotation: -30,
           },
@@ -187,8 +251,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         };
       case this.intervals[3]: //month
         return {
-          tickInterval: undefined,
-          minTickInterval: 28 * 24 * 3600 * 1000, //one month
+          // tickInterval: undefined,
+          // minTickInterval: 28 * 24 * 3600 * 1000, //one month
           labels: {
             format: '{value: %M/%Y}',
             align: 'right',
@@ -197,12 +261,20 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         };
       case this.intervals[4]: //year
         return {
-          tickInterval: undefined,
-          minTickInterval: 365 * 24 * 3600 * 1000, //one non leap year
+          // tickInterval: undefined,
+          // minTickInterval: 365 * 24 * 3600 * 1000, //one non leap year
           labels: {
             format: '{value: %Y}',
             align: 'right',
             rotation: -30,
+          },
+        };
+      case this.intervals[5]: //dayName
+        return {
+          labels: {
+            format: '{value: %R}',
+            // align: 'right',
+            // rotation: -30,
           },
         };
     }

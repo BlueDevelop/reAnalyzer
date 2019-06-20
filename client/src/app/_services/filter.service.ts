@@ -23,6 +23,7 @@ interface FilterParams {
 export class FilterService {
   serviceName: string = 'filter';
   config: any;
+  predictionConfig: any;
   filterParams: FilterParams = {
     date: { firstDay: 0, lastDay: 0 },
     units: [],
@@ -46,6 +47,13 @@ export class FilterService {
         projects: this.filterParams.projects.toString(),
         units: this.filterParams.units.toString(),
         discussions: this.filterParams.discussions.toString(),
+        officeCreated: this.filterParams.officeCreated,
+        officeAssign: this.filterParams.officeAssign,
+      },
+    };
+    this.predictionConfig = {
+      params: {
+        units: this.filterParams.units.toString(),
         officeCreated: this.filterParams.officeCreated,
         officeAssign: this.filterParams.officeAssign,
       },

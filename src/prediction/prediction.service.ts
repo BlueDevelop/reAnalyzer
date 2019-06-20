@@ -306,7 +306,7 @@ export default class PredictionService {
             },
           },
         },
-        size: 0,
+        // size: 0,
         _source: {
           excludes: [],
         },
@@ -344,6 +344,12 @@ export default class PredictionService {
   public static alakazam(data: any) {
     const req = {
       data: data,
+      seasonalities: [
+        {
+          name: 'monthly',
+          period: 30.5,
+        },
+      ],
     };
     return axios.post(alakazamUrl, req);
   }
