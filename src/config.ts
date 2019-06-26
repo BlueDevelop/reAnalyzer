@@ -9,6 +9,11 @@ interface ISaml {
   signatureAlgorithm: string;
   acceptedClockSkewMs: number;
 }
+interface IShraga {
+  callbackURL?: string;
+  shragaURL?: string;
+  transform?: any;
+}
 
 interface IConfig {
   port: number;
@@ -18,6 +23,7 @@ interface IConfig {
   apmAdress: string;
   apmServiceName: string;
   elasticsearch: string;
+  alakazam: string;
   hierarchyServiceUseMock: boolean; // if true will use mockfile to instead of api
   hierarchyServiceAddr?: string; // the address of the users\hierarchies API
   hierarchyServiceMockFile?: string; // local file describing return value for each hierarchy id
@@ -39,6 +45,8 @@ interface IConfig {
   useSaml?: boolean;
   usersHaveLastNameField?: boolean;
   saml?: ISaml;
+  shraga?: IShraga;
+  useShraga?: boolean;
   samlClaimMapper?: any; // used in the saml strategy to map profile keys to id,firstName,lastName
 }
 
@@ -52,6 +60,7 @@ const prod: IConfig = {
   apmAdress: process.env.APM_ADDR || 'http://apm:8200',
   apmServiceName: process.env.APM_NAME || 'reAnalyzer_prod',
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
+  alakazam: process.env.ALAKAZAM || 'http://localhost:8080/',
   hierarchyServiceAddr:
     process.env.hierarchyAPI || 'http://hierarchyServiceAddress/api/',
   hierarchyFile: path.join(__dirname, '../src/someGroupIDmock/hierarchy.json'),
@@ -76,6 +85,7 @@ const dev: IConfig = {
   apmAdress: process.env.APM_ADDR || 'http://apm:8200',
   apmServiceName: process.env.APM_NAME || 'momentum_dev',
   elasticsearch: process.env.ELASTIC || 'http://elasticsearch:9200',
+  alakazam: process.env.ALAKAZAM || 'http://localhost:8080/',
   // hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
   // hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
@@ -115,6 +125,7 @@ const local: IConfig = {
   apmAdress: process.env.APM_ADDR || 'http://localhost:8200',
   apmServiceName: process.env.APM_NAME || 'momentum_dev',
   elasticsearch: process.env.ELASTIC || 'http://localhost:9200',
+  alakazam: process.env.ALAKAZAM || 'http://localhost:8080/',
   // hierarchyServiceMockFile: path.join(__dirname, '../src/mock/members.json'),
   hierarchyServiceUseMock: true,
   // hierarchyFile: path.join(__dirname, '../src/mock/hierarchy.json'),
@@ -144,6 +155,11 @@ const local: IConfig = {
       ? true
       : false
     : false,
+  shraga: {
+    shragaURL: 'http://localhost:3000',
+    callbackURL: 'http://localhost:4200/api/login/callback',
+  },
+  useShraga: true,
 };
 
 const test: IConfig = {
@@ -154,6 +170,7 @@ const test: IConfig = {
   apmAdress: 'http://localhost:8200',
   apmServiceName: 'reAnalyzer_test',
   elasticsearch: 'http://localhost:9200',
+  alakazam: process.env.ALAKAZAM || 'http://localhost:8080/',
   hierarchyServiceUseMock: false,
   userIDToOfficeMembersFile: path.join(
     __dirname,

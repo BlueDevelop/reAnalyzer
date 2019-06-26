@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
 import { SettingsService } from '../_services/settings.service';
@@ -13,6 +13,8 @@ import { RefreshService } from '../_services/refresh.service';
 })
 export class TimeRatesComponent implements OnInit {
   data: object[] = [];
+  @Input()
+  title: string = '';
   constructor(
     private taskService: TaskService,
     private settingsService: SettingsService,

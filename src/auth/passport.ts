@@ -5,6 +5,7 @@ import userModel from '../users/user.model';
 import Iuser from '../users/user.interface';
 import LocalStrategy from './passport.local';
 import SamlStrategyGenerator from './passport.saml';
+import ShragaStrategyGenerator from './passport.shraga';
 import getConfig from '../config';
 import { Strategy } from 'passport-strategy';
 import { urlencoded } from 'body-parser';
@@ -36,8 +37,33 @@ const authenticateSaml = (req: Request, res: Response, next: NextFunction) => {
   );
 };
 
-export const authenticate = config.useSaml
-  ? authenticateSaml
+const authenticateShraga = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  passport.authenticate('shraga', (err: Error, user: any) => {
+    if (err) {
+      res.sendStatus(401);
+    } else if (!user) {
+      res.sendStatus(401);
+    } else {
+      req.logIn(user, (error: Error) => {
+        if (error) {
+          res.sendStatus(401);
+        } else {
+          res.status(200).send(user);
+        }
+      });
+    }
+  })(req, res, next);
+};
+
+// export const authenticate = config.useSaml
+//   ? authenticateSaml
+//   : authenticateLocal;
+export const authenticate = config.useShraga
+  ? authenticateShraga
   : authenticateLocal;
 
 export const init = (app: Application) => {
@@ -53,7 +79,28 @@ export const init = (app: Application) => {
       done(err, user as Iuser);
     });
   });
-  if (config.useSaml) {
+  if (config.useShraga) {
+    passport.use(ShragaStrategyGenerator());
+    /* GET home page. */
+    app.get('/api/login', passport.authenticate('shraga'), function(
+      req,
+      res,
+      next
+    ) {
+      res.status(200).json(req.user);
+    });
+
+    app.post('/api/login/callback', passport.authenticate('shraga'), function(
+      req,
+      res,
+      next
+    ) {
+      console.log(req.user);
+      // res.status(200).json(req.user);
+
+      return res.redirect('/');
+    });
+  } else if (config.useSaml) {
     passport.use(SamlStrategyGenerator());
     app.all(
       '/api/login/callback',

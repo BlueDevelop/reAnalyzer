@@ -22,7 +22,7 @@ import * as _moment from 'moment';
 import { RefreshService } from '../_services/refresh.service';
 import { PredictionService } from '../_services/prediction.service';
 import { filter } from 'rxjs/operators';
-import moment = require('moment');
+// import moment = require('moment');
 @Component({
   selector: 'app-prediction',
   templateUrl: './prediction.component.html',
@@ -39,9 +39,9 @@ export class PredictionComponent implements OnInit {
   monthly;
   @ViewChild('yearly')
   yearly;
-  timelinePrediction: any = [{}, {}, {}];
-  weeklyPrediction: any = [{}, {}];
-  trendPrediction: any = [{}, {}];
+  timelinePrediction: any = [];
+  weeklyPrediction: any = [];
+  trendPrediction: any = [];
   dayOrders: Object = {
     Sunday: 1,
     Monday: 2,
@@ -51,6 +51,7 @@ export class PredictionComponent implements OnInit {
     Friday: 6,
     Saturday: 7,
   };
+  title: string = '';
   constructor(
     private predictionService: PredictionService,
     private filterService: FilterService,
@@ -62,15 +63,11 @@ export class PredictionComponent implements OnInit {
   }
 
   dataFilering() {
-    console.log(
-      'Hi i am filtering very good my name is filter why are you gay?'
-    );
+    this.refresh.increaseProgress();
     const dateType = this.filter.dateType ? this.filter.dateType : 'due';
     this.predictionService
       .predictFieldCountPerInterval(dateType)
       .subscribe(data => {
-        console.log('the data is');
-        console.log(data);
         const fieldSeries: any = _.map(data.existingData, item => {
           return {
             x: _moment.parseZone(item.ds).valueOf(),
@@ -103,9 +100,6 @@ export class PredictionComponent implements OnInit {
           },
         ];
 
-        // const weeklyForcastArray = _.sortBy(data.forcast.slice(0, 7), item => {
-        //   return this.dayOrders[_moment(item.ds).format('dddd')];
-        // });
         let i = 0;
         while (_moment(data.forcast[i].ds).format('dddd') != 'Sunday') {
           i++;
@@ -161,6 +155,7 @@ export class PredictionComponent implements OnInit {
             series: trendRangesSeries,
           },
         ];
+        this.refresh.decreaseProgress();
       });
   }
 

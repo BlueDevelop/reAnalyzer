@@ -26,6 +26,8 @@ export class PieChartComponent implements OnInit, OnChanges {
   innerSize: string;
   @Input()
   name: string;
+  @Input()
+  title: string = '';
   @Output()
   getTasks: EventEmitter<object> = new EventEmitter<object>();
   chart: Highcharts.Chart;
@@ -40,9 +42,9 @@ export class PieChartComponent implements OnInit, OnChanges {
       plotBorderWidth: null,
       plotShadow: false,
     },
-    // title: {
-    //   text: 'כמות משימות לפי יחס בין זמן סיום לזמן יעד',
-    // },
+    title: {
+      text: this.title,
+    },
     yAxis: {
       title: {
         text: '',
@@ -83,6 +85,7 @@ export class PieChartComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.chartOptions.title.text = this.title;
     this.colors = this.settingsService.getColorDomain(this.data.length);
     this.chartOptions = {
       ...this.chartOptions,

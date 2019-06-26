@@ -50,6 +50,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-saml": "^0.35.0",
+    "passport-shraga": "^1.0.0",
     "striptags": "^3.1.1",
     "winston": "^2.4.4",
     "winston-daily-rotate-file": "3.3.3"

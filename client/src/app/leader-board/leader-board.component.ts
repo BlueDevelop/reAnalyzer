@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { MatDialog } from '@angular/material';
 import * as _ from 'lodash';
@@ -12,6 +12,8 @@ import { RefreshService } from '../_services/refresh.service';
 })
 export class LeaderBoardComponent implements OnInit {
   data: any = { done: [], total: [], keys: [] };
+  @Input()
+  title: string = '';
 
   constructor(
     private taskService: TaskService,

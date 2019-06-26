@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { SettingsService } from '../_services/settings.service';
 import * as _ from 'lodash';
@@ -22,8 +22,9 @@ import { RefreshService } from '../_services/refresh.service';
   styleUrls: ['./tag-cloud.component.css'],
 })
 export class TagCloudComponent implements OnInit {
+  @Input()
+  title: string = '';
   chart: Highcharts.Chart;
-  title = 'highchart-test';
   Highcharts = Highcharts;
   updateFlag = true;
   data: any[] = [];
@@ -55,7 +56,7 @@ export class TagCloudComponent implements OnInit {
       },
     ],
     title: {
-      text: '',
+      text: this.title,
     },
     tooltip: {
       enabled: true,
@@ -73,6 +74,7 @@ export class TagCloudComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.chartOptions.title.text = this.title;
     this.getTagClouds();
   }
 

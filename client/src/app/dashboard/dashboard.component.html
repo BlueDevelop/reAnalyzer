@@ -1,8 +1,8 @@
 <app-filter [showDateType]=false (valueChange)="dataFilering()"></app-filter>
 <div class="dashboard"  id="dashboard">
-    <div class="item a" id="step4"><app-chart-bar-date #barDate></app-chart-bar-date></div>
-    <div class="item b" id="step7"> <app-pie-status #pieStatus></app-pie-status></div>
-    <div class="item c" id="step3"><app-time-rates #timeRates ></app-time-rates></div> 
-    <div class="item d" id="step6"> <app-leader-board #leaderBoard></app-leader-board></div>
-    <div class="item e" id="step5"><app-tag-cloud #tagCloud></app-tag-cloud></div>
+    <div class="item a" id="step4"><app-chart-bar-date [title]="'כמות משימות לפי תג\u0022ב ולפי תאריך יצירה'" #barDate></app-chart-bar-date></div>
+    <div class="item b" id="step7"> <app-pie-status [title]="'כמות משימות לפי סטטוס'" #pieStatus></app-pie-status></div>
+    <div class="item c" id="step3"><app-time-rates [title]="'ב\u0022כמות משימות לפי עמידה בתג'"   #timeRates ></app-time-rates></div> 
+    <div class="item d" id="step6"> <app-leader-board [title]="'משתמשים מובילים'"  #leaderBoard></app-leader-board></div>
+    <div class="item e" id="step5"><app-tag-cloud  [title]="'ענן תגיות'" #tagCloud></app-tag-cloud></div>
 </div>

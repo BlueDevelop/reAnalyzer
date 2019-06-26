@@ -29,24 +29,24 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (environment.useSaml) {
-      this.userService.getUserFromAPI().subscribe(
-        data => console.log(data),
-        err => {
-          setTimeout(() => (window.location.href = 'http://adfs-proxy'), 5000);
+    // if (environment.useSaml) {
+    this.userService.getUserFromAPI().subscribe(
+      data => console.log(data),
+      err => {
+        setTimeout(() => (window.location.href = '/api/login'), 5000);
+      }
+    );
+    this.userService
+      .getUserFromAPI()
+      .toPromise()
+      .then(user => {
+        if (user) {
+          console.log(user);
+          this.userService.setUser(user);
+          this.router.navigate(['/home']);
         }
-      );
-      this.userService
-        .getUserFromAPI()
-        .toPromise()
-        .then(user => {
-          if (user) {
-            console.log(user);
-            this.userService.setUser(user);
-            this.router.navigate(['/home']);
-          }
-        });
-    }
+      });
+    // }
     this.loginForm = new FormGroup({
       email: new FormControl('', {
         validators: [Validators.required, Validators.email],

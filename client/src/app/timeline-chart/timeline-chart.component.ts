@@ -30,6 +30,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   zoomtype: string = 'x';
   @Input()
   isTimeline: boolean = true;
+  @Input()
+  title: string = '';
   @Output()
   getTasks: EventEmitter<object> = new EventEmitter<object>();
 
@@ -60,7 +62,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
       zoomType: this.zoomtype,
     },
     title: {
-      text: '',
+      text: this.title,
     },
     legend: {
       enabled: true,
@@ -143,6 +145,8 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
   ngOnInit() {
+    this.chartOptions.title.text = this.title;
+    console.log(`title:${this.title}`);
     this.colors = this.settingsService.getColorDomain(this.data.length);
     this.chartOptions = {
       ...this.chartOptions,

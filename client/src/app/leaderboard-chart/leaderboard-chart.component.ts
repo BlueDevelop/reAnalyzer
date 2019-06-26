@@ -30,6 +30,8 @@ const formatXLabels = (str: string) => {
 })
 export class LeaderboardChartComponent implements OnInit, OnChanges {
   @Input()
+  title: string = '';
+  @Input()
   data: any;
   @Input()
   innerSize: string;
@@ -59,7 +61,7 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
       },
     },
     title: {
-      text: '',
+      text: this.title,
     },
     yAxis: {
       title: {
@@ -123,6 +125,7 @@ export class LeaderboardChartComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
   ngOnInit() {
+    this.chartOptions.title.text = this.title;
     this.colors = this.settingsService.getColorDomain(2);
     this.chartOptions = {
       ...this.chartOptions,

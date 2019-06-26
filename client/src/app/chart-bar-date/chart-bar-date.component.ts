@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -17,6 +17,8 @@ export class ChartBarDateComponent implements OnInit {
   aggData: any = { without: [], day: [], week: [], month: [], year: [] };
   empty: boolean = false;
   formatting: any;
+  @Input()
+  title: string = '';
   // dueCanAlakazam: boolean = false;
   // createdCanAlakazam: boolean = false;
 

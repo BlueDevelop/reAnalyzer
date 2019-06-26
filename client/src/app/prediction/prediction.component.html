@@ -8,23 +8,32 @@
 ></app-filter>
 <div class="prediction" id="prediction">
   <div #prediction class="item a">
-    <app-timeline-chart
+    <app-timeline-chart *ngIf="timelinePrediction.length>0 else noData"
       [data]="timelinePrediction"
       interval="day"
+      [title]="'חיזוי כמות המשימות לפי תאריך יעד/יצירה'"
     ></app-timeline-chart>
   </div>
   <div #weekly class="item b">
-    <app-timeline-chart
+    <app-timeline-chart *ngIf="weeklyPrediction.length>0 else noData"
       [data]="weeklyPrediction"
       [zoomtype]="None"
       interval="dayName"
+      [title]="'תחזית כמות משימות משוערכת בחתך שבועי'"
     ></app-timeline-chart>
   </div>
   <div #monthly class="item c">
-    <app-timeline-chart
+    <app-timeline-chart *ngIf="trendPrediction.length>0 else noData"
       [data]="trendPrediction"
       interval="day"
+      [title]="'גרף טרנדים'"
     ></app-timeline-chart>
   </div>
   <div #yearly class="item d"></div>
+  <div #yearly class="item e"></div>
 </div>
+
+
+<ng-template #noData>
+  <div>אין נתונים להצגה</div>
+</ng-template>

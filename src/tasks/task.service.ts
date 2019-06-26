@@ -595,7 +595,7 @@ export default class TaskService {
     size?: number,
     officeMembers: object[] = []
   ) {
-    const should = TaskService.prefixQuery(filter, true, false);
+    const should = TaskService.prefixQuery(filter);
     const staticMust = [
       {
         terms: {

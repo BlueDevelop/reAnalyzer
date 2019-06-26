@@ -1,21 +1,25 @@
 version: '2.1'
 
 services:
-  reanalyzer:
-    image: reanalyzer
-    build: .
-    environment:
-      NODE_ENV: dev
-      MONGO: mongodb://mongodb:27017/reAnalyzer_dev
-      PORT: 4000
-      DEBUG: 'false'
+  # reanalyzer:
+  #   image: reanalyzer
+  #   build: .
+  #   environment:
+  #     NODE_ENV: dev
+  #     MONGO: mongodb://mongodb:27017/reAnalyzer_dev
+  #     PORT: 4000
+  #     DEBUG: 'false'
+  #   ports:
+  #     - 4000:4000
+  #   volumes:
+  #     - logs:/home/omer/Desktop/logs
+  #     - ./:/usr/src/app
+  #   depends_on: 
+  #     - mongodb
+  alakazam:
+    image: rabiran/alakazam
     ports:
-      - 4000:4000
-    volumes:
-      - logs:/home/omer/Desktop/logs
-      - ./:/usr/src/app
-    depends_on: 
-      - mongodb
+      - 8080:8080
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
     ports: ['9200:9200']
@@ -55,12 +59,12 @@ services:
     ports:
       - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null --replSet=mongo-azure
-  nginx: 
-    image: nginx:latest
-    container_name: nginx
-    network_mode: host
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+  # nginx: 
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   network_mode: host
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
   neo4j:
     image: rabiran/neo4j-apoc
     ports:
@@ -86,6 +90,34 @@ services:
       - 8001:8001
     volumes:
       - ../neo4j-hierarchy/server:/usr/src/app 
+  testsamlidp_idp:
+    image: kristophjunge/test-saml-idp
+    volumes: 
+     - ./users.php:/var/www/simplesamlphp/config/authsources.php
+    environment:
+      SIMPLESAMLPHP_SP_ENTITY_ID: http://localhost:3000/metadata.xml
+      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:3000/auth/saml
+      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
+      SAML_ISSUER: http://localhost:3000/metadata.xml
+      SAML_CALLBACK_URL: http://localhost:3000/auth/saml/callback
+      SIMPLESAMLPHP_ADMIN_PASSWORD: test
+      SIMPLESAMLPHP_SECRET_SALT: salt
+    ports:
+    - "8081:8080"
+    - "8443:8443"
+  shraga-proxy:
+    environment: 
+      MONGODB_URL: mongodb://mongo-shraga:27017
+      MONGODB_NAME: shraga-proxy
+      SESSION_SECRET: Secret
+      SAML_ENTRY_POINT: http://localhost:8081/simplesaml/saml2/idp/SSOService.php
+    image: shragauser/shraga-proxy
+    ports:
+     - 3000:3000
+    depends_on: 
+     - mongo-shraga
+  mongo-shraga:
+    image: mongo:latest
   # sso:
   #   image: kristophjunge/test-saml-idp
   #   ports:

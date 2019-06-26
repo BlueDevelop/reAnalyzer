@@ -19,54 +19,32 @@ export class PredictionService {
   constructor(
     private http: HttpClient,
     private filterService: FilterService,
-    private logsService: LogsService,
-    private translate: TranslateService
+    private logsService: LogsService
   ) {}
 
-  predictTaskCountByStatus(): Observable<any> {
-    return undefined;
-  }
-
   predictFieldCountPerInterval(field): Observable<any> {
-    const getObservableForInterval = field => {
-      let newConfig = this.filterService.predictionConfig;
-      newConfig.params['field'] = field; //'due';
-      //newConfig.params['interval'] = interval;
-      console.log(`newConfig`);
-      console.log(newConfig);
-      return this.http
-        .get(
-          `${environment.apiUrl}/prediction/predictFieldCountPerInterval`,
-          newConfig
-        )
-        .pipe(
-          tap(data => {
-            this.logsService.log(
-              this.serviceName,
-              'fetched data from predictFieldCountPerInterval'
-            );
-          }),
-          catchError(
-            this.logsService.handleError(
-              this.serviceName,
-              'predictFieldCountPerInterval',
-              []
-            )
+    let newConfig = this.filterService.predictionConfig;
+    newConfig.params['field'] = field; //'due';
+    return this.http
+      .get(
+        `${environment.apiUrl}/prediction/predictFieldCountPerInterval`,
+        newConfig
+      )
+      .pipe(
+        tap(data => {
+          console.log(data);
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from predictFieldCountPerInterval'
+          );
+        }),
+        catchError(
+          this.logsService.handleError(
+            this.serviceName,
+            'predictFieldCountPerInterval',
+            []
           )
-        );
-    };
-    return getObservableForInterval(field);
-  }
-
-  predictTagClouds(): Observable<any> {
-    return undefined;
-  }
-
-  predictLeaderboard(): Observable<any> {
-    return undefined;
-  }
-
-  predictTimeRates(): Observable<any> {
-    return undefined;
+        )
+      );
   }
 }

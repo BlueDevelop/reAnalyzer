@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TaskService } from '../_services/task.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
@@ -14,6 +14,8 @@ import { RefreshService } from '../_services/refresh.service';
 export class PieStatusComponent implements OnInit {
   data: object[] = [];
   empty: boolean = false;
+  @Input()
+  title: string = '';
 
   constructor(
     private taskService: TaskService,
