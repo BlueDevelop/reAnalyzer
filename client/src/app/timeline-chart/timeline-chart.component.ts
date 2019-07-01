@@ -39,7 +39,16 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   updateFlag = true;
   Highcharts = Highcharts;
   colors: string[] = [];
-  intervals: string[] = ['without', 'day', 'week', 'month', 'year', 'dayName'];
+  intervals: string[] = [
+    'without',
+    'day',
+    'week',
+    'month',
+    'year',
+    'dayName',
+    'dateWithoutYear',
+    'dayInMonth',
+  ];
   dayNames: object = {
     Sunday: 'ראשון',
     Monday: 'שני',
@@ -55,10 +64,12 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     prediction: 'חיזוי',
     weeklyPrediction: 'חיזוי שבועי',
     trendPrediction: 'חיזוי טרנד',
+    monthlyPrediction: 'חיזוי חודשי',
+    yearlyPrediction: 'חיזוי שנתי',
   };
   chartOptions: any = {
     chart: {
-      height: window.innerHeight * 0.34,
+      height: window.innerHeight * 0.4,
       zoomType: this.zoomtype,
     },
     title: {
@@ -139,6 +150,13 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         ];
         // return moment(timestamp).format('dddd');
       },
+      A: function(timestamp) {
+        const a = moment(timestamp);
+        return `${a.date()}/${a.month() + 1}`;
+      },
+      B: function(timestamp) {
+        return moment(timestamp).date();
+      },
     };
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -151,7 +169,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     this.chartOptions = {
       ...this.chartOptions,
       chart: {
-        height: window.innerHeight * 0.34,
+        height: window.innerHeight * 0.4,
         zoomType: this.zoomtype,
       },
       xAxis: {
@@ -206,7 +224,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   onResize() {
     this.chart.update({
       chart: {
-        height: window.innerHeight * 0.34,
+        height: window.innerHeight * 0.4,
       },
     });
     this.chart.reflow();
@@ -277,6 +295,23 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         return {
           labels: {
             format: '{value: %R}',
+            // align: 'right',
+            // rotation: -30,
+          },
+        };
+
+      case this.intervals[6]: //dateWithoutYear
+        return {
+          labels: {
+            format: '{value: %A}',
+            // align: 'right',
+            // rotation: -30,
+          },
+        };
+      case this.intervals[7]: //dayInMonth
+        return {
+          labels: {
+            format: '{value: %B}',
             // align: 'right',
             // rotation: -30,
           },

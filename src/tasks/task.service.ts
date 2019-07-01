@@ -694,7 +694,7 @@ function generateOfficeMembersMust(
   if (officeCreated)
     return {
       query_string: {
-        fields: ['creator.id.keyword'],
+        fields: ['creator.id.keyword', 'creator.upn.keyword'],
         query: _.map(officeMembersIDs, id => `${id}*`).join(' OR '),
         minimum_should_match: 1,
       },
@@ -702,7 +702,7 @@ function generateOfficeMembersMust(
   else if (officeAssign)
     return {
       query_string: {
-        fields: ['assign.id.keyword'],
+        fields: ['assign.id.keyword', 'assign.upn.keyword'],
         query: _.map(officeMembersIDs, id => `${id}*`).join(' OR '),
         minimum_should_match: 1,
       },

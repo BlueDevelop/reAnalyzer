@@ -12,6 +12,7 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  JUL,
 } from '@angular/material/core';
 import {
   MatAutocompleteSelectedEvent,
@@ -42,6 +43,8 @@ export class PredictionComponent implements OnInit {
   timelinePrediction: any = [];
   weeklyPrediction: any = [];
   trendPrediction: any = [];
+  yearlyPrediction: any = [];
+  monthlyPrediction: any = [];
   dayOrders: Object = {
     Sunday: 1,
     Monday: 2,
@@ -100,10 +103,10 @@ export class PredictionComponent implements OnInit {
           },
         ];
 
-        let i = 0;
-        while (_moment(data.forcast[i].ds).format('dddd') != 'Sunday') {
-          i++;
-        }
+        let i = _.findIndex(data.forcast, (item: any) => {
+          return _moment(item.ds).format('dddd') == 'Sunday';
+        });
+
         const weeklyForcastArray = data.forcast.slice(i, i + 7);
 
         const weeklySeries: any = _.map(weeklyForcastArray, item => {
@@ -116,8 +119,8 @@ export class PredictionComponent implements OnInit {
         const weeklyRangesSeries: any = _.map(weeklyForcastArray, item => {
           return [
             _moment.parseZone(item.ds).valueOf(),
-            item.weekly_lower - 0.1,
-            item.weekly_upper + 0.1,
+            item.weekly_lower,
+            item.weekly_upper,
           ];
         });
         this.weeklyPrediction = [
@@ -131,18 +134,18 @@ export class PredictionComponent implements OnInit {
           },
         ];
 
-        const trendSeries: any = _.map(data.forcast, item => {
+        const trendSeries: any = _.map(data.forcast, (item: any) => {
           return {
             x: _moment.parseZone(item.ds).valueOf(),
             y: item.trend,
           };
         });
 
-        const trendRangesSeries: any = _.map(data.forcast, item => {
+        const trendRangesSeries: any = _.map(data.forcast, (item: any) => {
           return [
             _moment.parseZone(item.ds).valueOf(),
-            item.trend_lower - 0.1,
-            item.trend_upper + 0.1,
+            item.trend_lower,
+            item.trend_upper,
           ];
         });
         this.trendPrediction = [
@@ -153,6 +156,110 @@ export class PredictionComponent implements OnInit {
           {
             name: 'Range',
             series: trendRangesSeries,
+          },
+        ];
+
+        let yearlyData = _.sortBy(data.forcast, (item: any) => {
+          return _moment(item.ds).dayOfYear();
+        });
+        yearlyData = _.map(yearlyData, item => {
+          let m = _moment(item.ds);
+          const nextYear = _moment().year() + 1;
+          m.set('year', nextYear);
+          return {
+            ds: m.valueOf(),
+            yearly: item.yearly,
+            yearly_lower: item.yearly_lower,
+            yearly_upper: item.yearly_upper,
+          };
+        });
+
+        const yearlySeries: any = _.map(yearlyData, item => {
+          return {
+            x: _moment.parseZone(item.ds).valueOf(),
+            y: item.yearly,
+          };
+        });
+
+        const yearlyRangesSeries: any = _.map(yearlyData, item => {
+          return [
+            _moment.parseZone(item.ds).valueOf(),
+            item.yearly_lower,
+            item.yearly_upper,
+          ];
+        });
+        this.yearlyPrediction = [
+          {
+            name: 'yearlyPrediction',
+            series: yearlySeries,
+          },
+          {
+            name: 'Range',
+            series: yearlyRangesSeries,
+          },
+        ];
+
+        i = _.findIndex(data.forcast, (item: any) => {
+          return _moment(item.ds).date() == 1;
+        });
+        let monthlyData = _.sortBy(data.forcast.slice(i, i + 28), item => {
+          return _moment(item.ds).date();
+        });
+        let lastDay = _moment(monthlyData[monthlyData.length - 1].ds).date();
+        // console.log(`lastDay=${lastDay}`);
+        for (let j = lastDay + 1; j <= 31; j++) {
+          let f = _.find(data.forcast, function(obj) {
+            return _moment(obj.ds).date() == j;
+          });
+          // console.log(`j=${j}`);
+          // console.log(f);
+          monthlyData.push(f);
+        }
+        monthlyData = _.map(monthlyData, item => {
+          let m = _moment(item.ds);
+          const nextYear = _moment().year() + 1;
+          m.set('year', nextYear);
+
+          m.set('month', 7);
+          m.set('year', nextYear);
+          return {
+            ds: m.valueOf(),
+            monthly: item.monthly,
+            monthly_lower: item.monthly_lower,
+            monthly_upper: item.monthly_upper,
+          };
+        });
+        // console.log('Hello man');
+        for (let j = 0; j < monthlyData.length; j++) {
+          // console.log(
+          //   `j=${j}   ,    ${_moment(monthlyData[j].ds).toString()}     ${
+          //     monthlyData[i].monthly
+          //   }`
+          // );
+        }
+
+        const monthlySeries: any = _.map(monthlyData, item => {
+          return {
+            x: _moment.parseZone(item.ds).valueOf(),
+            y: item.monthly,
+          };
+        });
+
+        const monthlyRangesSeries: any = _.map(monthlyData, item => {
+          return [
+            _moment.parseZone(item.ds).valueOf(),
+            item.monthly_lower,
+            item.monthly_upper,
+          ];
+        });
+        this.monthlyPrediction = [
+          {
+            name: 'monthlyPrediction',
+            series: monthlySeries,
+          },
+          {
+            name: 'Range',
+            series: monthlyRangesSeries,
           },
         ];
         this.refresh.decreaseProgress();

@@ -37,4 +37,8 @@ mat-button-toggle-group .alakazamButton{
     margin-top: 5px;
 }
 
+.buttons{
+    position: absolute;
+    z-index: 2;
+}
 

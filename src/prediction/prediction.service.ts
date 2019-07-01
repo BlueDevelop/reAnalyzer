@@ -96,6 +96,14 @@ export default class PredictionService {
           name: 'monthly',
           period: 30.5,
         },
+        {
+          name: 'weekly',
+          period: 7,
+        },
+        {
+          name: 'yearly',
+          period: 365,
+        },
       ],
     };
     return axios.post(config.alakazam, req);

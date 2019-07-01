@@ -69,6 +69,7 @@ export default class PredictionController {
       );
       const prediction = await predictionService.alakazam(alakazamArray);
       const forcast = prediction.data.forcast;
+      console.log(forcast);
       return res.json({
         field: req.query.field,
         forcast: forcast,

@@ -6,15 +6,15 @@
   [showStartDate]="false"
   [showEndDate]="false"
 ></app-filter>
-<div class="prediction" id="prediction">
-  <div #prediction class="item a">
+<div class="prediction" >
+  <div #prediction class="item a" id="prediction">
     <app-timeline-chart *ngIf="timelinePrediction.length>0 else noData"
       [data]="timelinePrediction"
       interval="day"
       [title]="'חיזוי כמות המשימות לפי תאריך יעד/יצירה'"
     ></app-timeline-chart>
   </div>
-  <div #weekly class="item b">
+  <div #weekly id="weekly" class="item b">
     <app-timeline-chart *ngIf="weeklyPrediction.length>0 else noData"
       [data]="weeklyPrediction"
       [zoomtype]="None"
@@ -22,15 +22,29 @@
       [title]="'תחזית כמות משימות משוערכת בחתך שבועי'"
     ></app-timeline-chart>
   </div>
-  <div #monthly class="item c">
+  <div #trend class="item c" id="trend">
     <app-timeline-chart *ngIf="trendPrediction.length>0 else noData"
       [data]="trendPrediction"
       interval="day"
       [title]="'גרף טרנדים'"
     ></app-timeline-chart>
   </div>
-  <div #yearly class="item d"></div>
-  <div #yearly class="item e"></div>
+  <div #yearly class="item d" id="yearly">
+    <app-timeline-chart *ngIf="yearlyPrediction.length>0 else noData"
+      [data]="yearlyPrediction"
+      interval="dateWithoutYear"
+      [title]="'תחזית כמות משימות משוערכת בחתך שנתי'"
+    ></app-timeline-chart>
+  </div>
+  <div #monthly class="item e" id="monthly">
+    <app-timeline-chart *ngIf="monthlyPrediction.length>0 else noData"
+      [data]="monthlyPrediction"
+      interval="dayInMonth"
+      [title]="'תחזית כמות משימות משוערכת בחתך חודשי'"
+    ></app-timeline-chart>
+
+
+  </div>
 </div>
 
 

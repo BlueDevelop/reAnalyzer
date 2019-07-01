@@ -17,7 +17,7 @@ services:
   #   depends_on: 
   #     - mongodb
   alakazam:
-    image: rabiran/alakazam
+    image: rabiran/alakazam:latest
     ports:
       - 8080:8080
   elasticsearch:

@@ -1,7 +1,7 @@
 <div class="container">
     <div *ngIf="empty">אין נתונים להצגה</div>
   <div class="chart"  *ngIf="!empty">
-    <div>
+    <div class="buttons">
       <mat-button-toggle-group
         (change)="changeInterval()"
         [(ngModel)]="interval"
