@@ -5,6 +5,7 @@ import { stat } from 'fs';
 import { Ingest } from 'elasticsearch';
 import getConfig from '../config';
 import axios from 'axios';
+import https from 'https';
 
 const config = getConfig();
 export default class PredictionService {
@@ -106,7 +107,9 @@ export default class PredictionService {
         },
       ],
     };
-    return axios.post(config.alakazam, req);
+    return axios.post(config.alakazam, req, {
+      httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+    });
   }
 
   /**
