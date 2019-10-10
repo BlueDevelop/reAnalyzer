@@ -6,7 +6,7 @@ mat-grid-tile {
     height: 100%;
   }
 
-  .dashboard{
+  .secondary-dashboard{
     /* margin-left: 10px; */
     display: flex;
     flex-wrap: wrap;
@@ -31,7 +31,7 @@ mat-grid-tile {
     height: 41.5vh;
   }
   .c{
-    width: 65.5%;
+    width: 32.5%;
     height: 41.5vh;
   }
 
@@ -44,6 +44,6 @@ mat-grid-tile {
    height: 41.5vh;
   }
 /* fullscreen */
-  .dashboard:fullscreen{
+  .secondary-dashboard:fullscreen{
     background-color: rgba(255, 255, 255, 1) !important;
   }

@@ -48,6 +48,8 @@ interface IConfig {
   shraga?: IShraga;
   useShraga?: boolean;
   samlClaimMapper?: any; // used in the saml strategy to map profile keys to id,firstName,lastName
+  specialProjectId: string;
+  specialhierarchies: string[];
 }
 
 const prod: IConfig = {
@@ -75,6 +77,12 @@ const prod: IConfig = {
       ? true
       : false
     : false,
+  specialProjectId: process.env.SPECIAL_PROJECT_ID
+    ? process.env.SPECIAL_PROJECT_ID
+    : '',
+  specialhierarchies: process.env.SPECIAL_HIERARCHIES
+    ? process.env.SPECIAL_HIERARCHIES.split(' ')
+    : [],
 };
 
 const dev: IConfig = {
@@ -115,6 +123,12 @@ const dev: IConfig = {
       ? true
       : false
     : false,
+  specialProjectId: process.env.SPECIAL_PROJECT_ID
+    ? process.env.SPECIAL_PROJECT_ID
+    : '',
+  specialhierarchies: process.env.SPECIAL_HIERARCHIES
+    ? process.env.SPECIAL_HIERARCHIES.split(' ')
+    : [],
 };
 
 const local: IConfig = {
@@ -160,6 +174,12 @@ const local: IConfig = {
     callbackURL: 'http://localhost:4200/api/login/callback',
   },
   useShraga: true,
+  specialProjectId: process.env.SPECIAL_PROJECT_ID
+    ? process.env.SPECIAL_PROJECT_ID
+    : '',
+  specialhierarchies: process.env.SPECIAL_HIERARCHIES
+    ? process.env.SPECIAL_HIERARCHIES.split(' ')
+    : [],
 };
 
 const test: IConfig = {
@@ -176,6 +196,12 @@ const test: IConfig = {
     __dirname,
     '../src/mock/userIDToOfficeMembers.json'
   ),
+  specialProjectId: process.env.SPECIAL_PROJECT_ID
+    ? process.env.SPECIAL_PROJECT_ID
+    : '',
+  specialhierarchies: process.env.SPECIAL_HIERARCHIES
+    ? process.env.SPECIAL_HIERARCHIES.split(' ')
+    : [],
 };
 
 export default () => {

@@ -32,7 +32,6 @@ export class PredictionService {
       )
       .pipe(
         tap(data => {
-          console.log(data);
           this.logsService.log(
             this.serviceName,
             'fetched data from predictFieldCountPerInterval'

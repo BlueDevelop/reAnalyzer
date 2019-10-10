@@ -5,6 +5,7 @@ import infoLogger from '../loggers/info.logger';
 import verboseLogger from '../loggers/verbose.logger';
 import errorLogger from '../loggers/error.logger';
 import filterHelper from '../helpers/userhierarchy.helper';
+import hierarchyService from '../helpers/userhierarchy.helper';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -14,6 +15,32 @@ const entities = new Entities();
 const decodeEntities = entities.decode;
 
 export default class TaskController {
+  public static getDoneDates(doneTasks: any[]) {
+    const doneDates: Date[] = doneTasks.map((task: any) => {
+      const sourceTask: any = task._source;
+      if (!sourceTask.statusUpdates || sourceTask.statusUpdates.length == 0) {
+        return new Date(0);
+      }
+      // Initiating value for the last "done" status date.
+      let maxStatusDate = new Date(sourceTask.statusUpdates[0].date).getTime();
+
+      if (!maxStatusDate || _.isNaN(maxStatusDate)) {
+        return new Date(0);
+      }
+
+      // Go through all the status updates and finding the last(The date when the task really ended,
+      // will always be a done status, otherwise it wont get it from elasticsearch).
+      for (let update of sourceTask.statusUpdates) {
+        let currDate = new Date(update.date).getTime();
+        if (maxStatusDate < currDate) {
+          maxStatusDate = currDate;
+        }
+      }
+
+      return new Date(maxStatusDate);
+    });
+    return doneDates;
+  }
   /**
    * validates queries and fetch the count of tasks per interval as given by a given field in given time range.
    *
@@ -28,9 +55,13 @@ export default class TaskController {
         );
         return res.sendStatus(400);
       }
-      if (req.query.field !== 'due' && req.query.field !== 'created') {
+      if (
+        req.query.field !== 'due' &&
+        req.query.field !== 'created' &&
+        req.query.field !== 'closed'
+      ) {
         errorLogger.info(
-          `getFieldCountPerInterval - field is not due or created - status 400 returned.`
+          `getFieldCountPerInterval - field is not due or created or closed - status 400 returned.`
         );
         return res.sendStatus(400);
       }
@@ -50,44 +81,72 @@ export default class TaskController {
           req.user.uniqueId
         } is ${filter}.`
       );
-      const response = await taskService.getFieldCountPerInterval(
-        req.query.field,
-        +req.query.from,
-        +req.query.to,
-        filter,
-        req.query.officeCreated,
-        req.query.officeAssign,
-        req.query.interval,
-        officeMembers
-      );
-      // const maximalD = await taskService.getMaximalFieldDate(
-      //   req.query.field,
-      //   +req.query.from,
-      //   filter,
-      //   req.query.officeCreated,
-      //   req.query.officeAssign,
-      //   req.query.interval,
-      //   officeMembers
-      // );
-      // const maximalDate = 0;
-      // const from = new Date(req.query.from);
-      // const to = new Date(req.query.to);
-      // const md = new Date(maximalD.body.aggregations.max_date);
-      // let canAlakazam = false;
-      // if (+from <= +md && +md <= +to) {
-      //   canAlakazam = true;
-      // }
-      verboseLogger.verbose(
-        `getFieldCountPerInterval function returned ${
-          response.body.aggregations['1'].buckets
-        }.`
-      );
 
-      return res.json({
-        field: req.query.field,
-        data: response.body.aggregations['1'].buckets,
-        // canAlakazam: true,
-      });
+      if (req.query.field == 'closed') {
+        let doneTasks = await taskService.getByField(
+          'done',
+          +req.query.from,
+          +req.query.to,
+          filter,
+          req.query.officeCreated,
+          req.query.officeAssign,
+          'status',
+          officeMembers
+        );
+
+        doneTasks = doneTasks.body.hits.hits;
+
+        let doneDates: Date[] = TaskController.getDoneDates(doneTasks);
+
+        for (let i = 0; i < doneTasks.length; i++) {
+          doneTasks[i] = doneTasks[i]._source;
+          doneTasks[i].doneDate = doneDates[i];
+        }
+        doneTasks = doneTasks.filter(
+          (task: any) => task.doneDate.getTime() != new Date(0).getTime()
+        );
+
+        doneTasks = _.groupBy(doneTasks, (task: any) =>
+          task.doneDate.getTime()
+        );
+
+        let data = [];
+        for (let key in doneTasks) {
+          let doc_count = doneTasks[key].length;
+          data.push({
+            key: key,
+            key_as_string: new Date(+key).toString(),
+            doc_count: doc_count,
+          });
+        }
+
+        return res.json({
+          field: req.query.field,
+          data: data,
+        });
+      } else {
+        const response = await taskService.getFieldCountPerInterval(
+          req.query.field,
+          +req.query.from,
+          +req.query.to,
+          filter,
+          req.query.officeCreated,
+          req.query.officeAssign,
+          req.query.interval,
+          officeMembers
+        );
+
+        verboseLogger.verbose(
+          `getFieldCountPerInterval function returned ${
+            response.body.aggregations['1'].buckets
+          }.`
+        );
+
+        return res.json({
+          field: req.query.field,
+          data: response.body.aggregations['1'].buckets,
+        });
+      }
     } catch (err) {
       errorLogger.error('%j', {
         message: err.message,
@@ -137,6 +196,81 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getCountByStatus function returned ${
+          response.body.aggregations['1'].buckets
+        }.`
+      );
+      return res.json(response.body.aggregations['1'].buckets);
+    } catch (err) {
+      errorLogger.error('%j', {
+        message: err.message,
+        stack: err.stack,
+        name: err.name,
+      });
+      return res.sendStatus(500);
+    }
+  }
+
+  /**
+   * validates queries and fetch the count of tasks open  in a given time range.
+   *
+   * @param {Request} req
+   * @param {Response} res
+   */
+  public static async getOpenTasks(req: Request, res: Response) {
+    //     GET tasks_test/_search
+    // {
+    //   "query": {
+    //     "bool": {
+    //   "must_not" : {  "term" : { "status" : "done" }}
+    //   }},
+    //   "aggs": {
+    //     "delay": {
+    //       "date_range": {
+    //         "field": "due",
+    //         "ranges": [
+    //           { "to": "now" , "key": "delay"},
+    //          { "from": "now", "key": "open" }
+    //         ]
+    //       }
+    //     }
+    //   }
+    // }
+    try {
+      if (!req.query.from || !req.query.to) {
+        errorLogger.info(
+          `getOpenTasks - from or to queries are missing - status 400 returned.`
+        );
+        return res.sendStatus(400);
+      }
+      if (isNaN(req.query.from) || isNaN(req.query.to)) {
+        errorLogger.info(
+          `getOpenTasks - from or to are not a number - status 400 returned.`
+        );
+        return res.sendStatus(400);
+      }
+
+      const filter: object[] = req.query.users;
+      const officeMembers: object[] = req.query.officeMembers;
+
+      verboseLogger.verbose(
+        `getOpenTasks filter for user ${req.user.uniqueId} is ${filter}.`
+      );
+
+      const hierarchyName = await hierarchyService.getHierarchyOfUser(
+        req.user.uniqueId
+      );
+      const response = await taskService.getOpenTasks(
+        +req.query.from,
+        +req.query.to,
+        filter,
+        req.query.officeCreated,
+        req.query.officeAssign,
+        officeMembers,
+        hierarchyName
+      );
+
+      verboseLogger.verbose(
+        `getOpenTasks function returned ${
           response.body.aggregations['1'].buckets
         }.`
       );
@@ -209,7 +343,14 @@ export default class TaskController {
         response.body.aggregations['1'].buckets,
         obj => obj.key != 'Agenda'
       );
-      return res.json(resp);
+      let resp2 = resp.map((item: any) => {
+        let key = item['key'];
+        let doc_count = item['doc_count'];
+        let percentage =
+          (item['2']['3']['buckets'][0]['doc_count'] / doc_count) * 100;
+        return { key: key, doc_count: doc_count, percentage: percentage };
+      });
+      return res.json(resp2);
     } catch (err) {
       errorLogger.error('%j', {
         message: err.message,
@@ -476,17 +617,6 @@ export default class TaskController {
   }
 
   public static clearTitle(title: string) {
-    // let firstIndex: number = title.indexOf('>');
-    // while (firstIndex != title.length - 1) {
-    //   title = title.substring(firstIndex + 1, title.length);
-    //   firstIndex = title.indexOf('>');
-    // }
-
-    // let lastIndex: number = title.lastIndexOf('<');
-    // while (lastIndex != -1) {
-    //   title = title.substring(0, lastIndex);
-    //   lastIndex = title.lastIndexOf('<');
-    // }
     return decodeEntities(striptags(title));
   }
 
@@ -527,6 +657,65 @@ export default class TaskController {
       return ret;
     });
     return tasksList;
+  }
+
+  public static async getMyTasks(req: Request, res: Response) {
+    if (!req.query.from || !req.query.to) {
+      errorLogger.info(
+        `getOpenTasks - from or to queries are missing - status 400 returned.`
+      );
+      return res.sendStatus(400);
+    }
+    if (!req.query.open) {
+      errorLogger.info(`getOpenTasks -open is missing - status 400 returned.`);
+      return res.sendStatus(400);
+    }
+    if (isNaN(req.query.from) || isNaN(req.query.to)) {
+      errorLogger.info(
+        `getOpenTasks - from or to are not a number - status 400 returned.`
+      );
+      return res.sendStatus(400);
+    }
+    req.query.open = req.query.open == 'false' ? false : true;
+    const filter: object[] = req.query.users;
+    const officeMembers: object[] = req.query.officeMembers;
+    const open = req.query.open;
+
+    verboseLogger.verbose(
+      `getOpenTasks filter for user ${req.user.uniqueId} is ${filter}.`
+    );
+
+    const hierarchyName = await hierarchyService.getHierarchyOfUser(
+      req.user.uniqueId
+    );
+    let tasks = await taskService.getOpenTasks(
+      +req.query.from,
+      +req.query.to,
+      filter,
+      req.query.officeCreated,
+      req.query.officeAssign,
+      officeMembers,
+      hierarchyName
+    );
+    tasks = tasks.body.hits.hits;
+
+    tasks = _.map(tasks, (task: any) => {
+      return task['_source'];
+    });
+    let newTasks = [];
+    let now = new Date();
+    for (let task of tasks) {
+      if (task.due) {
+        let due = new Date(task.due);
+        if (open && due < now) {
+          newTasks.push(task);
+        } else if (!open && due > now) {
+          newTasks.push(task);
+        }
+      }
+    }
+    newTasks = TaskController.buildTasksList(newTasks);
+    res.json(newTasks);
   }
 
   public static async getTasksByFilter(req: Request, res: Response) {

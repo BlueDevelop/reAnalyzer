@@ -12,7 +12,8 @@ import * as _ from 'lodash';
 import * as Highcharts from 'highcharts';
 import * as moment from 'moment';
 import { Chart } from 'highcharts/highcharts.src';
-import * as more_HC from 'highcharts/highcharts-more.src';
+declare var require: any;
+let more_HC = require('highcharts/highcharts-more.src');
 more_HC(Highcharts);
 @Component({
   selector: 'app-timeline-chart',
@@ -61,6 +62,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
   names: object = {
     due: 'תאריך יעד',
     created: 'תאריך יצירה',
+    closed: 'תאריך סגירה',
     prediction: 'חיזוי',
     weeklyPrediction: 'חיזוי שבועי',
     trendPrediction: 'חיזוי טרנד',
@@ -80,25 +82,28 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     },
     xAxis: {
       ...this.xAxisFormat(),
-      // tickInterval: 7 * 24 * 36e5, // one week - how often labels are shown on the x axis
-      // labels: {
-      //   format: '{value:Week %W/%Y}',
-      //   align: 'right',
-      //   rotation: -30,
-      // }, // shows a week from year
+
       title: {
         text: 'תאריכים',
       },
       type: 'datetime',
-      //
-      // categories: _.map(this.data, point => moment(point.x).toISOString()),
     },
     yAxis: {
       title: {
         text: 'כמות משימות',
       },
     },
-    plotOptions: {},
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true,
+          x: 0,
+          y: 0,
+          color: '#666666',
+        },
+        //enableMouseTracking: false,
+      },
+    },
     tooltip: {
       crosshairs: true,
       shared: true,
@@ -181,11 +186,14 @@ export class TimelineChartComponent implements OnInit, OnChanges {
     };
   }
   generateSeries() {
-    return _.map(this.data, (series, i) => {
+    let ret: any = _.map(this.data, (series, i) => {
       if (series.name != 'Range') {
         return {
           name: this.names[series.name],
-          data: series.series,
+          data: _.sortBy(series.series, elem => {
+            return elem.x;
+          }),
+          // pointRange: 30 * 24 * 3600 * 1000,
           type: 'line',
           showInLegend: true,
           zIndex: 1,
@@ -196,6 +204,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
           marker: {
             fillColor: 'white',
             lineWidth: 1,
+            radius: 4,
             lineColor: this.colors[i],
           },
         };
@@ -216,6 +225,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
         };
       }
     });
+    return ret;
   }
   getChartInstance(chart: Highcharts.Chart) {
     this.chart = chart;
@@ -243,7 +253,7 @@ export class TimelineChartComponent implements OnInit, OnChanges {
       case this.intervals[0]: //without
         return {
           // tickInterval: 24 * 36e5, // one  day
-          minTickInterval: 36e5, // one  hour
+          // minTickInterval: 30 * 24 * 3600 * 1000, // one  hour
           labels: {
             // format: '{value: %H/%D/%M/%Y}',
             format: '{value: %D/%M/%Y : %H}',

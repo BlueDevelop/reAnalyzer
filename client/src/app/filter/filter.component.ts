@@ -94,7 +94,7 @@ export class FilterComponent implements OnInit {
   model: object;
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  date = _moment().subtract(1, 'month');
+  date = _moment().startOf('year');
   startDate = new FormControl(this.date);
   endDate = new FormControl(_moment());
 
@@ -120,7 +120,7 @@ export class FilterComponent implements OnInit {
   allProjects: string[] = [];
   officeCreated: boolean = true;
   officeAssign: boolean = false;
-  dateType : any;
+  dateType: any;
 
   constructor(
     private taskService: TaskService,
@@ -321,7 +321,11 @@ export class FilterComponent implements OnInit {
     this.filterService.filterParams.date.lastDay = this.endDate.value.valueOf();
     this.filterService.filterParams.officeCreated = this.officeCreated;
     this.filterService.filterParams.officeAssign = this.officeAssign;
+    // console.log('before');
+    // console.dir(this.filterService.filterParams);
     this.filterService.updateConfig();
+    // console.log('after');
+    // console.dir(this.filterService.filterParams);
     this.valueChange.emit();
   }
 }

@@ -22,11 +22,11 @@ import * as _moment from 'moment';
 import { RefreshService } from '../_services/refresh.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  selector: 'app-secondary-dashboard',
+  templateUrl: './secondary-dashboard.component.html',
+  styleUrls: ['./secondary-dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class SecondaryDashboardComponent implements OnInit {
   @ViewChild('barDate')
   barDate;
   @ViewChild('pieStatus')
@@ -52,29 +52,19 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.dataFilering();
-    // this.settingsService.initColorsArray().subscribe(() => {
-    //console.log(this.settingsService.colorsArray);
     this.dataFilering();
-    // });
   }
 
   dataFilering() {
-    // this.settingsService.initColorsArray();
-    // this.settingsService.initColorsArray().subscribe(() => {
-    // setTimeout(() => {
     // this.barDate.getFieldCountPerInterval();
-    // this.pieStatus.getCountByStatus();
-    // this.leaderBoard.getLeaderboard();
+    // this.myGivenTasks.getCountByStatus();
     // this.tagCloud.getTagClouds();
-    // this.timeRates.getTimeRates();
-    this.tagCloud.getTagClouds();
+    // this.myTasks.getCountByStatus();
+
     this.barDate.getFieldCountPerInterval();
-
-    this.myGivenTasks.getCountByStatus();
-    this.myTasks.getCountByStatus();
-    // }, 0);
-
-    // });
+    this.pieStatus.getCountByStatus();
+    this.leaderBoard.getLeaderboard();
+    this.tagCloud.getTagClouds();
+    this.timeRates.getTimeRates();
   }
 }

@@ -13,7 +13,8 @@ export class NavBarComponent implements OnInit {
 
   navLinks = [
     { path: [{ outlets: { app: ['dashboard'] } }], label: 'לוח ראשי' },
-    { path: [{ outlets: { app: ['units'] } }], label: 'units' },
+    // { path: [{ outlets: { app: ['units'] } }], label: 'units' },
+    { path: [{ outlets: { app: ['secondaryDashboard'] } }], label: 'לוח משני' },
     { path: [{ outlets: { app: ['projects'] } }], label: 'פרויקטים' },
     { path: [{ outlets: { app: ['users'] } }], label: 'משתמשים' },
     { path: [{ outlets: { app: ['predictions'] } }], label: 'תחזיות' },

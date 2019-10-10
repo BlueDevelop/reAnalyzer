@@ -7,11 +7,11 @@ import { ModalComponent } from '../modal/modal.component';
 import { RefreshService } from '../_services/refresh.service';
 
 @Component({
-  selector: 'app-pie-status',
-  templateUrl: './pie-status.component.html',
-  styleUrls: ['./pie-status.component.css'],
+  selector: 'app-my-given-task',
+  templateUrl: './my-given-task.component.html',
+  styleUrls: ['./my-given-task.component.css'],
 })
-export class PieStatusComponent implements OnInit {
+export class MyGivenTaskComponent implements OnInit {
   data: object[] = [];
   empty: boolean = false;
   @Input()
@@ -29,13 +29,11 @@ export class PieStatusComponent implements OnInit {
   }
 
   editData(data): void {
-    let translateStatus: object;
-    this.translate
-      .get('status')
-      .subscribe((res: object) => (translateStatus = res));
     this.data = _.map(data, bucket => {
+      let name: object;
+      this.translate.get(bucket.key).subscribe((res: object) => (name = res));
       return {
-        name: translateStatus[bucket.key],
+        name: name,
         y: bucket.doc_count,
       };
     });
@@ -44,17 +42,21 @@ export class PieStatusComponent implements OnInit {
   getCountByStatus(): void {
     this.empty = false;
     this.refresh.increaseProgress();
-    this.taskService.getTaskCountByStatus().subscribe(data => {
-      //this.taskService.getOpenTasks().subscribe(data => {
+    this.taskService.getOpenTasks(true, false).subscribe(data => {
       this.editData(data);
-      this.empty = this.data.length == 0;
+      this.empty = this.data[0]['y'] == 0 && this.data[0]['y'] == 0;
       this.refresh.decreaseProgress();
     });
   }
 
   getTask(event) {
+    let open: boolean = event.name == 'באיחור' ? true : false;
     this.dialog.open(ModalComponent, {
-      data: this.taskService.getTasksByFilter({ status: event.name }),
+      data: this.taskService.getMyTasks({
+        officeCreated: true,
+        officeAssign: false,
+        open: open,
+      }),
     });
   }
 }

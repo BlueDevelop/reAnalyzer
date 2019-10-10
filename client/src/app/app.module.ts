@@ -55,6 +55,9 @@ import { MomentumLoadingComponent } from './momentum-loading/momentum-loading.co
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { PredictionComponent } from './prediction/prediction.component';
+import { MyTaskComponent } from './my-task/my-task.component';
+import { MyGivenTaskComponent } from './my-given-task/my-given-task.component';
+import { SecondaryDashboardComponent } from './secondary-dashboard/secondary-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +98,9 @@ import { PredictionComponent } from './prediction/prediction.component';
     MenuItemComponent,
     SplashScreenComponent,
     PredictionComponent,
+    MyTaskComponent,
+    MyGivenTaskComponent,
+    SecondaryDashboardComponent,
   ],
   imports: [
     BrowserModule,

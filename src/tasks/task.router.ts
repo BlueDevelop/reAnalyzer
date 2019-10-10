@@ -18,6 +18,18 @@ router.get(
 );
 
 /**
+ * GET /task/openTasks?from=123&to=124.
+ * returns count of open tasks.
+ */
+router.get(
+  '/openTasks',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getOpenTasks
+);
+
+/**
  * GET /task/fieldCountPerInterval?field=due&from=123&to=124&interval=1d.
  * the interval field is optional and defaults to 1d.
  * @returns count of field per interval.
@@ -82,6 +94,14 @@ router.get(
   filters.parseFiltersFromQueryString,
   filters.getMembersOfHierarchy,
   taskController.getTasksByFilter
+);
+
+router.get(
+  '/getMyTasks',
+  authenticate,
+  filters.parseFiltersFromQueryString,
+  filters.getMembersOfHierarchy,
+  taskController.getMyTasks
 );
 
 export default router;

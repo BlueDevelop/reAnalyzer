@@ -9,6 +9,7 @@ import { DashboardComponent } from '../app/dashboard/dashboard.component';
 import { HomeComponent } from '../app/home/home.component';
 import { SettingsComponent } from '../app/settings/settings.component';
 import { PredictionComponent } from '../app/prediction/prediction.component';
+import { SecondaryDashboardComponent } from 'src/app/secondary-dashboard/secondary-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,8 +18,17 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent, outlet: 'app' },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        outlet: 'app',
+      },
       { path: 'units', component: DashboardComponent, outlet: 'app' },
+      {
+        path: 'secondaryDashboard',
+        component: SecondaryDashboardComponent,
+        outlet: 'app',
+      },
       { path: 'projects', component: DashboardComponent, outlet: 'app' },
       { path: 'users', component: DashboardComponent, outlet: 'app' },
       { path: 'predictions', component: PredictionComponent, outlet: 'app' },

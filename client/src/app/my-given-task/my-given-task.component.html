@@ -1,0 +1,2 @@
+<div *ngIf="empty">אין נתונים להצגה </div>
+<app-pie-chart name="משימות" [title]="title" [data]="data" (getTasks)="getTask($event)" legendTitle="סטטוס" *ngIf="!empty"></app-pie-chart>

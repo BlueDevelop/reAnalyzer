@@ -18,6 +18,9 @@
     width: 32px;
     margin-right: 20px;
 }
+mat-button-toggle-group {
+    direction: ltr;
+}
 
 mat-button-toggle-group /deep/ .mat-button-toggle-label-content{
     line-height: 30px;

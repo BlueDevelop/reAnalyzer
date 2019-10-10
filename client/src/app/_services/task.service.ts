@@ -46,6 +46,25 @@ export class TaskService {
       );
   }
 
+  getOpenTasks(officeCreated: boolean, officeAssign: boolean): Observable<any> {
+    let newConfig = JSON.parse(JSON.stringify(this.filterService.config));
+    newConfig.params.officeCreated = officeCreated;
+    newConfig.params.officeAssign = officeAssign;
+    return this.http
+      .get(`${environment.apiUrl}/task/openTasks`, newConfig)
+      .pipe(
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from getOpenTasks'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(this.serviceName, 'getOpenTasks', [])
+        )
+      );
+  }
+
   getFieldCountPerInterval(): Observable<any> {
     const getObservableForInterval = field => {
       let newConfig = this.filterService.config;
@@ -72,6 +91,7 @@ export class TaskService {
     return forkJoin([
       getObservableForInterval('due'),
       getObservableForInterval('created'),
+      getObservableForInterval('closed'),
     ]);
   }
 
@@ -102,6 +122,31 @@ export class TaskService {
         ),
         catchError(
           this.logsService.handleError(this.serviceName, 'getLeaderboard', [])
+        )
+      );
+  }
+
+  getMyTasks(filter: object): Observable<any> {
+    let configFilter = { ...this.filterService.config.params };
+    delete configFilter.officeAssign;
+    delete configFilter.officeCreated;
+
+    let newFilter = { ...configFilter, ...filter };
+    newFilter = {
+      params: newFilter,
+    };
+
+    return this.http
+      .get(`${environment.apiUrl}/task/getMyTasks`, newFilter)
+      .pipe(
+        tap(data =>
+          this.logsService.log(
+            this.serviceName,
+            'fetched data from TasksByFilter'
+          )
+        ),
+        catchError(
+          this.logsService.handleError(this.serviceName, 'getTasksByFilter', [])
         )
       );
   }
@@ -143,8 +188,6 @@ export class TaskService {
     newFilter = {
       params: newFilter,
     };
-
-    //console.log(newFilter);
     return this.http
       .get(`${environment.apiUrl}/task/tasksByFilter`, newFilter)
       .pipe(

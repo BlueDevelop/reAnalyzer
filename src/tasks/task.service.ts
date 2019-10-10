@@ -423,6 +423,153 @@ export default class TaskService {
       },
     });
   }
+  // GET _search
+  // {
+  //   "query": {
+  //     "match_all": {}
+  //   },
+  //   "aggs": {
+  //     "1": {
+  //       "terms": {
+  //         "field": "tags.keyword",
+  //         "size": 40,
+  //         "order": {
+  //           "_count": "desc"
+  //         }
+  //       },
+  //       "aggs": {
+  //         "2": {
+  //           "filter": {
+  //             "bool": {
+  //               "must_not": [
+  //                 {
+  //                   "term": {
+  //                     "status": "done"
+  //                   }
+  //                 }
+  //               ]
+  //             }
+  //           },
+  //           "aggs": {
+  //             "3": {
+  //               "date_range": {
+  //                 "field": "due",
+  //                 "ranges": [
+  //                   {
+  //                     "from": "now",
+  //                     "key": "delay"
+  //                   },
+  //                   {
+  //                     "to": "now",
+  //                     "key": "open"
+  //                   }
+  //                 ]
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  /**
+   * Returns the count of tasks per status in a given time range.
+   *
+   * @param {number} from Date to search from in epoch_millis.
+   * @param {number} to Date to search to in epoch_millis.
+   * @param {object[]} filter filter by users.
+   */
+  public static getOpenTasks(
+    from: number,
+    to: number,
+    filter: object[] = [],
+    officeCreated: boolean,
+    officeAssign: boolean,
+    officeMembers: object[] = [],
+    hierarchyName: string = ''
+  ) {
+    let mustNot: any = [{ term: { status: 'done' } }];
+    const should = TaskService.prefixQuery(filter);
+    if (
+      officeAssign &&
+      config.specialhierarchies.indexOf(hierarchyName) != -1
+    ) {
+      should.push({ term: { project: config.specialProjectId } });
+    } else if (
+      officeAssign &&
+      config.specialhierarchies.indexOf(hierarchyName) != -1
+    ) {
+      mustNot.push({ term: { project: config.specialProjectId } });
+    }
+
+    const staticMust = [
+      {
+        range: {
+          created: {
+            gte: from,
+            lte: to,
+            format: 'epoch_millis',
+          },
+        },
+      },
+    ];
+    const must: any[] = generateMust(
+      staticMust,
+      officeMembers,
+      officeCreated,
+      officeAssign
+    );
+    return esClient.search({
+      index: TaskService.index,
+      body: {
+        aggs: {
+          1: {
+            date_range: {
+              field: 'due',
+              ranges: [
+                { to: 'now', key: 'delay' },
+                {
+                  from: 'now',
+                  key: 'open',
+                },
+              ],
+            },
+          },
+        },
+        size: 1000,
+        _source: {
+          excludes: [],
+        },
+        stored_fields: ['*'],
+        script_fields: {},
+        docvalue_fields: [
+          'assignUpdates.created',
+          'assignUpdates.updated',
+          'comments.created',
+          'comments.updated',
+          'created',
+          'due',
+          'statusUpdates.created',
+          'statusUpdates.updated',
+          'updated',
+        ],
+        query: {
+          bool: {
+            must,
+            filter: [
+              {
+                match_all: {},
+              },
+            ],
+            should,
+            minimum_should_match: 1,
+            must_not: mustNot,
+          },
+        },
+      },
+    });
+  }
 
   /**
    * Returns the count of unique tags in a given time range.
@@ -476,6 +623,34 @@ export default class TaskService {
               size: size || 40,
               order: {
                 _count: 'desc',
+              },
+            },
+            aggs: {
+              '2': {
+                filter: {
+                  bool: {
+                    must_not: [
+                      {
+                        term: {
+                          status: 'done',
+                        },
+                      },
+                    ],
+                  },
+                },
+                aggs: {
+                  '3': {
+                    date_range: {
+                      field: 'due',
+                      ranges: [
+                        {
+                          to: 'now',
+                          key: 'delay',
+                        },
+                      ],
+                    },
+                  },
+                },
               },
             },
           },

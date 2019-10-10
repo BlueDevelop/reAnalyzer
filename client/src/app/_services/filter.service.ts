@@ -38,8 +38,6 @@ export class FilterService {
   }
 
   updateConfig(): void {
-    ////console.log('filterParams');
-    console.log(this.filterParams);
     this.config = {
       params: {
         from: this.filterParams.date.firstDay.toString(),
@@ -58,6 +56,8 @@ export class FilterService {
         officeAssign: this.filterParams.officeAssign,
       },
     };
+    console.log('config');
+    console.dir(this.config);
   }
 
   getDiscussionNameList(): Observable<any> {

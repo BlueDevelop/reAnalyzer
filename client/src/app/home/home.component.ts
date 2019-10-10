@@ -9,6 +9,7 @@ import {
   ViewRef,
 } from '@angular/core';
 import { RefreshService } from '../_services/refresh.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   tpl: TemplateRef<any>;
   constructor(
     private refresh: RefreshService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private router: Router
   ) {}
   childViewRef: ViewRef;
 
@@ -40,5 +42,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.inProgress = newVal;
       //this.cdRef.detectChanges();
     });
+    this.router.navigateByUrl('/home/(app:dashboard)');
   }
 }

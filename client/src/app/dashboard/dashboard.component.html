@@ -1,8 +1,16 @@
-<app-filter [showDateType]=false (valueChange)="dataFilering()"></app-filter>
+<!-- <app-filter [showDateType]=false (valueChange)="dataFilering()"></app-filter>
 <div class="dashboard"  id="dashboard">
     <div class="item a" id="step4"><app-chart-bar-date [title]="'כמות משימות לפי תג\u0022ב ולפי תאריך יצירה'" #barDate></app-chart-bar-date></div>
     <div class="item b" id="step7"> <app-pie-status [title]="'כמות משימות לפי סטטוס'" #pieStatus></app-pie-status></div>
     <div class="item c" id="step3"><app-time-rates [title]="'ב\u0022כמות משימות לפי עמידה בתג'"   #timeRates ></app-time-rates></div> 
     <div class="item d" id="step6"> <app-leader-board [title]="'משתמשים מובילים'"  #leaderBoard></app-leader-board></div>
     <div class="item e" id="step5"><app-tag-cloud  [title]="'ענן תגיות'" #tagCloud></app-tag-cloud></div>
+</div> -->
+<app-filter [showDateType]=false (valueChange)="dataFilering()"></app-filter>
+<div class="dashboard"  id="dashboard">
+    <div class="item a" id="step4"><app-chart-bar-date [title]="'כמות משימות לפי תאריך יצירה, תאריך יעד, ותאריך סגירה'" [mainDashboard]="true" #barDate></app-chart-bar-date></div>
+    <div class="item b" id="step7"> <app-my-given-task [title]="'הנחיות שלי'" #myGivenTasks></app-my-given-task></div>
+    <div class="item c" id="step5"><app-tag-cloud  [title]="'ענן תגיות'" #tagCloud></app-tag-cloud></div>
+    <div class="item d" id="step3"><app-my-task [title]="'הנחיות דרג ממונה'"   #myTasks ></app-my-task></div> 
+   
 </div>

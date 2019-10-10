@@ -6,7 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class SettingsService {
-  public interval: string = 'without';
+  public interval: string = 'year';
   colorsArrayDefault: string[] = [
     '#E0F7FA',
     '#B1EBF2',
