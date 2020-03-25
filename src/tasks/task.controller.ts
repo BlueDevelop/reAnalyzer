@@ -644,15 +644,17 @@ export default class TaskController {
         status: task.status ? task.status : '',
         watchers: task.watchers
           ? task.watchers.map((watcher: any) => {
-              return {
-                name: fullNameGenerator(watcher.name, watcher.lastname),
-                id: watcher.id ? watcher.id : '',
-              };
-            })
+            return {
+              name: fullNameGenerator(watcher.name, watcher.lastname),
+              id: watcher.id ? watcher.id : '',
+            };
+          })
           : [],
         description: task.description
           ? decodeEntities(striptags(task.description))
           : '',
+        tags: task.tags.join(),
+        project: task.project ? task.project.title : ""
       };
       return ret;
     });
@@ -707,7 +709,7 @@ export default class TaskController {
     for (let task of tasks) {
       if (task.due) {
         let due = new Date(task.due);
-        if (open && due < now) {
+        if (!due && task.status != "done" && task.status != "review" && (!due || due < now)) {
           newTasks.push(task);
         } else if (!open && due > now) {
           newTasks.push(task);

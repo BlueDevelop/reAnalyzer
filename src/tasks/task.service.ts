@@ -9,6 +9,18 @@ const config = getConfig();
 export default class TaskService {
   public static index = 'tasks_test';
 
+  public static mustNotDone = {
+    term: {
+      status: 'done',
+    }
+  }
+
+  public static mustNotReview = {
+    term: {
+      status: 'review',
+    }
+  }
+
   /**
    * Returns the requested result from elasticsearch.
    * @param {string} value The value to search.
@@ -92,6 +104,10 @@ export default class TaskService {
         };
       }
     }
+    if (!status) {
+      body.query.bool.must_not.push(this.mustNotDone);
+      body.query.bool.must_not.push(this.mustNotReview);
+    }
     return esClient.search({
       index: TaskService.index,
       body,
@@ -155,6 +171,10 @@ export default class TaskService {
         },
       },
     };
+    if (field != "status") {
+      body.query.bool.must_not.push(this.mustNotDone);
+      body.query.bool.must_not.push(this.mustNotReview);
+    }
 
     body.query.bool.must[1].match[searchField] = value;
     return esClient.search({
@@ -489,20 +509,8 @@ export default class TaskService {
     officeMembers: object[] = [],
     hierarchyName: string = ''
   ) {
-    let mustNot: any = [{ term: { status: 'done' } }];
+    let mustNot: any = [{ term: { status: 'done' } }, { term: { status: 'review' } }];
     const should = TaskService.prefixQuery(filter);
-    if (
-      officeAssign &&
-      config.specialhierarchies.indexOf(hierarchyName) != -1
-    ) {
-      should.push({ term: { project: config.specialProjectId } });
-    } else if (
-      officeAssign &&
-      config.specialhierarchies.indexOf(hierarchyName) != -1
-    ) {
-      mustNot.push({ term: { project: config.specialProjectId } });
-    }
-
     const staticMust = [
       {
         range: {
@@ -520,6 +528,18 @@ export default class TaskService {
       officeCreated,
       officeAssign
     );
+
+    if (
+      officeAssign &&
+      config.specialhierarchies.indexOf(hierarchyName) != -1
+    ) {
+      must.push({ term: { project: config.specialProjectId } });
+    } else if (
+      officeAssign &&
+      config.specialhierarchies.indexOf(hierarchyName) != -1
+    ) {
+      mustNot.push({ term: { project: config.specialProjectId } });
+    }
     return esClient.search({
       index: TaskService.index,
       body: {
@@ -588,6 +608,7 @@ export default class TaskService {
     size?: number,
     officeMembers: object[] = []
   ) {
+    size = 20;
     // const should =
     //   officeCreated == false && officeAssign == false
     //     ? TaskService.prefixQuery(filter)
@@ -620,7 +641,7 @@ export default class TaskService {
           1: {
             terms: {
               field: 'tags.keyword',
-              size: size || 40,
+              size: size || 20,
               order: {
                 _count: 'desc',
               },

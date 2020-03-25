@@ -59,67 +59,85 @@ export class ModalComponent implements OnInit {
       autoHeight: true,
     },
     {
-      headerName: this.translate.instant('creator'),
-      cellRendererFramework: AgGridAvatarComponent,
-      field: 'creator',
-      sortable: true,
-      // filter: true,
-    },
-    {
-      headerName: this.translate.instant('statusTask'),
-      cellRendererFramework: AgGridStatusChipComponent,
-      field: 'status',
-      sortable: true,
-      // filter: true,
-      valueGetter: params => {
-        // return this.translate.instant(`status.${params.data.status}`);
-        return params.data.status;
-      },
-      valueFormatter: params => {
-        return params.value.status;
-      },
-    },
-    {
-      headerName: this.translate.instant('assign'),
-      field: 'assign',
-      sortable: true,
-      // filter: 'agTextColumnFilter',
-      cellRendererFramework: AgGridAvatarComponent,
-      valueGetter: function(params) {
-        return params.data.assign.name;
-      },
-      valueFormatter: function(params) {
-        return params.value;
-      },
-      filterValueGetter: function(params) {
-        return params.data.assign.name;
-      },
-    },
-    {
-      headerName: this.translate.instant('watchers'),
-      field: 'watchers',
+      headerName: this.translate.instant('description'),
+      field: 'description',
       sortable: true,
       // filter: true,
       resizable: true,
-      cellRendererFramework: AgGridAvatarComponent,
       cellStyle: { 'white-space': 'normal' },
       autoHeight: true,
-      comparator: (a, b) => {
-        let aLength = a.split(',').length;
-        let bLength = b.split(',').length;
-        return aLength >= bLength ? 1 : -1;
-      },
-      valueGetter: function(params) {
-        return _.map(params.data.watchers, watcher => watcher.name).join(',');
-      },
-      // valueFormatter: function(params) {
-      //   return _.map(params.value, watcher => watcher.name).join(',');
-      // },
-
-      filterValueGetter: function(params) {
-        return _.map(params.data.watchers, watcher => watcher.name).join(',');
-      },
     },
+    {
+      headerName: this.translate.instant('tags'),
+      field: 'tags',
+      sortable: true,
+      // filter: true,
+      resizable: true,
+      cellStyle: { 'white-space': 'normal' },
+      autoHeight: true,
+    }
+    // {
+    //   headerName: this.translate.instant('creator'),
+    //   cellRendererFramework: AgGridAvatarComponent,
+    //   field: 'creator',
+    //   sortable: true,
+    //   // filter: true,
+    // },
+    // {
+    //   headerName: this.translate.instant('statusTask'),
+    //   cellRendererFramework: AgGridStatusChipComponent,
+    //   field: 'status',
+    //   sortable: true,
+    //   // filter: true,
+    //   valueGetter: params => {
+    //     // return this.translate.instant(`status.${params.data.status}`);
+    //     return params.data.status;
+    //   },
+    //   valueFormatter: params => {
+    //     return params.value.status;
+    //   },
+    // },
+    // {
+    //   headerName: this.translate.instant('assign'),
+    //   field: 'assign',
+    //   sortable: true,
+    //   // filter: 'agTextColumnFilter',
+    //   cellRendererFramework: AgGridAvatarComponent,
+    //   valueGetter: function(params) {
+    //     return params.data.assign.name;
+    //   },
+    //   valueFormatter: function(params) {
+    //     return params.value;
+    //   },
+    //   filterValueGetter: function(params) {
+    //     return params.data.assign.name;
+    //   },
+    // },
+    // {
+    //   headerName: this.translate.instant('watchers'),
+    //   field: 'watchers',
+    //   sortable: true,
+    //   // filter: true,
+    //   resizable: true,
+    //   cellRendererFramework: AgGridAvatarComponent,
+    //   cellStyle: { 'white-space': 'normal' },
+    //   autoHeight: true,
+    //   comparator: (a, b) => {
+    //     let aLength = a.split(',').length;
+    //     let bLength = b.split(',').length;
+    //     return aLength >= bLength ? 1 : -1;
+    //   },
+    //   valueGetter: function(params) {
+    //     return _.map(params.data.watchers, watcher => watcher.name).join(',');
+    //   },
+    //   // valueFormatter: function(params) {
+    //   //   return _.map(params.value, watcher => watcher.name).join(',');
+    //   // },
+
+    //   filterValueGetter: function(params) {
+    //     return _.map(params.data.watchers, watcher => watcher.name).join(',');
+    //   },
+    // },
     {
       headerName: this.translate.instant('due'),
       field: 'due',
@@ -145,6 +163,15 @@ export class ModalComponent implements OnInit {
       //   return !params.data.due ? '' : moment(params.data.due);
       // },
     },
+    {
+      headerName: this.translate.instant('project'),
+      field: 'project',
+      sortable: true,
+      // filter: true,
+      resizable: true,
+      cellStyle: { 'white-space': 'normal' },
+      autoHeight: true,
+    }
   ];
   //dataArray = [this.data];
   dataSource: any; //= new MatTableDataSource(this.data as object[]);
@@ -202,9 +229,11 @@ export class ModalComponent implements OnInit {
           .utc(rowNode.data.due)
           .local()
           .toDate(),
-        "משתתפים":rowNode.data.watchers.map(w=>w.name).join(","),
-        "סטטוס":rowNode.data.status,
-        "תיאור":rowNode.data.description,
+        "משתתפים": rowNode.data.watchers.map(w => w.name).join(","),
+        "סטטוס": rowNode.data.status,
+        "תיאור": rowNode.data.description,
+        "תגיות": rowNode.data.tags,
+        "פרויקט": rowNode.data.project
       });
     });
     this.excelService.jsonToExcel(excelJson);

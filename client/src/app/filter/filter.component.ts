@@ -76,9 +76,9 @@ export class FilterComponent implements OnInit {
   autocompleteProject: MatAutocomplete;
 
   @Input()
-  showProjects: boolean = true;
+  showProjects: boolean = false;
   @Input()
-  showDiscussions: boolean = true;
+  showDiscussions: boolean = false;
   @Input()
   showStartDate: boolean = true;
   @Input()
