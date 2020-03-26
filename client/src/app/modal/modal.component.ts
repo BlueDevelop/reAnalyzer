@@ -75,7 +75,7 @@ export class ModalComponent implements OnInit {
       resizable: true,
       cellStyle: { 'white-space': 'normal' },
       autoHeight: true,
-    }
+    },
     // {
     //   headerName: this.translate.instant('creator'),
     //   cellRendererFramework: AgGridAvatarComponent,
@@ -151,12 +151,12 @@ export class ModalComponent implements OnInit {
       comparator: (a, b) => {
         return !a ? -1 : !b ? 1 : a.diff(b) >= 0 ? 1 : -1;
       },
-      valueGetter: function(params) {
+      valueGetter: function (params) {
         return !params.data.due
           ? undefined
           : moment.utc(params.data.due).local();
       },
-      valueFormatter: function(params) {
+      valueFormatter: function (params) {
         return !params.value ? '' : params.value.format('DD/MM/YYYY');
       },
       // filterValueGetter: function(params) {
@@ -187,7 +187,7 @@ export class ModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Observable<any>,
     private translate: TranslateService,
     private excelService: ExcelService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.data.subscribe(data => {
@@ -218,14 +218,14 @@ export class ModalComponent implements OnInit {
   save() {
     //TODO: add description in server and table + hide:true in table, and translate headers and status and check why watchers is not printed
     let excelJson = [];
-    this.gridApi.forEachNode(function(rowNode, index) {
+    this.gridApi.forEachNode(function (rowNode, index) {
       //iterates over every row in the table and pushes the row to excelJson
       //should translate keys/status with translateService
       excelJson.push({
-        "כותרת":rowNode.data.title,
-        "יוצר":rowNode.data.creator,
-        "אחראי":rowNode.data.assign.name,
-        "תאריך יעד":moment
+        "כותרת": rowNode.data.title,
+        "יוצר": rowNode.data.creator,
+        "אחראי": rowNode.data.assign.name,
+        "תאריך יעד": moment
           .utc(rowNode.data.due)
           .local()
           .toDate(),

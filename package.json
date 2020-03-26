@@ -19,7 +19,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "copy": "cp -r ../mock src/",
     "client": "npm start --prefix client",
-    "build:live": "NODE_ENV=local nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "build:live": "SET NODE_ENV=azure && nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "dev": "concurrently \"npm run build:live\" \"npm run client\""
   },
   "bin": {

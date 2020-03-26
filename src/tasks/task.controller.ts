@@ -78,7 +78,7 @@ export default class TaskController {
       const officeMembers: object[] = req.query.officeMembers;
       verboseLogger.verbose(
         `getFieldCountPerInterval filter for user ${
-          req.user.uniqueId
+        req.user.uniqueId
         } is ${filter}.`
       );
 
@@ -138,7 +138,7 @@ export default class TaskController {
 
         verboseLogger.verbose(
           `getFieldCountPerInterval function returned ${
-            response.body.aggregations['1'].buckets
+          response.body.aggregations['1'].buckets
           }.`
         );
 
@@ -196,7 +196,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getCountByStatus function returned ${
-          response.body.aggregations['1'].buckets
+        response.body.aggregations['1'].buckets
         }.`
       );
       return res.json(response.body.aggregations['1'].buckets);
@@ -271,7 +271,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getOpenTasks function returned ${
-          response.body.aggregations['1'].buckets
+        response.body.aggregations['1'].buckets
         }.`
       );
       return res.json(response.body.aggregations['1'].buckets);
@@ -335,7 +335,7 @@ export default class TaskController {
 
       verboseLogger.verbose(
         `getTagCloud function returned ${
-          response.body.aggregations['1'].buckets
+        response.body.aggregations['1'].buckets
         }.`
       );
 
@@ -438,7 +438,7 @@ export default class TaskController {
             done: bucket['doc_count'],
             total:
               totalTasksCount.body.aggregations['1'].buckets[index][
-                'doc_count'
+              'doc_count'
               ],
           };
         }
@@ -709,9 +709,16 @@ export default class TaskController {
     for (let task of tasks) {
       if (task.due) {
         let due = new Date(task.due);
-        if (!due && task.status != "done" && task.status != "review" && (!due || due < now)) {
+        if (task.status != "done" && task.status != "review" && due < now) {
           newTasks.push(task);
         } else if (!open && due > now) {
+          newTasks.push(task);
+        }
+      }
+      else {
+        if (task.status != "done" && task.status != "review") {
+          newTasks.push(task);
+        } else {
           newTasks.push(task);
         }
       }
